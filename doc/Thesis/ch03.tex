@@ -1,24 +1,88 @@
 \chapter{\aicat\ Framework Design}
 
-XXX the first paragraph should be talking about how framework is designed,
-not what it is
+Framework design is a difficult task in general, because a
+well-designed framework must allow for several kinds of
+growth.\cite[p. XXX]{fayad:99} The framework interface must be
+usefully applied to several different use cases, including ones that
+the framework designer may not be able to foresee.  The framework must
+also be extensible by subclassing, and must therefore have enough
+structure that the relationships among classes are well-defined, yet
+flexible enough that the framework developer can make appropriate
+modifications.
 
-\aicat\ is a set of Perl modules that implements an
-object-oriented framework for text categorization.  It provides
-classes for managing documents, categories, machine learners,
-categorization hypotheses, and categorization results.
-It is designed for maximum re-use in many
-kinds of situations \ldots XXX.
+In designing the \aicat\ framework, attention has been paid to three
+primary areas: the framework's audience motivates the interface, use
+cases motivate the functionality, and algorithms and data structures
+motivate the implementation.  In this chapter the functionality and
+interface decisions will be discussed in detail, with implementation
+discussed primarily in Chapter \ref{Implementation}.  However, some
+implementation issues inevitably motivate design, so they will be
+mentioned in this chapter as appropriate.
 
 For brevity, the \aicat\texttt{::} prefix will be omitted from class
 names in this discussion.  It is to be understood that any class
 within the \aicat\ framework (except the top-level class
 \aicat\ itself) is prefixed by \aicat\texttt{::}.
 
-\section{Usage Scenarios (use cases)}
-\subsection{Research scenarios}
-\subsection{Application scenarios}
-\subsection{Commercial scenarios}
+\section{Audience}
+
+The main users of Text Categorization software may be generally
+divided into three categories: TC researchers, application developers,
+and domain experts.  Of course, one person may play several of these
+roles simultaneously, but it is helpful during the design process to
+separate these roles.
+
+\subsection{Researcher}
+
+A researcher is interested in exploring novel approaches to machine
+learning or document processing.  This professional is often not
+interested in implementing a real-world application, but wishes to
+improve existing Text Categorization algorithms and methodologies.
+
+A researcher will often extend the framework with custom code that
+implements new functionality.  For instance, the researcher may
+implement new machine learning algorithms or variations on existing
+algorithms.  Researchers will also need tools for comparing the
+results of categorization experiments, and may find it convenient to
+use a user interface for running common kinds of experiments.
+
+Although a researcher will often need to write low-level framework
+extension code, that code will often be called from a high level.  A
+researcher's application programs may be extremely simple, in effect
+training a categorizer and testing it on a set of test documents.  
+
+\subsection{Application Developer}
+
+An application developer is a professional such as a web developer or
+engineer that needs to add automatic categorization features to a
+software application.  The application developer may have no prior
+experience with Text Categorization, but may still need to control the
+TC process closely because of specific application needs.  An
+application developer may want to treat a TC system as a library or
+set of libraries, providing no custom code of his or her own.
+Alternatively, the developer may add custom code for accessing data in
+the application's native formats or integrating with the application's
+environment.
+
+While the application developer may write less custom framework code
+than the researcher, framework usage may be more complicated.  The
+application developer is often interested in very specific aspects of
+the categorization process, such as which/how many categories are
+assigned to any given document.  Thus the application developer will
+typically create more complex applications using the framework than
+the researcher, exercising the framework API to a greater extent.
+
+\subsection{Domain Expert}
+
+Complex applications often require a domain expert who dictates
+project requirements and has expertise in the application domain (for
+example, financial documents or knowledge management).  The domain
+expert often makes high-level decisions about when Text Categorization
+could be effective in the given domain, and may need to exert fine
+control over the Text Categorization process.  The domain expert may
+delegate actual software development using the framework to the other
+members of a business team.
+
 
 \section{Application integration}
 \subsection{Client/server applications}
@@ -664,7 +728,7 @@ built-in support for managing the patterns of creation necessary in
 frameworks.  Contrast this with inheritance relationships, which are
 directly supported by object-oriented languages.  For instance, a C++
 or Java \texttt{class} declaration lists its superclasses explicitly,
-and Perl specifies inheritance via each class's \texttt{@INC} array.
+and Perl specifies inheritance via each class's \texttt{@ISA} array.
 Because inheritance is directly implemented by the language, it is
 easy for framework users to understand inheritance relationships, and
 these relationships are expressed straightforwardly in the framework
