@@ -3,7 +3,7 @@
 
 With the functionality requirements and class designs in Chapter
 \ref{design} as a guide, the \aicat\ framework has been implemented
-and released under an open source license\cite{XXX-open-source} as a
+and released under an open source license\cite{raymond:97,dibona:99} as a
 part of this thesis and as a continuing project in Text
 Categorization.  This chapter describes some of the implementation
 decisions that have been made in \aicat\, and provides some of the
@@ -24,7 +24,7 @@ the \aicat\ project, which provides the following benefits.
 
 \begin{itemize}
 \item Perl is widely known to be a powerful text processing tool
-   \cite{XXX-mastering-regular-expressions, etc}, hence it should be
+   \cite{friedl:02, pedersen:01}, hence it should be
    relatively easy for users of the framework to customize its
    processing capabilities.
 \item A large number of contributed Perl modules are freely available
@@ -41,7 +41,7 @@ the \aicat\ project, which provides the following benefits.
 \item Perl can be embedded within applications written in other
    languages, particularly in \texttt{C}/\texttt{C++} applications
    using Perl's embedding interface, or in Java applications using the
-   Java/Perl Layer.  This allows for maximum reusability of the
+   JPL toolkit.  This allows for maximum reusability of the
    framework as described in Section \ref{embedded-apps}.
 \item Code from other languages can be embedded within Perl
    applications, using either the XS extension mechanism for
@@ -125,7 +125,7 @@ also inherited from \class{Class::Container}, as a factory method.  In
 the object specification, the ``delayed'' flag indicates that the
 objects will be created on demand in this manner---if this flag were
 not specified, the objects would be automatically created during the
-\method{new} method in an aggregation\cite[XXX-section]{gamma:95}
+\method{new} method in an aggregation\cite[p. 22]{gamma:95}
 manner.
 
 
@@ -205,9 +205,15 @@ insignificant compared to the constant overhead costs of the
 operations.
 
 A \class{FeatureVector} subclass implementing the structure described
-in the previous paragraph is currently underway by another researcher
-at the University of Sydney, though it is not yet a part of the
-\aicat\ framework.
+in the previous paragraph is currently under development by another
+researcher at the University of Sydney, though it is not yet a part of
+the \aicat\ framework.  Another \class{FeatureVector} subclass
+(\class{FeatureVector::FastDot}) which uses a greatly simplified
+version of the same structure, optimized for repeated dot-product
+calculations but otherwise identical to the standard
+\class{FeatureVector} class, has been completed.  However, because it
+will be rendered largely obsolete by the other project underway, it
+will probably not become a part of the framework.
 
 \subsection{Sets of Documents or Categories}
 
