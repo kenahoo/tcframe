@@ -7,4 +7,5 @@ learner_class: "::NaiveBayes"
 tfidf_weighting: xfx
 stemming: porter
 features_kept: 2000
+stopword_behavior: pre_stemmed
 verbose: 1
