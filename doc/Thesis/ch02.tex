@@ -16,15 +16,22 @@ functions that can process natural-language documents, assigning zero
 or more user-defined labels to them based on their content.  More
 formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
 previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
-function $\func$ that maps from $\docs$ to the set of all subsets of $\cats$.
+function $\func$ that maps from $\docs$ to the set of all subsets of
+$\cats$.  Figure \ref{sets} shows a simple diagram of this action.
 
-XXX - create a diagram of a classifier's action on sets
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{figures/sets.pdf}
+\caption{The action of a categorizer on a set of documents}
+\label{sets}
+\end{center}
+\end{figure}
 
 In
 some applications, categorizers assign only a single label to each
 document, so a categorizer is often a function that maps directly from
-$\docs$ to $\cats$.  Often an intermediate function is useful for ``soft'' or 
-``rank-based'' categorization, mapping from $\docs \times \cats$ to
+$\docs$ to $\cats$.  Often an intermediate function is useful for \term{soft} or 
+\term{rank-based} categorization, mapping from $\docs \times \cats$ to
 the set of real numbers $\mathbb{R}$ in order to assign a score to
 each category $c_j$ for each document $d_i$.  The scored categories
 may then be presented to a human expert in decreasing order, and the
@@ -148,8 +155,8 @@ directly after tokenization) may remove from the data any term in a
 pre-defined list of ``stop words,'' which are words that occur very
 commonly in the domain (such as ``the'' or ``and'' in most English
 texts) and are assumed to contain little or no relevance to the
-categorization problem at hand. \ref[p. 15]{sebastiani:02}
-\ref{mladenic:98}
+categorization problem at hand. \cite[p. 15]{sebastiani:02}
+\cite{mladenic:98}
 
 In order to address these issues, a TC system needs to allow
 variations in the tokenizing process.  This may involve providing a
