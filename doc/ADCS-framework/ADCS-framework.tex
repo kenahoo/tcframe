@@ -121,7 +121,9 @@ mathematical or networking libraries that exist for most programming
 languages.  The ``bow'' library \cite{bow:96} is an example from TC.
 Developers who use a library do not have to learn its internal
 architecture, and the library does not dictate the structure of the
-application under development.  \cite{fayad:99}
+application under development.\cite{fayad:99} The internal
+implementation of the library is considered to be hidden from its
+users.
 
 \item[Frameworks] A framework is a set of classes that embodies an
 abstract design for solutions to a family of related problems
@@ -129,7 +131,8 @@ abstract design for solutions to a family of related problems
 a certain set of problems, and on flexible best-practices embodied in
 software.  An ``inversion of control'' puts the framework in charge at
 a high level inside the application, with custom application code
-playing a subordinate role.  Common examples of frameworks include
+playing a subordinate role--therefore, interfaces between framework
+classes must be documented and stable.  Common examples of frameworks include
 generic application frameworks like Apple's ``Cocoa.''  Weka may also
 be considered a framework when it is used to implement new
 categorization algorithms through subclassing.
@@ -171,7 +174,14 @@ common kinds of experiments.  By contrast, an application developer
 may want to use a TC system as a library or set of libraries,
 providing no custom code of his or her own.
 
-Given these requirements, we decided to implement our software as a framework rather than as an application or set of libraries.  One reason for this is that a framework can easily be turned into an application by providing a simple wrapper application, and it can be turned into a library by providing concrete implementation classes.  However, libraries and applications can not typically be turned into frameworks very easily.  Therefore, a framework provides the best coverage for the perceived needs of the TC community.
+Given these requirements, we decided to implement our software as a
+framework rather than as an application or set of libraries.  One
+reason for this is that a framework can easily be turned into an
+application by providing simple wrapper code, and it can be
+turned into a library by providing concrete implementation classes.
+However, libraries and applications can not typically be turned into
+frameworks very easily.  Therefore, a framework provides the best
+coverage for the perceived needs of the TC community.
 
 The framework described in this paper includes classes for managing
 documents, collections of documents, categorization algorithms, and so
@@ -185,21 +195,47 @@ and reduce repeated work.
 
 \section{Design Requirements}
 
-A framework must be able to accommodate functionality in a number of essential areas, providing common behaviour while allowing users and developers to customize behaviour through configuration parameters and/or framework subclassing.  We summarize the design issues in this framework as follows.  Note that some of these issues are general framework design issues, while others are more specific to this particular domain.
+A framework must be able to accommodate functionality in a number of
+essential areas, providing common behaviour while allowing users and
+developers to customize behaviour through configuration parameters
+and/or framework subclassing.  We summarize the design issues in this
+framework as follows.  Note that some of these issues are general
+framework design issues, while others are more specific to this
+particular domain.
 
 \begin{description}
-\item[Framework reusability] The main reason for building a framework rather than a single text categorization application is to increase reusability of design and implementation.  Framework research literature provides guidelines on building application frameworks \cite{fayad:99}.
-\item[Modularity] The components' internal implementations should be able to change  without affecting the other components.
-\item[Integration] The framework should be able to interface easily with existing categorization solutions (e.g. Weka, libbow, various Neural Net libraries, and feature selection packages), uniting many solutions under a common interface.
-\item[Rapid Application Development] Prototyping new applications should be very quick, with a minimum of custom code in each case.  Custom code should generally implement new behaviors rather than new structures within the framework.
-\item[Rapid Research Cycle] Researchers should be able to quickly investigate new questions, using the framework as a starting point.
-\item[Model Flexibility] The framework structure should be flexible enough to accommodate the needs of many different categorization algorithms that may operate on different representations of the underlying data.
+\item[Framework reusability] The main reason for building a framework
+rather than a single text categorization application is to increase
+reusability of design and implementation.  Framework research
+literature provides guidelines on building application
+frameworks.\cite{fayad:99}
+\item[Modularity] The components' internal implementations should be
+able to change without affecting the other components.
+\item[Integration] The framework should be able to interface easily
+with existing categorization solutions (e.g. Weka, libbow, various
+Neural Net libraries, and feature selection packages), uniting many
+solutions under a common interface.
+\item[Rapid Application Development] Prototyping new applications
+should be very quick, with a minimum of custom code in each case.
+Custom code should generally implement new behaviors rather than new
+structures within the framework.
+\item[Rapid Research Cycle] Researchers should be able to quickly
+investigate new questions, using the framework as a starting point.
+\item[Model Flexibility] The framework structure should be flexible
+enough to accommodate the needs of many different categorization
+algorithms that may operate on different representations of the
+underlying data.
 \item[Computational Efficiency] The data sets involved can be quite
-large so it is important to have a design and implementation that is
+large, so it is important to have a design and implementation that is
 efficient in memory, CPU time, and other practical measures such as
 the time it takes to load a categorizer from disk and generate a
 hypothesis.
-\item[Separability] Pieces of the framework should be usable in isolation for users that only need a feature selection package, a vector categorizer, etc.  The most separable pieces of the framework should in many cases be completely separated and available under separate distribution, and used as a software dependency in our framework.
+\item[Separability] Pieces of the framework should be usable in
+isolation for users that only need a feature selection package, a
+vector categorizer, etc.  The most separable pieces of the framework
+should in many cases be completely separated and available under
+separate distribution, and used as a software dependency in our
+framework.
 \end{description}
 
 With the above issues in mind, we have chosen to implement the
@@ -303,17 +339,16 @@ class for custom stemming.  This may be extremely important in highly
 morphological languages or in certain application domains.
 
 \subsection*{Feature selection}
-Feature selection is handled by the \class{KnowledgeSet} class's
-\method{scan\_features} and \method{select\_features} methods.
-The \method{select\_features} method works on an entire
-\class{KnowledgeSet} in-memory at once.  The
-\method{scan\_features} method is a quicker and less
-memory-consuming way to select features before reading in the whole
-data set, but it requires the user to make two passes through the data
-set to actually read in the documents.  Both methods return a
-\class{FeatureVector} (feature vs. value) to the framework, which
-saves the list of highest-ranking features to use when parsing future
-documents.
+Feature selection is handled by the abstract \class{FeatureSelector}
+class and its concrete subclasses.  These classes implement
+\method{scan\_features} and \method{select\_features} methods.  The
+\method{select\_features} method works on an entire
+\class{KnowledgeSet} in-memory at once.  The \method{scan\_features}
+method can scan a collection of documents for the best features
+without necessarily loading the entire collection into memory.  Both
+methods return a \class{FeatureVector} object to the client (typically
+a \class{KnowledgeSet}), which saves the list of highest-ranking
+features to use when parsing future documents.
 
 The default implementation uses a simple Document-Frequency criterion
 for selecting features to use in model-building and categorization.
@@ -329,7 +364,7 @@ the user wants to employ a different weighting scheme, the
 may be overridden.
 
 \subsection*{Machine Learning algorithm}
-Choosing machine learning algorithms is done
+Choosing a machine learning algorithm is done
 by choosing a subclass of the \class{Learner} class.  Several
 algorithms have already been implemented including \naive\ Bayes
 \cite{lewis:98}, Support Vector Machines \cite{scholkopf:99}
@@ -401,7 +436,21 @@ architecture supports it when an implementation is needed.
 
 \section{Framework Customization}
 
-Like C++ and Java, Perl is natively object-oriented, but unlike them it does not have strict separation of compilation and execution stages.  Rather, the compiler and interpreter work in tandem, trading back and forth to execute a Perl application, allowing runtime compilation of code.  In addition, Perl's object model is fairly loosely bound (similar in this respect to Objective-C's model), permitting class names to be stored in variables and/or specified at runtime.  Because of these properties, the choice of specific classes to be used in the framework can be made at runtime, controlled by parameters, facilitated by the \class{Class::Container} module.  It allows several classes to cooperate as a framework without having to know about each others' class names, constructor parameters, and so on, and provides the glue to do strict early checking of parameter names and types, facilitating transparent factory patterns within the framework.
+Like C++ and Java, Perl is natively object-oriented, but unlike them
+it does not have strict separation of compilation and execution
+stages.  Rather, the compiler and interpreter work in tandem, trading
+back and forth to execute a Perl application, allowing runtime
+compilation of code.  In addition, Perl's object model is fairly
+loosely bound (similar in this respect to Objective-C's model),
+permitting class names to be stored in variables and/or specified at
+runtime.  Because of these properties, the choice of specific classes
+to be used in the framework can be made at runtime, controlled by
+parameters, facilitated by the \class{Class::Container} module.  It
+allows several classes to cooperate as a framework without having to
+know about each others' class names, constructor parameters, and so
+on, and provides the glue to do strict early checking of parameter
+names and types, facilitating transparent factory patterns within the
+framework.
 
 For instance, to use the built-in SVM learner, one could either create
 an \aicat\texttt{::SVM} object directly, or one could specify
