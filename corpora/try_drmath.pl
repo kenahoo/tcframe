@@ -10,7 +10,7 @@ use AI::Categorizer::Experiment;
 # Useful for debugging
 use Carp; $SIG{__DIE__} = \&Carp::confess;
 
-my $name = "reuters-21578";
+my $name = "drmath-1.00";
 
 # Scan features
 if (0) {
@@ -86,7 +86,6 @@ if (0) {
 if (1) {
   warn "restoring from $name-save3";
   my $nb = AI::Categorizer::Categorizer::NaiveBayes->restore_state("$name-save3");
-  $nb->threshold(0.1);
   my $e = new AI::Categorizer::Experiment;
 
   my $cats = read_cats("$name/cats.txt");
@@ -97,6 +96,7 @@ if (1) {
   while (my $file = readdir $dir) {
     next if $file =~ /^\./;
     
+    print "$file: @{$cats->{$file}}\n";
     my $body = do {open my $fh, "$name/test/$file" or die $!; local $/; <$fh>};  
     my $d = new AI::Categorizer::Document(
 					  name => $file,
@@ -104,12 +104,10 @@ if (1) {
 					 );
     my $h = $nb->categorize($d);
     $e->add_hypothesis($h, $cats->{$file});
-    print "$file: @{$cats->{$file}} => @{[ $h->categories ]}\n";
-    #last if $::i++ > 19;
   }
   closedir $dir;
 
-  print $e->stats_table;
+  print $e->display_stats;
 }
 
 ########################################################################
