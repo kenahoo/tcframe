@@ -1,0 +1,14 @@
+The AI-Classifier directory contains the AI::Classifier framework.
+I'm not yet sold on that name.  It might be possible to use
+AI::Categorize, or even AI::Categorizer.
+
+Note that there are two synonyms for classification - "classify"
+vs. "categorize".  In this project I'm trying to stay away from
+"classify", since that gives the word "class" a confusing double
+meaning (OO class vs. semantic category).
+
+I'm using the Class::Container module, soon to be on CPAN, to glue the
+classes together into a framework.  It's been very helpful in the
+HTML::Mason project, and has evolved there for several months of
+intense development.
+
