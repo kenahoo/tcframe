@@ -236,19 +236,121 @@ is therefore considered a goal of the \aicat\ project.
 \subsection{Hypothesis behavior}
 \label{Hypothesis behavior}
 
+Most of the standard Text Categorization literature assumes that the
+goal of TC is to assign each document to one of two mutually exclusive
+categories, otherwise known as \emph{binary
+categorization}.\cite[p. 3]{sebastiani:02} Of course, real-world
+problems often involve ontologies that consist of more than two
+categories, and membership may not be mutually exclusive.  For
+instance, some applications may require assigning only the most
+appropriate category from $\cats$, some may require assigning any
+appropriate category, and some, such as rank-based tasks, may require
+an appropriateness score linking each category-document pair.
 
+This situation does not represent a theoretical disconnect between
+research and practice, because each multi-category TC problem can be
+re-posed as a series of binary problems.  Most application builders,
+however, will not want to actually re-pose their problems in this
+manner, because it requires extra work, and it may obscure the true
+nature of the application under development.  Therefore, it is
+desirable for a TC system to offer support for all the scenarios
+described in the previous paragraph, without requiring the
+implementers of the Machine Learning algorithms to explicitly code for
+them.  The way in which this is achieved is discussed in Section
+\ref{class-overview}.
 
-\section{Machine learning techniques}
+\section{Machine Learning techniques}
 \label{machine-learning}
 
-\subsection{Naive Bayes}
+This section describes three Machine Learning techniques that are
+common for Text Categorization: \naive\ Bayes categorizers, Support
+Vector Machines, and k-Nearest-Neighbor categorizers.
+
+\subsection{\naive\ Bayes}
+
+\naive Bayes categorizers are extremely well-represented in the TC
+literature \cite{lewis:98,yang:99,sebastiani:02}, often giving a
+baseline performers against which other categorizers can be measured.
+Their theory rests on Bayes' Theorem of conditional probability, shown
+in Equation \ref{bayes}.  For those unfamiliar with conditional
+probabilities, the notation $P(a|b)$ means ``the probability of $a$
+given $b$.''
+
+\begin{equation} \label{bayes}
+P(x|y) = \frac{P(y|x) P(x)}{P(y)}
+\end{equation}
+
+The quantity of interest when determining the relevance of a
+particular document $d_i$ to a category $c_j$ is $P(c_j|d_i)$.  Any
+category with a high enough conditional probability will be considered
+assigned to $d_i$.  In particular, the ``best'' category will be
+$\ArgMax_{c_j\in\cats} P(c_j|d_i)$. This probability is usually impossible to
+compute directly, however, because $d_i$ has likely never been
+encountered before.  Therefore, Bayes' Theorem can be applied to
+change the probabilistic expression to one whose terms may be
+estimated from the training data $\train$ as follows.
+
+\begin{align*}
+\ArgMax_{c_j\in\cats} P(c_j|d_i) 
+ & = \ArgMax_{c_j\in\cats} \frac{P(d_i|c_j) P(c_j)}{P(d_i)} & (\text{by (\ref{bayes})}) \\
+ & = \ArgMax_{c_j\in\cats} P(d_i|c_j) P(c_j) & (P(d_i) \text{ is constant}) \\
+\end{align*}
+
+$P(c_j)$ may be easily estimated from the frequency with which
+documents appear in $c_j$ in $\train$.  To estimate $P(d_i|c_j)$,
+$d_i$ may be considered equivalent to the string of its features
+$f_{i1} f_{i2} \ldots f_{ik}$.  $\ArgMax_{c_j\in\cats} P(c_j|d_i)$ may
+then be estimated as follows.
+
+\begin{align*}
+\ArgMax_{c_j\in\cats} P(c_j|d_i) 
+ & = \ArgMax_{c_j\in\cats} P(f_{i1} \ldots f_{ik}|c_j) P(c_j) \\
+ & \approx \ArgMax_{c_j\in\cats} P(f_{i1}|c_j) \cdot \ldots \cdot P(f_{ik}|c_j) P(c_j) \\
+\end{align*}
+
+This final step, which gives this algorithm its ``na\"ive'' moniker,
+involves two conditional independence assumptions: first, that the
+features $f_{i1}, \ldots, f_{ik}$ are conditionally independent given
+the category $c_j$, and second, that the position of features within
+document $d_i$ has no effect on the probability.  These features may
+not be true in general---features may in fact correlate in complex
+ways in real-world documents.  Nevertheless, the \naive\ Bayes
+categorizer tends to produce fairly good results, and an analysis of
+this phenomenon can be found in \cite{domingos:97}.
+
+The conditional probabilities $P(f_{i1}|c_j), \ldots, P(f_{ik}|c_j)$
+are typically estimated by measuring the relative frequencies of the
+features $f_{i1}, \ldots, f_{ik}$ in the documents belonging to
+$c_j$.  For features found in the documents of $\docs$ which were not
+encountered in $\train$, it would be inappropriate to use this
+estimate, however, because it would yield a probability of zero and
+render the rest of the terms useless.  For this reason, unknown terms
+are typically assigned some small nonzero probability in a process
+known as \emph{smoothing}.
+
+The \naive\ Bayes algorithm is fairly fast and non-memory-intensive.
+Because its training process consists merely of counting the features
+of the training documents, its training time scales linearly with
+$|\train|$.  Categorization is also fairly fast, because all the
+pre-computed probabilities $P(f_{il}|c_j)$ may simply be looked up in
+an array.  Categorization of a single document therefore scales
+linearly with $|\cats|$.  Because the system need only store feature
+information on a per-category basis instead of a per-document basis,
+the size of the trained categorizer will stay fairly small compared to
+more resource-intensive categorizers like k-Nearest-Neighbor.
+
 \subsection{Support Vector Machines}
+
+XXX - need to write
+
 \subsection{k-Nearest-Neighbor}
+
+XXX - need to write
 
 \section{Related products}
 
 To discuss the relevance of \aicat\ in the marketplace of Text
-Categorization, three related products will be examined.  These
+Categorization, three related products are examined here.  These
 products are by no means the only available products similar to
 \aicat, but they provide a reasonable sample of well-known tools for
 comparison.
@@ -268,7 +370,7 @@ interfaces, so it may itself be considered a framework.
 Weka is used extensively throughout the academic Text Categorization
 community, and as such includes support for many cutting-edge
 categorization techniques, including advances in Support Vector
-Machines, k-Nearest-Neighbor, Naive Bayes, and other categorizers, as
+Machines, k-Nearest-Neighbor, \naive\ Bayes, and other categorizers, as
 well as several variations of feature selection techniques.  It is
 therefore a standard against which the \aicat\ framework can
 be measured, as well as a resource which can be leveraged in its
@@ -312,6 +414,8 @@ facilities would make useful additions to \aicat\ if
 implemented.
 
 \subsection{Autonomy.com}
+
+XXX - need to write
 
 \subsection{Teragram Corporation}
 
