@@ -1,0 +1,241 @@
+\documentclass[a4paper]{report}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{tabularx}
+
+\title{Thesis}
+\author{Ken Williams}
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter*{Abstract}
+\chapter*{Acknowledgements}
+\chapter{Introduction}
+
+\section{Preface}
+
+The field of Automatic Text Categorization is an extremely active area
+of current research and application.  It is a multi-disciplinary
+field, attracting attention from the Linguistics, Computer Science,
+Engineering, and Business communities.  Its applicability is broad,
+with many potential uses for large businesses as well as individuals.
+
+The goal of Automatic Text Categorization is to produce specialized
+algorithms that can process natural-language documents, assigning zero
+or more user-defined labels to them based on their content.  More
+formally, given a set of labels L = {L1, ..., Lk} and a set of
+previously unseen documents D = {D1, D2, ... }, a categorizer is a
+function C that maps from D to the set of all subsets of L.  In
+practice, many categorizers assign only a single label to each
+document, so a categorizer is often a function that maps directly from
+D to L.  In many cases, accurate categorizer functions can be created
+that map documents to useful category sets.
+
+The standard approach to creating new categorizer functions is to
+learn them from a set of training documents.  This is a set of
+user-provided, pre-labeled documents that follows a category
+distribution similar to the distribution of D, and whose contents
+provide information about what sorts of documents should be mapped to
+what sorts of categories.  Algorithms can then be developed that make
+generalizations about the relationship between document content and
+document category, encoding these generalizations in the algorithm C.
+
+\section{Automatic Text Categorization}
+
+\section{Object Frameworks}
+
+A framework is a large-scale unit of reusable code in object-oriented
+software development.  Frameworks were developed in response to
+situations requiring fine-grained control over the
+
+\subsection{Guidelines for designing frameworks}
+\subsection{Design patterns}
+
+
+\section{Overview of AI::Categorizer Framework}
+
+AI::Categorizer is a set of Perl modules that implements an
+object-oriented framework for text categorization.  It provides
+classes for managing documents, categories, machine learners,
+categorization hypotheses, and categorization results.
+
+\section{Contributions}
+
+\section{Organization of the Thesis}
+
+\chapter{Practical Issues in Text Categorization}
+
+\section{Usage Scenarios (use cases)}
+\subsection{Commercial scenarios}
+\subsection{Research scenarios}
+
+\section{General Text Categorization Considerations}
+\subsection{Document format}
+\subsection{Document structure}
+\subsection{Tokenizing of data}
+\subsection{Linguistic stemming}
+\subsection{Feature selection}
+\subsection{Vector space modeling}
+\subsection{Machine learning algorithm choice}
+\subsection{Machine learning configuration}
+\subsection{Incremental or on-line learning}
+\subsection{Hypothesis behavior}
+
+\section{Application integration}
+\subsection{Client/server applications}
+\subsection{Embedded applications}
+\subsection{Database cooperation}
+
+\section{Evaluation}
+\subsection{Correctness}
+Precision, recall, FN2, error, accuracy
+\subsection{Usefulness}
+ROC curves
+\subsection{Scalability}
+\subsubsection{Architecture}
+\subsubsection{Running time}
+\subsubsection{Memory usage}
+
+\section{Dissemination}
+\subsection{Documentation}
+\subsection{Community involvement}
+
+\chapter{Design of the AI::Categorizer Framework}
+
+\section{Machine learning techniques}
+\subsection{Naive Bayes}
+\subsection{Decision Trees}
+\subsection{Support Vector Machines}
+
+\section{AI::Categorizer framework design}
+
+\section{Related products}
+
+To establish the relevance of AI::Categorizer in the marketplace of
+Text Categorization, I will examine three related products.  First I
+discuss Weka, a Java product that has been used successfully by many
+Text Categorization researchers.  Then I address two businesses that
+supply products and services related to Text Categorization,
+Autonomy.com and Teragram Corporation.
+
+\subsection{Weka}
+
+Weka is an open-source system for Machine Learning originally
+developed at the XXX University of Waikato, New Zealand.  Its primary
+audience is the international community of academic machine learning
+researchers, most notably those working with Categorization or
+Clustering problems that arise from working with text.  Weka has
+undergone at least one major code rewrite; at present it is
+implemented as a set of related Java classes with documented internal
+interfaces, so it may itself be considered a framework.
+
+Weka is used extensively throughout the academic Text Categorization
+community, and as such includes support for many cutting-edge
+categorization techniques, including advances in Support Vector
+Machines, k-Nearest-Neighbor, Naive Bayes, and other categorizers, as
+well as several variations of feature selection techniques.  It is
+therefore a standard against which the AI::Categorizer framework can
+be measured, as well as a resource which can be leveraged in its
+construction.
+
+Despite some similar properties, Weka and AI::Categorizer differ in
+their goals and in many important implementation decisions.  Whereas
+Weka specifically targets the academic research community,
+AI::Categorizer aims to support use cases under both
+application-building and research-conducting situations.
+Consequently, Weka will typically keep up with research trends more
+closely, but AI::Categorizer will usually be easier for application
+developers to integrate into a real-world situation.
+
+In addition to these differences, another important difference arises
+from the different goals in the two projects.  Much of the academic
+community is interested in evaluating the correctness and algorithmic
+complexity of categorization techniques, whereas most application
+developers must also consider resource usage in real-world terms like
+time and memory.  In testing, AI::Categorizer has greatly outperformed
+Weka in terms of speed and memory when equivalent algorithms are
+compared on identical data sets.  This doesn't reflect an inherent
+design flaw in Weka, rather a difference in the kinds of things Weka
+developers are likely to spend their time working on.
+
+In order to help facilitate cooperation between the Weka and
+AI::Categorizer communities, as well as leverage existing solutions
+inside AI::Categorizer, a machine learner class has been created
+within AI::Categorizer that simply passes data through to Weka's
+categorizers.  In this way, application developers can easily
+experiment with Weka's cutting-edge categorization techniques while
+retaining AI::Categorizer's application integration advantages.  Any
+cross-pollination generated as a result will likely benefit both
+projects.
+
+Other facilities provided by Weka are not yet offered by
+AI::Categorizer.  These include visualization tools, several
+sophisticated correctness evaluation tools, and XXX.  Most of these
+facilities would make useful additions to AI::Categorizer if
+implemented
+
+\subsection{Autonomy.com}
+
+\subsection{Teragram Corporation}
+
+According to their web site (http://www.teragram.com/), Teragram
+Corporation is a provider of ``fast and stable linguistic
+technologies, information search and extraction, knowledge management,
+and text processing technologies.''  One of their largest-scale
+products is the Teragram Categorizer, an automatic document
+categorizer that plays a similar technical role to AI::Categorizer.
+It cooperates with the Teragram Taxonomy Manager, which provides a
+user interface to categories and the documents within each category.
+
+All of Teragram's software products are proprietary, so little
+information on implementation is available.  However, product
+capabilities and roles can be assessed from the marketing information
+given on the web site.  The information presented here has all been
+gathered this way.
+
+The Taxonomy Manager is a browser of hierarchical categories, similar
+to several on-line directory services like Yahoo
+(http://www.yahoo.com/) or the Open Directory Project
+(http://www.dmoz.org/).  It might therefore be inferred that the
+Categorizer is a native hierarchical categorizer, or perhaps that the
+categorizer actually flattens the tree structure of the category
+hierarchy into a flat list of its leaves, and imposes the tree
+structure only afterwards.  Whichever case is true, it must be noted
+that the interfaces of the categorizer allow hierarchical
+categorization even if the internal workings are flat.
+
+Another interesting aspect of Teragram's categorization technology is
+their Rule-Based Categorizer.  Using this system, ``each category
+within the directory is associated with a set of rules that describe
+documents within that category.''  This may be motivated by a need to
+integrate older hand-maintained lists of rules into newer
+applications, or it might be meant to address situations like email
+categorization in which most documents are indeed best categorized by
+simple rules (usually because the sender and receiver have agreed upon
+a tagging scheme to mark documents' important properties).  It's not
+clear whether Teragram's Rule-Based Categorizer and Automatic
+Categorizer can cooperate on a single taxonomy, but they indicate that
+the two systems are complementary rather than antithetic.
+
+Teragram also offers separate licensing for many of the tools that
+make up its products.  In this sense, it has a strategy similar to one
+employed in AI::Categorizer's design, in which useful pieces of
+functionality created for AI::Categorizer should be split off into
+their own products whenever possible.
+
+\chapter{Use of the AI::Categorizer framework}
+
+\section{Performance evaluation}
+\subsection{Descriptions of corpora}
+
+\section{Applications}
+
+\chapter{Conclusion}
+
+\bibliographystyle{plain}
+\bibliography{TC-references}
+
+\end{document}
