@@ -316,7 +316,7 @@ The abstract \class{Learner} class provides an interface to train on a
 set of pre-categorized documents and subsequently categorize
 previously unseen \class{Document} objects.  Its
 concrete subclasses implement specific categorization algorithms like
-Naive Bayes, SVM, Decision Tree, and so on.
+\naive\ Bayes, SVM, Decision Tree, and so on.
 
 \item[FeatureVector]
 
@@ -336,6 +336,12 @@ document is a \class{Hypothesis} object.  It may be queried for information
 about which categories were assigned, which category was the single
 most appropriate category, what scores were assigned to each category,
 and so on.
+
+In order to support this range of behaviors, the \class{Learner} is
+required to create the \class{Hypothesis} object by specifying an
+appropriateness score for each category and a threshold for category
+membership.  Any category whose score is above the threshold is
+considered assigned by the system to the given document.
 
 \item[Experiment]
 
