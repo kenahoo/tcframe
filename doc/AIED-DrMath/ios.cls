@@ -223,7 +223,7 @@
   \null
   \begin{center}%
   \let \footnote \thanks
-  %\vskip1em
+  \vskip1em
     {\huge \@title \par}%
     \vskip .5em%
     {\normalsize
