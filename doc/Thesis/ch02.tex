@@ -19,8 +19,8 @@ of a TC system.
 The goal of automatic Text Categorization is to automatically produce
 specialized functions that can process natural-language documents,
 assigning zero or more user-defined labels to them based on their
-content. \cite[p. 3]{sebastiani:02} \cite[ch. 16]{manning:99}
-\cite[sec. 6.10]{mitchell:97} More formally, given a set of labels
+content \cite[p. 3]{sebastiani:02} \cite[ch. 16]{manning:99}
+\cite[sec. 6.10]{mitchell:97}.  More formally, given a set of labels
 (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
 previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
 function $\func$ that maps from $\docs$ to the set of all subsets of
@@ -36,11 +36,11 @@ $\cats$.  Figure \ref{sets} shows a simple diagram of this action.
 
 In some applications, categorizers assign only a single label to each
 document, so a categorizer is often a function that maps directly from
-$\docs$ to $\cats$. \cite[p. 3]{sebastiani:02} Often an intermediate
+$\docs$ to $\cats$ \cite[p. 3]{sebastiani:02}. Often an intermediate
 function is useful for \term{soft} or \term{rank-based}
 categorization, mapping from $\docs \times \cats$ to the set of real
 numbers $\mathbb{R}$ in order to assign a score to each category $c_j$
-for each document $d_i$. \cite[p. 4]{sebastiani:02} The scored
+for each document $d_i$ \cite[p. 4]{sebastiani:02}. The scored
 categories may then be presented to a human expert in decreasing
 order, and the human may then make the final decision on the
 document's category membership.  Alternatively, the system may make a
@@ -53,7 +53,7 @@ shown in Figure \ref{sets}.\footnote{This is the internal approach
 
 The standard modern approach to creating new categorizer functions is
 to build them using Machine Learning techniques from a set of training
-documents $\train$. \cite[p. 2]{sebastiani:02} This is a set of
+documents $\train$ \cite[p. 2]{sebastiani:02}. This is a set of
 user-provided, pre-labeled documents that follows a category
 distribution similar to the distribution of $\docs$, and whose contents
 provide information about what sorts of documents should be mapped to
@@ -164,7 +164,7 @@ the TC system.
 The segmenting of text data into chunks representing individual words
 may seem like a straightforward task, but in fact there are many
 variations on how this process
-can be performed. \cite[sec. 4.2.2]{manning:99} It is not
+can be performed \cite[sec. 4.2.2]{manning:99}. It is not
 sufficient to split the data into tokens by using whitespace (spaces, tabs
 returns, and the like) as delimiters, because this does not deal with
 punctuation characters.  It is also not obvious whether words with
@@ -181,8 +181,8 @@ may remove from the data any token in a
 pre-defined ``stop list,'' which contains tokens that occur very
 commonly in the domain (such as ``the'' or ``and'' in most English
 texts) and are assumed to contain little or no relevance to the
-categorization problem at hand. \cite[p. 15]{sebastiani:02}
-\cite{mladenic:98}
+categorization problem at hand \cite[p. 15]{sebastiani:02}
+\cite{mladenic:98}.
 
 In order to address these issues, a TC system needs to allow
 variations in the tokenizing process.  This may involve adjusting a
@@ -193,8 +193,8 @@ write custom code to handle domain-specific cases.
 \label{dim-reduction}
 
 Like many Language Processing research fields, much of Text Categorization has
-to do with the problem of \term{high dimensionality}.
-\cite[p. 13]{sebastiani:02} \cite{joachims:98} The
+to do with the problem of \term{high dimensionality}
+\cite[p. 13]{sebastiani:02} \cite{joachims:98}.  The
 dimensionality of the space in which the Machine Learning algorithm
 operates can be as large as the total number of distinct terms in
 $\train$.
@@ -202,7 +202,7 @@ $\train$.
 High dimensionality may present two problems.  First, some Machine
 Learning algorithms may be efficient on low-dimensional data, but they
 may require more time or memory than is practical when the
-dimensionality of the data set is too high. \cite{chakrabarti:98}
+dimensionality of the data set is too high \cite{chakrabarti:98}.
 Second, the
 $\train$ data in a high-dimensional space may be too sparse, with
 not enough nonzero data points to make any useful inductive leap
@@ -220,7 +220,7 @@ collapse to their linguistic stem \emph{run}.  Although the use of
 such processing has occasionally been reported to harm overall system
 performance \cite{baker:98}, availability of such an algorithm is
 usually seen as a necessary component of a TC
-system. \cite[p. 12]{sebastiani:02}
+system \cite[p. 12]{sebastiani:02}.
 
 Another way to reduce dimensionality in a TC system is to apply
 \emph{feature selection} and/or \emph{feature extraction}.  Both are
@@ -235,7 +235,7 @@ order to create a new, lower-dimensional space of features.
 
 Three of the most commonly used feature selection criteria are the
 \term{document frequency} (DF), \term{$\chi^2$}, and \term{information
-gain} (IG) metrics. \cite{yang:97}
+gain} (IG) metrics \cite{yang:97}.
 
 $\text{DF}(f_k)$ is simply the number of documents of $\train$ in
 which the feature $f_k$ occurs.  It is fairly effective as a feature
@@ -278,14 +278,14 @@ $f_k$           & Yes & $A$ & $B$ \\
 In order to find the overall $\chi^2(f_k)$ metric, the terms
 $\chi^2(f_k,c_j)$ may either be averaged (typically weighted by the
 frequency of each category), or the maximum value for any category may
-be adopted. \cite{yang:97}
+be adopted \cite{yang:97}.
 
 $IG$ is defined in Equation \ref{eq-ig-def}.  $P(f_k)$ and $P(\overline{f_k})$ are
 the probabilities that a document does or does not contain $f_k$,
 respectively.  $\cats_{f_k}$ and $\cats_{\overline{f_k}}$ are the
 category sets in the subsets of $\docs$ containing $f_k$ or not,
 respectively.  $\Entr(x)$ is the standard entropy function from
-Information Theory. \cite[ch. 2]{manning:99}
+Information Theory \cite[ch. 2]{manning:99}.
 
 \begin{equation} \label{eq-ig-def}
         IG(f_k) = \Entr(\cats)
@@ -369,7 +369,7 @@ issue will be discussed again in Section \ref{factory-method}.
 
 In some TC applications, it may be desirable to incorporate feedback
 from the user about whether the system's categorization decisions have
-been correct or incorrect. \cite[p. 28]{sebastiani:02} This may allow
+been correct or incorrect \cite[p. 28]{sebastiani:02}. This may allow
 for a relatively small initial training set $\train$, or for
 categorization on concepts which may change over time.  This process
 is called \emph{incremental} or \emph{on-line} learning.
@@ -388,7 +388,7 @@ is therefore considered a goal of the \aicat\ project.
 Most of the standard Text Categorization literature assumes that the
 goal of TC is to assign each document to one of two mutually exclusive
 categories, otherwise known as \emph{binary
-categorization}. \cite[p. 3]{sebastiani:02} Of course, real-world
+categorization} \cite[p. 3]{sebastiani:02}. Of course, real-world
 problems often involve ontologies (category hierarchies) that consist of more than two
 categories, and membership may not be mutually exclusive.  For
 instance, some applications may require assigning only the most
@@ -517,7 +517,7 @@ each category, possibly learned by optimizing performance on a
 validation set.  In addition, if more than one document is being
 categorized in a batch operation, several differing strategies for
 thresholding may be employed that take advantage of the overall
-proportions of documents that belong to each category. \cite{yang:01}
+proportions of documents that belong to each category \cite{yang:01}.
 
 Although the k-Nearest-Neighbor algorithm is conceptually simple, it
 is computationally intensive.  Unless thresholds are learned from a
@@ -543,7 +543,7 @@ SVM techniques are similar to kNN in that they view the training
 documents as vectors in a vector space, and that they require a
 similarity function (called the ``kernel'' function) that plays a role
 similar to the function $m$ in Section
-\ref{knn}. \cite[ch. 1]{scholkopf:02} However, instead of considering
+\ref{knn} \cite[ch. 1]{scholkopf:02}. However, instead of considering
 the documents most similar to the document to be categorized, SVM
 algorithms learn a \emph{decision surface} during training which
 divides the vector space into regions that indicate category
@@ -592,15 +592,15 @@ evaluate Decision Tree categorizers, the discussion in Chapter
 \label{measures}
 
 Several statistical measures have become standard in the area of
-evaluating Text Categorization systems. \cite[p. 33]{sebastiani:02}
+evaluating Text Categorization systems \cite[p. 33]{sebastiani:02}.
 Some of the most prevalent are based on the notions of
 \emph{precision} and \emph{recall} from the field of Information
-Retrieval. \cite{rijsbergen:79} Precision, often denoted by the symbol
+Retrieval \cite{rijsbergen:79}. Precision, often denoted by the symbol
 $\pi$, measures the probability that a document assigned by the TC
 system to a given category actually belongs to that category.
 Conversely, recall, denoted by $\rho$, measures the probability that a
 document actually belonging to a certain category will be assigned
-during testing to that category. \cite[p. 33]{sebastiani:02}
+during testing to that category \cite[p. 33]{sebastiani:02}.
 
 The probabilities mentioned above can be estimated during testing by
 comparing how often the TC system's category choices match the correct
@@ -645,7 +645,7 @@ C_i}$, respectively.
 $\pi$ and $\rho$ give valuable information about the performance of a
 TC system, but neither provides an isolated rating of the system's
 quality.  The reason is that either measure can usually be improved in
-a system to the detriment of the other. \cite[p. 35]{sebastiani:02} For
+a system to the detriment of the other \cite[p. 35]{sebastiani:02}. For
 instance, the \emph{trivial acceptor} categorizer, which assigns every
 document to every category, will have a perfect $\rho$ score of 1, but
 its precision will be unacceptably low on any nontrivial task.

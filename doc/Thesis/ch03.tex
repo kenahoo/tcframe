@@ -3,7 +3,7 @@
 
 Framework design is a difficult task in general, because a
 well-designed framework must allow for several kinds of
-growth. \cite[p. 11]{fayad:99} The framework interface must be
+growth \cite[p. 11]{fayad:99}. The framework interface must be
 usefully applied to several different use cases, including ones that
 the framework designer may not be able to foresee.  The framework must
 also be extensible by subclassing, and must therefore have enough
@@ -29,7 +29,7 @@ within the \aicat\ framework (except the top-level class
 
 The design process for any sufficiently complicated software system
 benefits from consideration of its users and the specific ways they
-will want to interact with the system. \cite[ch. 16]{booch:98} This
+will want to interact with the system \cite[ch. 16]{booch:98}. This
 provides both a motivation for the design of the system's interfaces,
 and a way to evaluate the system during and after its development, by
 ensuring that the users can use the system to perform the required
@@ -100,7 +100,7 @@ the TC system depends.
 
 In order to better understand and document how the framework will be
 used, an analysis of use cases is often
-helpful. \cite[ch. 2]{booch:98} Use cases provide details of
+helpful \cite[ch. 2]{booch:98}. Use cases provide details of
 the required functionality of a project.  They can also provide a
 starting point for design of the project's architecture.  In this
 section, several common use cases for a Text Categorization
@@ -112,7 +112,7 @@ directed toward satisfying these use cases.
 
 Much of the academic work on Text Categorization is scientific
 investigation into various techniques for document
-processing. \cite{sebastiani:02} This work may include investigations
+processing \cite{sebastiani:02}. This work may include investigations
 into methods for preprocessing document content, feature selection and
 extraction, or machine learning methods.  Most often, researchers will
 develop or adopt a measurement for the quality of results, then
@@ -251,7 +251,7 @@ Another way to examine the framework is to examine the run-time
 relationships between its classes.  This often provides a much more
 enlightening analysis of a framework, since modern framework design
 often favors object composition over class inheritance for its
-important structural relationships. \cite[p. 20]{gamma:95}
+important structural relationships \cite[p. 20]{gamma:95}.
 
 The diagram in Figure \ref{classes-uml} shows the
 most important run-time relationships between classes in the
@@ -618,7 +618,7 @@ of these four methods and shows the user a summary of the results.
 The real power and intellectual content of any framework lies not in
 the design of its individual classes, but in the interfaces between
 the classes and the way objects collaborate to solve problems in the
-framework's application domain. \cite[p. 31]{fayad:99} These
+framework's application domain \cite[p. 31]{fayad:99}. These
 relationships can be quite complicated and difficult to explain, yet
 understanding them is essential to understanding the framework.
 
@@ -740,9 +740,9 @@ One instance of this kind of structure in Text Categorization is in
 so-called ``ensemble learners,'' also known as ``classifier
 committees.''  An ensemble learner is a categorizer that combines the
 results of a set of other categorizers in some way to arrive at a
-categorization result of its own. \cite[p. 30]{sebastiani:02} Often,
+categorization result of its own \cite[p. 30]{sebastiani:02}. Often,
 an ensemble learner may outperform each of its constituent members on
-the general categorization task.  \cite{tumer:98}
+the general categorization task  \cite{tumer:98}.
 
 To implement ensemble learners within \aicat, the Composite
 pattern may be applied to the \class{Learner} class to create a
@@ -787,7 +787,7 @@ the interface necessary for the environment in which that task must be
 performed.  For example, a framework may require that a particular
 role is implemented by subclasses of a certain abstract class.  This
 helps unify functionality by taking advantage of polymorphic
-abstraction. \cite[p. 5]{fayad:99} That functionality may already be
+abstraction \cite[p. 5]{fayad:99}. That functionality may already be
 present in an existing body of code outside the framework.  An Adapter
 can help bridge the gap between the two code bodies by letting the
 external code function inside the framework.\footnote{An Adapter may
@@ -875,7 +875,7 @@ framework.
 \label{Strategy}
 
 The Strategy pattern defines ``a family of algorithms, encapsulates
-each one, and makes them interchangeable.'' \cite[p. 315]{gamma:95}
+each one, and makes them interchangeable'' \cite[p. 315]{gamma:95}.
 It is used when a domain task needs to be carried out, but there may
 be several ways to carry out that task, and it is important to let the
 user or client choose from among these alternatives.
@@ -929,7 +929,7 @@ not the case.  Many researchers may wish to write their own
 \class{Learner} subclasses, using this portion of the framework in the
 ``whitebox'' paradigm.  Other researchers, and most application
 developers, will want to use existing framework classes in a
-``blackbox'' framework usage style. \cite[p. 10]{fayad:99} Either
+``blackbox'' framework usage style \cite[p. 10]{fayad:99}. Either
 method is supported.
 
 Each \class{Learner} subclass must implement the abstract
@@ -1012,7 +1012,7 @@ relationships.  An example of this situation is pictured in Figure
 \ref{better-constructors}.  Here, the patterns of object creation more
 closely follow the class relationships that will be used at runtime.
 This design is moving closer toward a factory-style pattern, in which
-object creation is delegated to another object. \cite{gamma:95}
+object creation is delegated to another object \cite{gamma:95}.
 defines two specific kinds of factory patterns, ``Factory Methods''
 and ``Abstract Factories.''  Figure \ref{better-constructors} does not
 fit either of these patterns exactly, but it does fall under the
@@ -1070,7 +1070,7 @@ these relationships are expressed straightforwardly in the framework
 code.  For support of this point, consider object-oriented programming
 in languages like C that don't have inherent OO support, where
 understanding the inheritance structures can be much more
-challenging. \cite[p. 7]{fayad:99}
+challenging \cite[p. 7]{fayad:99}.
 
 With this perspective in mind, one solution is to create a way for
 each class to explicitly declare its constructor parameters and its
@@ -1139,13 +1139,13 @@ the framework runtime structure can be highly parameterized.
 \section{Examples}
 
 Effective documentation is essential for the use and dissemination of
-any framework. \cite[ch. 21]{fayad:99} The \aicat\ distribution
+any framework \cite[ch. 21]{fayad:99}. The \aicat\ distribution
 contains complete documentation of the user-visible classes, and that
 documentation will not be reproduced here.  Of use to the present
 discussion, however, are some simple examples of using the framework.
 Example code often forms one of the most important kinds of framework
 documentation, since it shows concrete examples of framework
-usage. \cite[p. 498]{fayad:99}
+usage \cite[p. 498]{fayad:99}.
 
 Figure \ref{high-level-interface} shows the highest-level
 interface usage, in which an entire experi\-ment---training on a
@@ -1251,11 +1251,11 @@ However, many environments routinely use richer data models for
 documents.  For instance, researchers in the Linguistics community
 often represent documents as hierarchical data structures indicating
 each syntactical element's relationship to the other syntactical
-elements in the document. \cite[ch. 11 \& 12]{manning:99} \cite{sag:99}
+elements in the document \cite[ch. 11 \& 12]{manning:99} \cite{sag:99}.
 Additionally, many structured HTML and XML business documents are
 represented using the Document Object Model, which provides a common
 programmatic interface to the logical structure of
-documents. \cite{dom}
+documents \cite{dom}.
 
 Because few TC techniques in the common literature take advantage of
 document structure, and because several techniques depend on
@@ -1294,10 +1294,10 @@ future work.
 Hierarchical categorization is the process of categorizing documents
 into a set of categories possessing a treelike structure.  The
 hierarchical nature of the category set may be exploited for both
-increased efficiency and improved accuracy. \cite{dumais:00}  Because
+increased efficiency and improved accuracy \cite{dumais:00}.  Because
 some common categorization problems are inherently hierarchical, the
 field of hierarchical categorization has seen significant attention in
-the research literature. \cite[p. 7]{sebastiani:02}
+the research literature \cite[p. 7]{sebastiani:02}.
 
 In the \aicat\ framework, hierarchical categorization has not
 explicitly been supported in the architecture.  The set of categories

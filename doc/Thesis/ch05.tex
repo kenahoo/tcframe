@@ -24,7 +24,7 @@ framework will behave differently on different data sets, it is
 important to understand the characteristics of each corpus.  For
 instance, different feature selection and categorization algorithms
 may scale differently in relation to the size of the training corpus,
-both in terms of efficiency and accuracy. \cite{chakrabarti:98} Also,
+both in terms of efficiency and accuracy \cite{chakrabarti:98}. Also,
 the specifics of the categorization problem in each corpus may be more
 amenable to one categorization technique or another.
 
@@ -50,7 +50,7 @@ they will only slow processing and add noise to the data.
 
 The ApteMod version of the Reuters-21578 corpus has become a standard
 benchmark corpus in evaluating Text Categorization
-systems. \cite{yang:99,joachims:98} In terms of evaluating the \aicat\
+systems \cite{yang:99,joachims:98}. In terms of evaluating the \aicat\
 framework, it provides an opportunity to compare the performance of
 \aicat\ with other implementations of the same TC algorithms so that
 the correctness of the present implementation can be verified.
@@ -67,7 +67,7 @@ with 36.7\% of the documents in the most common category, and only
 In fact, the original data source is even more skewed---in creating
 the corpus, any categories that did not contain at least one document
 in the training set and one document in the test set were removed from
-the corpus. \cite{yang:99}
+the corpus \cite{yang:99}.
 
 In the ApteMod corpus, each document belongs to one or more
 categories.  There are 90 categories in the corpus.  The average
@@ -111,7 +111,7 @@ helpful.
 
 The Dr. Math corpus is a collection of 6,630 English-language messages
 sent to the ``Ask Dr. Math'' ask-an-expert service for
-students. \cite{drmath} Each message has been manually assigned by a
+students \cite{drmath}. Each message has been manually assigned by a
 domain expert to one or more categories,
 with category names indicating both math topic and grade level,
 e.g. ``High School Geometry.''  There are 95 categories in the
@@ -186,7 +186,7 @@ Table \ref{aptemod-results} summarizes the results of three different
 machine learning methods in \aicat\ as compared with the baseline
 categorizer described above.  Table \ref{aptemod-yang} gives similar
 scores from a well-known comparative study of common categorization
-algorithms. \cite{yang:99} Where possible, the present study has
+algorithms \cite{yang:99}. Where possible, the present study has
 attempted to duplicate the findings in \cite{yang:99}, though in some
 cases there is not enough information to duplicate the findings
 exactly, and in some cases the \aicat\ framework lacks certain
@@ -238,7 +238,7 @@ significantly worse than the findings in \cite{yang:99}.  The reasons
 for this are not clear---\aicat\ currently uses an SVM implementation
 based on the \texttt{libsvm} C library \cite{libsvm}, whereas
 \cite{yang:99} used $SVM^{light}$ as its
-implementation\cite{joachims:99a}, and there may be major differences
+implementation \cite{joachims:99a}, and there may be major differences
 in the behavior of these two libraries.  Since the macro-averaged scores are
 particularly bad, it may be inferred that \cite{libsvm} is not
 performing well on rare categories.  In both studies, a linear SVM
@@ -286,7 +286,7 @@ criterion was used with which categorizer) for feature selection,
 while \emph{document frequency} was used here.  This should not be a
 major factor in the results, as document frequency has been shown to
 produce results competitive with other feature selection methods on
-this corpus. \cite{yang:97}
+this corpus \cite{yang:97}.
 
 
 
@@ -479,11 +479,11 @@ Unfortunately, there are as yet no standard methods of objectively
 evaluating the quality of a framework's design.  Such a method is not
 likely to appear in the near future, because framework design is a
 highly subjective process requiring much expertise in the framework
-developer. \cite[sec. 1.5]{fayad:99} Some quality metrics have been
+developer \cite[sec. 1.5]{fayad:99}. Some quality metrics have been
 proposed, but they tend to rely on comparing different releases of a
 framework as it evolves to meet application needs, interpreting any
 major changes as flaws in the original framework
-design. \cite[ch. 25]{fayad:99} Because \aicat\ is a newly released
+design \cite[ch. 25]{fayad:99}. Because \aicat\ is a newly released
 framework, this kind of comparison between releases is not possible.
 
 In order to provide evidence of the framework's usefulness, therefore,

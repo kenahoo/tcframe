@@ -3,7 +3,7 @@
 
 With the functionality requirements and class designs in Chapter
 \ref{design} as a guide, the \aicat\ framework has been implemented
-and released under an open source license\cite{raymond:97,dibona:99} as a
+and released under an open source license \cite{raymond:97,dibona:99} as a
 part of this thesis and as a continuing project in Text
 Categorization.  This chapter describes some of the implementation
 decisions that have been made in \aicat\, and provides some of the
@@ -67,7 +67,7 @@ the \aicat\ project, which provides the following benefits.
 To implement the behavior discussed in Sections \ref{ml-config} and \ref{factory-method},
 the \class{Class::Con\-tain\-er} module from CPAN\footnote{The
 \class{Class::Container} module was written by Ken Williams for a
-previous project\cite{rolsky:02} and greatly extended for the \aicat\
+previous project \cite{rolsky:02} and greatly extended for the \aicat\
 project.} implements the abstract parent class \aclass{ObjectFactory}
 shown in Figure \ref{factory-constructors}.  It provides the generic
 specification of object constructor parameters, as well as generic
@@ -126,8 +126,7 @@ also inherited from \class{Class::Container}, as a factory method.  In
 the object specification, the ``delayed'' flag indicates that the
 objects will be created on demand in this manner---if this flag were
 not specified, the objects would be automatically created during the
-\method{new} method in an aggregation\cite[p. 22]{gamma:95}
-manner.
+\method{new} method in an aggregation manner \cite[p. 22]{gamma:95}.
 
 
 \section{Data Structures}
