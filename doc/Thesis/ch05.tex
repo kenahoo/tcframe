@@ -274,7 +274,8 @@ tasks here, because it may give insight into the character of the
 system's performance.
 
 
-\subsection{Averaging Measures Across Categories}
+\subsection{Combining Measures Across Categories}
+\label{combining-measures}
 
 Section \ref{measures} introduced several performance measures that
 may be defined to evaluate a categorizer on a single category.  In
@@ -339,7 +340,36 @@ error^M
 \end{eqnarray*}
 % \end{displaymath}
 
-\begin{table}
+
+\subsection{Results}
+
+Using the measures defined in Sections \ref{measures} and
+\ref{combining-measures}, categorization experiments were performed on
+each of the four corpora described in Section \ref{Corpora}.  The
+parameters controlling each experiment were optimized to provide the
+best performance on the test set---in this sense, the test set might
+be thought of more correctly as a validation set, because in a strict
+testing environment the performance on the test set should not
+influence training parameters.  This methodology was adopted because
+it more closely matches the procedure that would be used when building
+an application, in which the true test set may consist of documents
+not yet posessed by the developer, i.e. the set of target documents
+in the application domain.
+
+Where a baseline score is given in the results, this refers to a
+simple probabilistic categorizer that assigns categories to each
+document, weighting the probability of assignment by the frequency of
+each category in the training set.  For instance, if a certain
+category was present in 40\% of the training documents, any document
+in the test set would have a probability of 0.4 of being assigned to
+that category by the baseline categorizer.  
+
+\subsubsection{ApteMod}
+
+Table \ref{aptemod-results} summarizes the results of the 
+
+
+\begin{table} \label{aptemod-results}
 \begin{center}
 \begin{tabular}{|r c c c c c c c|}
 \hline
@@ -370,6 +400,10 @@ kNN & ? & ? & .5242 & .8339 & .8807 & .8567 & .00385 \\
 \caption{Results from \cite{yang:99} on ApteMod corpus}
 \end{table}
 
+
+\subsubsection{Dr. Math}
+\subsubsection{Signal G (Sensitivity)}
+\subsubsection{Signal G (Report Type)}
 
 \section{Efficiency}
 \label{Efficiency}
