@@ -908,13 +908,11 @@ Section \ref{factory-method} ensures that each parameter becomes an
 argument to the appropriate object constructor method.
 
 \begin{figure}
-\rule{\textwidth}{1pt}
-\begin{verbatim}
+\begin{code}
 use AI::Categorizer;
 my $c = new AI::Categorizer(...parameters...);
 $c->run_experiment;
-\end{verbatim}
-\rule{\textwidth}{1pt}
+\end{code}
 \caption{Highest-level interface to \aicat}
 \label{high-level-interface}
 \end{figure}
@@ -927,8 +925,7 @@ different machines if the \param{progress\_file} parameter is used in
 order to save state between the stages.
 
 \begin{figure}
-\rule{\textwidth}{1pt}
-\begin{verbatim}
+\begin{code}
 use AI::Categorizer;
 my $c = new AI::Categorizer(...parameters...);
 
@@ -938,8 +935,7 @@ $c->read_training_set;
 $c->train;
 $c->evaluate_test_set;
 print $c->stats_table;
-\end{verbatim}
-\rule{\textwidth}{1pt}
+\end{code}
 \caption{Separate invocations of experimental phases}
 \label{medium-level-interface}
 \end{figure}
@@ -958,16 +954,14 @@ category with the best score, but another application may require
 different information from the \class{Hypothesis} object \texttt{\$h}.
 
 \begin{figure}
-\rule{\textwidth}{1pt}
-\begin{verbatim}
+\begin{code}
 my $l = AI::Categorizer::Learner->restore_state(...);
 while (...) {
   my $d = ...create a document...
   my $h = $l->categorize($d);
   print "Best category: ", $h->best_category, "\n";
 }
-\end{verbatim}
-\rule{\textwidth}{1pt}
+\end{code}
 \caption{Using \aicat\ for direct categorization of documents}
 \label{application-interface}
 \end{figure}
