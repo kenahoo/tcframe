@@ -223,35 +223,39 @@ to the \method{categorize} function.
 \label{sql-insert}
 \end{figure}
 
-If the categorization is to take place within a database, where often categorized 
-documents are going to be appended to the learning set, a learning algorithm which has 
-very little training overhead is ideal. This prevents the need to retrain a categorizer 
-after each document insertion. K-nearest neighbour is one such learning algorithm. K-
-nearest neighbour or KNN involves mapping each document to an n dimensional 
-vector. When a document is to be classified it is also mapped to a vector and 
-compared to the vectors of the documents in the learning set. The k documents which 
-are closest (in vector space) to the document to be classified are kept for reference. 
-These k documents are consulted and the most prevalent category amongst these 
-documents is assigned to the new document. 
+If the categorization is to take place within a database, where
+categorized documents are often going to be appended to the learning
+set, a learning algorithm which has very little training overhead is
+ideal.  This avoids the need to retrain a categorizer after each
+document insertion.  Two such algorithms are the \naive\ Bayes
+algorithm (NB) and the K-Nearest Neighbor algorithm (kNN).
 
-In the kNN learner module created, the comparison between vectors was made by 
-normalizing each vector and 
-finding their dot product. The dimension of each vector was, in this case, 
-representative of the prevalence of a keyword in the document. This in effect gives a 
-cosine of the two vectors being compared. 
+The training phase in NB consists only of counting term frequencies in
+each document and using them to calculate conditional probabilities
+between terms and categories.  These probabilities are then consulted
+when categorizing a new document, with conditional probabilities for
+each term being multiplied to find the probability that a given
+document belongs to a certain category.
 
-The kNN module created has two customizable variables: threshold and k-value. The 
-k-value governs how many neighbours are consulted to decide the category of the 
-document. The threshold governs the confidence of the learner required to apply a 
-category to a document. For example if a learner identifies 10 neighbours (i.e. k-value 
-= 10) and finds 10 unique categories amongst those neighbours, the confidence for 
-each category would be 10%. If the threshold is set to 0.15 the learner will not apply 
-any category to the new document. Thus the threshold is a good control of precision 
-within the classification system.
+kNN in its basic form has essentially no training phase.  Each
+document is represented as an $n$-dimensional vector, where $n$ is the
+number of unique terms in the training set.  When a new document is to
+be classified, it is compared to the vectors of the documents in the
+training set. The $k$ training vectors which are closest to the test
+vector are found (with distance defined as the cosine of the angle
+between any two vectors), and the most prevalent category or
+categories amongst these is assigned to the new document.
 
-Since, the categorization performance is determined only by the classification 
-framework, all these methods should behave as they do in standalone mode (outside 
-the database). What the integration into the RDBMS does is to make the 
+In our testing, we have found that NB is a more accurate categorizer
+than kNN.  This seems contrary to the findings of \cite{yang:99}, and
+may reflect the fact that our implementation of NB is more mature than
+our kNN implementation.  The rest of this paper will focus on the NB
+experiment and results.
+
+Since the categorization performance is determined only by the classification 
+framework, all these methods should behave the same inside the
+database as they do outside 
+the database. What the integration into the database does is to make the 
 functionalities of the framework available as procedures in the SQL language.
 Since relational databases can be designed using an object oriented methodology \cite{blaha:88,
 rumbaugh:91}, by integrating it in this way, the classification task 
@@ -260,8 +264,8 @@ rumbaugh:91}, by integrating it in this way, the classification task
 \section{Method and Results}
 \label{results}
 
-The training set of the Dr Math corpus (5305 documents) was loaded into a database 
-table named "documents". This table consisted of 3 columns, name, content and 
+The 5305 training documents in the Dr. Math corpus were loaded into a database 
+table named "documents". This table consisted of 3 columns: name, content and 
 categories. The testing set was then inserted into the database, one document at a time 
 using a statement similar to that in Figure \ref{sql-insert}. After each insert a SELECT query was 
 run to extract the assigned categories. These categories were then compared to the 
@@ -269,8 +273,8 @@ actual categories of that document. Through this comparison the performance of t
 categorization in terms of recall  and performance  was measured. The precision and 
 recall\footnote{Recall is the proportion of the target items that the
 system selected, i.e. tp/(tp+fn).  Precision is the proportion of
-selected items the system got right, i.e. tp/(tp+fp).} was then used
-to calculate the F1 measure \cite{calvo:01,sebastiani:02}.
+selected items the system got right, i.e. tp/(tp+fp).} were then used
+to calculate the $F_1$ measure \cite{calvo:01,sebastiani:02}.
 
 \begin{table}
 \begin{tabular}{|r|r|r|r|}
@@ -284,6 +288,17 @@ Baseline & 0.018   & 0.042   & 0.031 \\ \hline
 \end{table}
 
 XXX - ``baseline'' was calculated using only class prior probabilities.  Needs discussion.
+
+XXX - find a home for this
+The kNN module created has two customizable variables: threshold and k-value. The 
+k-value governs how many neighbours are consulted to decide the category of the 
+document. The threshold governs the confidence of the learner required to apply a 
+category to a document. For example if a learner identifies 10 neighbours (i.e. k-value 
+= 10) and finds 10 unique categories amongst those neighbours, the confidence for 
+each category would be 10%. If the threshold is set to 0.15 the learner will not apply 
+any category to the new document. Thus the threshold is a good control of precision 
+within the classification system.
+
 
 
 \begin{table}
