@@ -58,7 +58,7 @@ if (0) {
   $k->save_state("$name-save2") or die $!;
 }
 
-if (1) {
+if (0) {
   ### Train the categorizer
   warn "restoring from $name-save2";
   my $k = AI::Categorizer::KnowledgeSet->restore_state("$name-save2");
@@ -79,7 +79,10 @@ if (1) {
   my $nb = AI::Categorizer::Categorizer::NaiveBayes->restore_state("$name-save3");
 
   my $cats = read_cats("$name/cats.txt");
+  my %totals;
+  my @metrics = qw(precision recall F1);
 
+  my $i;
   opendir my($dir), "$name/test" or die $!;
   while (my $file = readdir $dir) {
     next if $file =~ /^\./;
@@ -91,10 +94,17 @@ if (1) {
 					  content => $body,
 					 );
     my $h = $nb->categorize($d);
-    print " => @{[ $h->categories ]}\n";
-#last if $::i++ > 500;
+    printf (" => @{[ $h->categories ]}, %s=%f, %s=%f, %s=%f\n",
+	    map {$_, $h->$_($cats->{$file})} @metrics
+	   );
+    foreach (@metrics) {
+      $totals{$_} += $h->$_($cats->{$file});
+    }
+    $i++;
   }
   closedir $dir;
+
+  printf "Total (micro): %s=%f, %s=%f, %s=%f\n", map {$_, $totals{$_}/$i} @metrics;
 }
 
 ########################################################################
