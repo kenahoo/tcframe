@@ -64,7 +64,7 @@ the \aicat\ project, providing the following benefits:
 \label{constructor-methods}
 
 To implement the behavior discussed in Sections \ref{ml-config} and \ref{factory-method},
-the \class{Class::Con\-tain\-er} module from CPAN\footnote{The
+the \class{Class::\-Con\-tain\-er} module from CPAN\footnote{The
 \class{Class::Container} module was written by Ken Williams for a
 previous project \cite{rolsky:02} and greatly extended for the \aicat\
 project.} implements the abstract parent class \aclass{ObjectFactory}
@@ -181,7 +181,7 @@ However, there are certain liabilities with this approach as well:
   memory-greedy in order to provide benefits like automatic memory
   allocation and transparent casting.  This can cause low-level data
   structures to consume much more memory than needed, and this is the
-  case for the base \texttt{FeatureVector} class.
+  case for the base \class{Feature\-Vector} class.
 \item The hash key in the feature vector is always stored as a string,
   but it would be more compact to store it as a single integer
   representing an index into a global array of all features in the
