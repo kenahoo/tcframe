@@ -117,7 +117,7 @@ write custom code to handle domain-specific cases.
 
 Like many Language Processing fields, much of Text Categorization has
 to do with the problem of \emph{high dimensionality}.
-\cite[p. 13]{sebastiani:02} \cite[p. XXX]{manning:99} The
+\cite[p. 13]{sebastiani:02} \cite[p. XXX]{manning:99} \cite{joachims:98} The
 dimensionality of the space in which the Machine Learning algorithm
 must operate can be as large as the total number of distinct terms in
 $\train$.  This presents two problems.  First, the Machine Learning
@@ -146,11 +146,49 @@ Another way to reduce dimensionality in a TC system is to apply
 statistical techniques to transform the entire set of document terms
 into a smaller feature set with less sparsity.  The former does this
 by choosing the ``most relevant'' terms using some statistical
-criterion such as the number of documents each term appears in, or a
-$\chi^2$ metric of term-document correlation.\cite{yang:97} The latter
+criterion to measure relevance.  The latter
 applies some transformation such as singular value decomposition (used
 in the ``Latent Semantic Indexing'' technique) or term clustering in
 order to create a new, lower-dimensional space of features.
+
+Three of the most commonly used feature selection criteria are the
+\emph{information gain} (IG), \emph{document frequency} (DF), and
+\emph{$\chi^2$} metrics.\cite{yang:97} $\text{DF}(f_k)$ is simply the
+number of documents of $\train$ in which the feature $f_k$ occurs.
+The other two metrics are defined as follows---here, $A$, $B$, $C$,
+and $D$ are defined as the terms in the contingency table shown in
+Table \ref{termcat-contingency}, and $\Entr(x)$ and $\Entr(x|y)$ are the
+standard entropy and conditional entropy functions from Information
+Theory.\cite[ch. XXX]{manning:99}
+
+% XXX - need to check notation for conditional entropy in Manning
+\begin{align*}
+\chi^2(f_k,c_j) & = \frac{|\train|(AD-CB)^2}{(A+C)(B+D)(A+B)(C+D)} \\
+        IG(f_k) & = - \Entr(\cats) + P(f_k) \Entr(\cats|f_k)
+	            + P(\overline{f_k}) \Entr(\cats|\overline{f_k})
+\end{align*}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\cline{3-4}
+\multicolumn{2}{c|}{} & \multicolumn{2}{c|}{$c_j$ \textbf{occurs}} \\
+\cline{3-4}
+\multicolumn{2}{c|}{} & Yes & No \\
+\hline
+$f_k$           & Yes & $A$ & $B$ \\
+\cline{2-4}
+\textbf{occurs} & No  & $C$ & $D$ \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Contingency table for category $c_j$ and term $f_k$}
+\label{termcat-contingency}
+\end{table}
+
+In order to find the overall $\chi^2(f_k)$ metric, the terms
+$\chi^2(f_k,c_j)$ may either be averaged, or the maximum value for any
+category may be adopted.
 
 \subsection{Vector space modeling}
 
@@ -339,11 +377,8 @@ information on a per-category basis instead of a per-document basis,
 the size of the trained categorizer will stay fairly small compared to
 more resource-intensive categorizers like k-Nearest-Neighbor.
 
-\subsection{Support Vector Machines}
-
-XXX - need to write
-
 \subsection{k-Nearest-Neighbor}
+\label{knn}
 
 The k-Nearest-Neighbor algorithm (kNN) is one of the most conceptually
 simple TC algorithms in the literature.  All documents in $\train$ are
@@ -380,6 +415,37 @@ categorization.  In addition, the entire training corpus $\train$ must
 be preserved in the categorizer's model, so memory or storage
 requirements may be prohibitively high in some environments.
 
+\subsection{Support Vector Machines}
+
+Support Vector Machines (SVM) are another extremely active area of
+research in the Text Categorization literature.  Their use in TC was
+introduced by \cite{joachims:98}, and several studies, including
+\cite{joachims:98} and \cite{yang:99}, have found their results to be
+highly competitive with other Machine Learning methods on the standard
+benchmark corpora.
+
+SVM techniques are similar to kNN in that they view the training
+documents as vectors in a vector space, and that they require a
+similarity function (called the ``kernel'' function) that plays a role
+similar to the function $m$ in Section
+\ref{knn}.\cite[ch. 1]{scholkopf:02} However, instead of considering
+the documents most similar to the document to be categorized, SVM
+algorithms learn a \emph{decision surface} during training which
+divides the vector space into regions that indicate category
+membership.  Categorization then simply consists of determining which
+side of the decision surface each document to be categorized lies on.
+
+One key advantage of SVMs is that they can deal well with very large
+feature spaces, both in terms of the correctness of the categorization
+results and the efficiency of the training and categorization
+algorithms.  This implies that little or no feature selection may need
+to be performed on the training data, removing a possibly
+time-consuming aspect of the TC process.  Unfortunately, a
+disadvantage of many SVM training algorithms is that they scale poorly
+with $|\train|$, in some cases requiring as much as $O(|\train|^3)$ or
+$O(|\train|^4)$.  This may make their use with large numbers of
+documents prohibitive unless the standard algorithms are modified.
+
 
 \section{Related products}
 
@@ -393,7 +459,7 @@ comparison.
 
 Weka is an open-source system for Machine Learning originally
 developed at the University of Waikato, New Zealand, by Ian H. Witten
-and Eibe Frank.\cite{weka} Its primary
+and Eibe Frank.\cite{weka:99} Its primary
 audience is the international community of academic Machine Learning
 researchers, most notably those working with Categorization or
 Clustering problems that arise from working with text.  Weka has
@@ -449,7 +515,13 @@ implemented.
 
 \subsection{Autonomy.com}
 
-XXX - need to write
+Autonomy Corporation (\url{http://www.autonomy.com/}) provides
+information services and product licensing to enterprise-level
+organizations.  Some of its customers include General Motors,
+Ericsson, Sybase, Deutsche Bank, and the United States Department of
+Homeland Security.  Its products range from 
+
+
 
 \subsection{Teragram Corporation}
 
