@@ -77,7 +77,7 @@ of categories to each document based on the documents' content.
 
 The basic outline for creating Text Categorization applications is relatively simple: the
 documents in $\train$ are presented to the TC system, the system
-process the documents' content, and a specific categorization
+processes the documents' content, and a specific categorization
 function $\func$ is produced that may be used to categorize future documents
 from the set $\docs$.  In an application, however, many details of
 this process need to be managed in specific and often varying ways.
@@ -125,8 +125,8 @@ whereas in other collections they may only add noise to the data.
 
 For reasons similar to those mentioned in the previous section, it may
 be desirable for a TC system to deal with these issues directly, or
-more likely, provide a mechanism for a developer to extend the system
-in this way, rather than forcing the developer to convert all data to
+to provide a mechanism to extend the system to recognize new formats,
+rather than forcing the conversion of all data to
 a format recognized by the system.
 
 \subsection{Document structure}
@@ -135,7 +135,7 @@ Separate from the issue of document \emph{format} is that of document
 \emph{structure}.  In an age when XML data is increasingly more common
 as a data exchange and storage format, the structure of a document,
 i.e. the way the constituent parts of a document interrelate and nest
-to create the entire document, may be important to understanding the
+to create the entire document, may be important in understanding the
 document's meaning.
 
 In the TC literature, little is currently made of document structure,
@@ -144,7 +144,7 @@ a document according to pre-set importance weights of the sections in
 which those terms were found.  For instance, a term found in the title
 of a document might be considered twice as important as a term found
 in the body.  However, as research into categorization of structured
-documents progresses, this may be an important area to consider in
+documents progresses, this may be an fruitful area to consider in
 building TC systems.
 
 \subsection{Tokenizing of data}
@@ -164,8 +164,8 @@ written languages such as Japanese or Korean do not contain spaces indicating di
 words, so a sophisticated tokenizer may be required when dealing with
 languages like these.
 
-In addition, the tokenization process (or equivalently, a stage
-directly after tokenization) may remove from the data any term in a
+In addition, the tokenization process 
+may remove from the data any term in a
 pre-defined list of ``stop words,'' which are words that occur very
 commonly in the domain (such as ``the'' or ``and'' in most English
 texts) and are assumed to contain little or no relevance to the
@@ -173,9 +173,8 @@ categorization problem at hand. \cite[p. 15]{sebastiani:02}
 \cite{mladenic:98}
 
 In order to address these issues, a TC system needs to allow
-variations in the tokenizing process.  This may involve providing a
-set of parameters that the user can adjust in order to affect
-tokenizing, or in some cases the application developer may need to
+variations in the tokenizing process.  This may involve adjusting a
+set of control parameters, or in some cases the application developer may need to
 write custom code to handle domain-specific cases.
 
 \subsection{Dimensionality reduction}
@@ -215,22 +214,23 @@ Another way to reduce dimensionality in a TC system is to apply
 statistical techniques to transform the entire set of document terms
 into a smaller feature set with less sparsity.  The former does this
 by choosing the ``most relevant'' terms using some statistical
-criterion to measure relevance.  The latter
+criterion.  The latter
 applies some transformation such as singular value decomposition (used
-in the ``Latent Semantic Indexing'' technique) or grouping terms into clusters in
+in the ``Latent Semantic Indexing'' technique \cite{deerwester:90}) or
+grouping terms into clusters in
 order to create a new, lower-dimensional space of features.
 
 Three of the most commonly used feature selection criteria are the
-\emph{information gain} (IG), \emph{document frequency} (DF), and
-\emph{$\chi^2$} metrics. \cite{yang:97} $\text{DF}(f_k)$ is simply the
+\term{document frequency} (DF), \term{$\chi^2$}, and \term{information
+gain} (IG) metrics. \cite{yang:97} $\text{DF}(f_k)$ is simply the
 number of documents of $\train$ in which the feature $f_k$ occurs.
-$\chi^2$ is defined as follows---here, $A$, $B$, $C$, and $D$ are
+$\chi^2$ is defined in Equation \ref{eqn-x2-def}. $A$, $B$, $C$, and $D$ are
 defined as the terms in the contingency table shown in Table
 \ref{termcat-contingency}.
 
-\begin{align*}
-\chi^2(f_k,c_j) & = \frac{|\train|(AD-CB)^2}{(A+C)(B+D)(A+B)(C+D)} \\
-\end{align*}
+\begin{align} \label{eqn-x2-def}
+\chi^2(f_k,c_j) & = \frac{|\train|(AD-CB)^2}{(A+C)(B+D)(A+B)(C+D)}
+\end{align}
 
 
 \begin{table}
@@ -259,20 +259,18 @@ $\chi^2(f_k,c_j)$ may either be averaged (typically weighted by the
 frequency of each category), or the maximum value for any category may
 be adopted. \cite{yang:97}
 
-$IG$ is defined as follows, where $P(f_k)$ and $P(\overline{f_k})$ are
+$IG$ is defined in Equation \ref{eq-ig-def}.  $P(f_k)$ and $P(\overline{f_k})$ are
 the probabilities that a document does or does not contain $f_k$,
-respectively, $\cats_{f_k}$ and $\cats_{\overline{f_k}}$ are the
+respectively.  $\cats_{f_k}$ and $\cats_{\overline{f_k}}$ are the
 category sets in the subsets of $\docs$ containing $f_k$ or not,
-respectively, and $\Entr(x)$ is the standard entropy function from
+respectively.  $\Entr(x)$ is the standard entropy function from
 Information Theory. \cite[ch. 2]{manning:99}
 
-\begin{equation*}
+\begin{equation} \label{eq-ig-def}
         IG(f_k) = \Entr(\cats)
                   - P(f_k) \Entr(\cats_{f_k})
 	          - P(\overline{f_k}) \Entr(\cats_{\overline{f_k}})
-%        IG(f_k) = - \Entr(\cats) + P(f_k) \Entr(\cats|f_k)
-%	          + P(\overline{f_k}) \Entr(\cats|\overline{f_k})
-\end{equation*}
+\end{equation}
 
 
 \subsection{Vector space modeling}
@@ -285,14 +283,17 @@ Support Vector Machines and k-Nearest-Neighbor categorizers.  It also
 allows for arbitrary vector processing algorithms on the document data
 to improve categorization results.
 
-A common set of algorithms used for this purpose is the \emph{TF/IDF}
+A common set of algorithms used for this purpose in Information Retrieval is the \emph{TF/IDF}
 term-weighting scheme of Salton and Buckley \cite{salton:88}, which
 allows for several different ways to represent a document as a vector
 in the global vector space.  Terms may be weighted by their frequency
 in the document, by the logarithm of that frequency, or by a boolean
 figure representing only the presence or absence of the term.  Term
-weight may also be reduced by a factor representing prevalence in
-other documents, and the overall length of the document vector may be
+weight may also be reduced by a factor representing the term's
+prevalence in other documents, on the theory that any term present in
+most corpus documents possesses little discriminatory power between
+categories.
+Finally, the overall length of the document vector may be
 scaled in several different ways.  The TF/IDF vector weighting
 techniques are used commonly in TC systems, and their availability is
 desirable for the \aicat\ framework.
@@ -320,7 +321,7 @@ of categorization.
 \subsection{Machine Learning configuration}
 \label{ml-config}
 
-Even within a single Machine Learning algorithm, there may be several
+Even within a single Machine Learning algorithm there may be several
 parameters that a supervisor may vary to influence the training and
 categorization processes.  For instance, the k-Nearest-Neighbor
 algorithm has an adjustable parameter $k$, the SVM algorithm allows
@@ -363,7 +364,7 @@ Most of the standard Text Categorization literature assumes that the
 goal of TC is to assign each document to one of two mutually exclusive
 categories, otherwise known as \emph{binary
 categorization}. \cite[p. 3]{sebastiani:02} Of course, real-world
-problems often involve ontologies that consist of more than two
+problems often involve ontologies (category hierarchies) that consist of more than two
 categories, and membership may not be mutually exclusive.  For
 instance, some applications may require assigning only the most
 appropriate category from $\cats$, some may require assigning any
@@ -374,10 +375,10 @@ This situation does not represent a theoretical disconnect between
 research and practice, because each multi-category TC problem can be
 re-posed as a series of binary problems.  Most application builders,
 however, will not want to actually re-pose their problems in this
-manner, because it requires extra work, and it may obscure the true
+manner because it requires extra work and it may obscure the true
 nature of the application under development.  Therefore, it is
 desirable for a TC system to offer support for all the scenarios
-described in the previous paragraph, without requiring the
+described in the previous paragraph without requiring the
 implementers of the Machine Learning algorithms to explicitly code for
 them.  The way in which this is achieved is discussed in Section
 \ref{class-overview}.
@@ -416,7 +417,7 @@ estimated from the training data $\train$ as follows.
 \begin{align*}
 \ArgMax_{c_j\in\cats} P(c_j|d_i) 
  & = \ArgMax_{c_j\in\cats} \frac{P(d_i|c_j) P(c_j)}{P(d_i)} & (\text{by (\ref{bayes})}) \\
- & = \ArgMax_{c_j\in\cats} P(d_i|c_j) P(c_j) & (P(d_i) \text{ is constant}) \\
+ & = \ArgMax_{c_j\in\cats} P(d_i|c_j) P(c_j) & (P(d_i) \text{ is constant})
 \end{align*}
 
 $P(c_j)$ may be easily estimated from the frequency with which
@@ -428,7 +429,7 @@ then be estimated as follows.
 \begin{align*}
 \ArgMax_{c_j\in\cats} P(c_j|d_i) 
  & = \ArgMax_{c_j\in\cats} P(f_{i1} \ldots f_{ik}|c_j) P(c_j) \\
- & \approx \ArgMax_{c_j\in\cats} P(f_{i1}|c_j) \cdot \ldots \cdot P(f_{ik}|c_j) P(c_j) \\
+ & \approx \ArgMax_{c_j\in\cats} P(f_{i1}|c_j) \cdot \ldots \cdot P(f_{ik}|c_j) P(c_j)
 \end{align*}
 
 This final step, which gives this algorithm its ``na\"ive'' moniker,

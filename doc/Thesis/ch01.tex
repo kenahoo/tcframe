@@ -17,17 +17,17 @@ can automatically place text-based documents into predefined
 categories.  For example, one system may assign themes such as
 ``sports,'' ``finance,'' or ``politics'' to general-interest news
 stories.  Another system may automatically route a user's email
-messages by into folders based on the messages' content.  In these
+messages by placing documents into folders based on the messages' content.  In these
 scenarios, the news
 story or email message plays the role of a ``document,'' and the news
-theme or email folder plays the role of a ``category.''  The system's
-categorization decisions may be based on any arbitrary properties of
-the documents, usually (though not always) some analysis of the text
-content of each document.
+theme or email folder plays the role of a ``category.''  TC systems'
+categorization decisions are usually based on some analysis of the
+words in each document, though they may be based on any arbitrary
+document properties.
 
 The standard modern approach to TC involves using Machine Learning to
-create categorizers automatically, rather than manually specifying the
-criteria that a document must fulfill in order to belong to each
+create categorizers automatically rather than manually specifying the
+membership criteria for each
 category. \cite[p. 2]{sebastiani:02} The Machine Learning process
 typically examines a set of documents which have
 been pre-assigned to categories, and makes inductive abstractions
@@ -167,7 +167,7 @@ following benefits as a reuse technique:
 \item[Modularity] The hot spots of a framework represent encapsulated
   solutions to the variations in the application domain.  This helps
   minimize the impact of design and implementation changes in
-  applications, because they will usually be limited to these
+  applications because they will usually be limited to these
   encapsulated areas.
 \item[Reusability] Frameworks represent both design reuse and code
   reuse, leveraging both the expertise of the framework developer
@@ -178,7 +178,7 @@ following benefits as a reuse technique:
 \item[Extensibility] Whitebox reuse allows frameworks to be used for
   purposes that the framework developer did not or could not foresee,
   and allows application developers to create interfaces to
-  proprietary or non-generic entities while using the framework
+  proprietary or non-generic entities while using the framework's
   general architecture.
 \item[Inversion of control] Custom application code can play a
   subordinate role to generic framework code, so that different
@@ -200,7 +200,7 @@ discussing commonly seen patterns of cooperation in object-oriented
 design. \cite[p. 3]{gamma:95} The design patterns do not provide
 prescriptions for software design, but rather descriptions of common
 practices in common situations.  Each design pattern in \cite{gamma:95}
-includes discussions of various trade-offs that can be made in applying
+includes discussions of variations that can be made in applying
 the pattern, indicating that a design pattern is actually a family of
 similar solutions to a problem, not one rigid solution.
 
@@ -232,19 +232,19 @@ Weka is an open-source system for Machine Learning originally
 developed at the University of Waikato, New Zealand, by Ian H. Witten
 and Eibe Frank. \cite{weka:99} Its primary
 audience is the international community of academic Machine Learning
-researchers, most notably those working with Categorization or
-Clustering problems that arise from working with text.  Weka has
+researchers, most notably those working with categorization or
+clustering problems that arise from working with text.  Weka has
 undergone at least one major code rewrite; at present it is
 implemented as a set of related Java classes with documented internal
-interfaces, so it may itself be considered a framework.
+interfaces.  Since these classes may be extended, Weka may itself be considered a framework.
 
 Weka is used extensively throughout the academic Text Categorization
 community, and as such includes support for many cutting-edge
-categorization techniques, including advances in Support Vector
+categorization techniques.  These include recent advances in Support Vector
 Machines, k-Nearest-Neighbor, \naive\ Bayes, and other categorizers
 (see Section \ref{machine-learning}), as well as several variations of
-feature selection techniques (see Section \ref{dim-reduction}).  It is
-therefore a standard against which the \aicat\ framework can
+feature selection techniques (see Section \ref{dim-reduction}).  Weka
+therefore provides a standard against which the \aicat\ framework can
 be measured, as well as a resource which can be leveraged in its
 construction.
 
@@ -296,7 +296,7 @@ Text Processing and Information Retrieval, including categorization,
 summarization, and search systems.  The company's web site claims that
 their products are ``automatic, language independent, fast, scalable,
 and accurate.''  Since the products are proprietary, no independent
-verification of these claims has been done in this study, but the
+verification of these claims has been done in this thesis, but the
 claims do provide a list of attributes this company feels are
 important in marketing its products.
 
@@ -309,8 +309,7 @@ consistent with \naive\ Bayes categorization and an Information Gain
 feature selection criterion (see Sections \ref{machine-learning} and
 \ref{dim-reduction}).  However, one must be cautious in making
 assessments like this, since there are other ways of employing
-Bayesian techniques for categorization that have not been as widely
-reported in the research literature as \naive\ Bayes, and Shannon's
+Bayesian techniques for categorization, and Shannon's
 information theory pervades many areas of TC and Information
 Retrieval, including Decision Tree construction
 \cite{quinlan:89,wallace:93} and search relevance ranking
@@ -364,7 +363,7 @@ simple rules (usually because the sender and receiver have agreed upon
 a tagging scheme to mark documents' important properties).  It's not
 clear whether Teragram's Rule-Based Categorizer and Automatic
 Categorizer can cooperate on a single taxonomy, but they indicate that
-the two systems are complementary rather than antithetic.
+the two systems are complementary rather than exclusive.
 
 Teragram also offers separate licensing for many of the tools that
 make up its products.  In this sense, it has a strategy similar to one
