@@ -848,8 +848,68 @@ the framework structure can be highly parameterized.
 
 \section{Limitations}
 
-XXX Here, write about basic assumptions \aicat\ makes about the
-general TC problem, and what happens when those assumptions aren't
-true.  For example, structured feature vectors instead of flat,
-non-bag-of-words, etc.
+In any software design process, choices must be made that determine
+the scope and direction of the project.  In designing \aicat, these
+choices have been made in a way that tries to maximize usefulness for
+the intended audience, reuse of framework components, framework
+efficiency and flexibility, and rapid application development.  In
+some cases, these decisions may limit the capabilities of the
+framework.  This section describes some of these limitations, explains
+the reasons for them, and proposes alternative ways to deal with the
+problems they present.
+
+\subsection{Structured Feature Vectors}
+
+The basic data model representing documents in the \aicat\ framework
+is the feature vector.  In this model, certain features of each
+document (typically counts of words or word stems) are measured, and
+their values are represented as vectors in a vector space encompassing
+all document vectors in the training set.  Each document vector is
+\emph{flat}, i.e. an $n$-dimensional vector with no internal
+structure, where $n$ is the total number of features in all the
+training documents.  This representation has been shown to be very
+effective for Text Categorization applications
+\cite[p. 10]{sebastiani:02}, and is crucial for such common TC
+algorithms as k-Nearest-Neighbor and Support Vector Machines.
+
+However, many environments routinely use richer data models for
+documents.  For instance, researchers in the Linguistics community
+often represent documents as hierarchical data structures indicating
+each syntactical element's relationship to the other syntactical
+elements in the document.\cite[ch. 11 \& 12]{manning:99} \cite{sag:99}
+Additionally, many structured HTML and XML business documents are
+represented using the Document Object Model, which provides a common
+programmatic interface to the logical structure of
+documents.\cite{dom}
+
+Because few TC techniques in the common literature take advantage of
+document structure, and because several techniques depend on
+unstructured vector representations, the \class{FeatureVector} class
+only provides an interface to unstructured feature vectors.  This
+class does leave the \emph{implementation} of the vectors unspecified,
+however, so that different internal representations are possible (see
+Section \ref{imp-featurevectors} for more on this topic).
+
+In an application using structured documents, two options exist for
+taking advantage of this structure using \aicat.  One option is to
+``flatten'' the structure of the document into a traditional feature
+vector representation. (XXX - need to explain further, with
+references)  
+
+Another option if the document structure is just a sequence of
+document sections and not arbitrarily nested structures is to use the
+\aicat\ framework's \param{content\_weights} parameter.  This allows
+each document to be divided into an arbitrary number of sections such
+as title, abstract, body, and so on, assigning ``importance'' weights
+to each section.  These weights will be used when creating a feature
+vector from the document content, in effect automatically flattening
+the document into a traditional feature vector.
+
+Neither of these two solutions allow the framework to truly deal with
+structured documents in any deep way.  It is therefore to be
+understood that the framework is not currently capable of exploiting
+this structure very deeply, and this is a possible area of future
+work.
+
+\subsection{Hierarchical Categorization}
 
