@@ -99,7 +99,7 @@ context, can be performed.\cite[p. XXX]{manning:99} It is not
 sufficient to split the data by using whitespace (spaces, tabs
 returns, and the like) as delimiters, because this does not deal with
 punctuation characters.  It is also not obvious whether terms with
-punctuated suffixes like \emph{'s} or \emph{'t}, or hyphenated terms
+punctuated suffixes like \emph{boy's} or \emph{doesn't}, or hyphenated terms
 like \emph{ready-made} ought to be treated as one feature or multiple
 features---this decision will usually need to be made with some
 knowledge of the document set $\docs$.  In addition, many non-European
@@ -113,15 +113,70 @@ set of parameters that the user can adjust in order to affect
 tokenizing, or in some cases the application developer may need to
 write custom code to handle domain-specific cases.
 
-\subsection{Linguistic stemming}
+\subsection{Dimensionality reduction}
 
+Like many Language Processing fields, much of Text Categorization has
+to do with the problem of \emph{high dimensionality}.
+\cite[p. 13]{sebastiani:02} \cite[p. XXX]{manning:99} The
+dimensionality of the space in which the Machine Learning algorithm
+must operate can be as large as the total number of distinct terms in
+$\train$.  This presents two problems.  First, the Machine Learning
+algorithm may scale poorly with increased dimensionality, so that
+using the full feature set may be prohibitively costly.  Second, the
+$\train$ data in a high-dimensionality space may be too sparse, with
+not enough nonzero data points to make any useful inductive leap
+during training.  This is particularly true in some highly
+morphological languages like Finnish, in which a single word stem may
+have thousands or millions of inflected forms, and most forms may only
+be seen one time in all of $\train$, making them almost useless for
+inductive learning.
 
+One way to address the problem of high dimensionality is by applying a
+linguistic \emph{stemming} algorithm to the terms found in $\train$
+and $\docs$.  These algorithms transform words by removing prefix and
+suffix morphemes, so that words like \emph{running} and \emph{runner}
+collapse to their linguistic stem \emph{run}.  Although the use of
+such processing has occasionally been reported to harm overall system
+performance \cite{baker:98}, availability of such an algorithm is
+usually seen as a necessary component of a TC
+system.\cite[p. 12]{sebastiani:02}
 
-\subsection{Feature selection}
+Another way to reduce dimensionality in a TC system is to apply
+\emph{feature selection} and/or \emph{feature extraction}.  Both are
+statistical techniques to transform the entire set of document terms
+into a smaller feature set with less sparsity.  The former does this
+by choosing the ``most relevant'' terms using some statistical
+criterion such as the number of documents each term appears in, or a
+$\chi^2$ metric of term-document correlation.\cite{yang:97} The latter
+applies some transformation such as singular value decomposition (used
+in the ``Latent Semantic Indexing'' technique) or term clustering in
+order to create a new, lower-dimensional space of features.
 
 \subsection{Vector space modeling}
 
+The discussion in the previous section suggests that each document may
+be viewed as a vector in a global vector space whose dimensions
+represent the set of all unique features from $\train$.  This idea
+forms the basis for several Machine Learning techniques, including
+Support Vector Machines and k-Nearest-Neighbor categorizers.  It also
+allows for arbitrary vector processing algorithms on the document data
+to improve categorization results.
+
+A common set of algorithms used for this purpose is the \emph{TF/IDF}
+term-weighting scheme of Salton and Buckley \cite{salton:88}, which
+allows for several different ways to represent a document as a vector
+in the global vector space.  Terms may be weighted by their frequency
+in the document, by the logarithm of that frequency, or by a boolean
+figure representing only the presence or absence of the term.  Term
+weight may also be reduced by a factor representing prevalence in
+other documents, and the overall length of the document vector may be
+scaled in several different ways.  The TF/IDF vector weighting
+techniques are used commonly in TC systems, and their availability is
+desirable for the \aicat\ framework.
+
 \subsection{Machine learning algorithm choice}
+
+
 
 \subsection{Machine learning configuration}
 
@@ -132,18 +187,8 @@ write custom code to handle domain-specific cases.
 
 \section{Machine learning techniques}
 \subsection{Naive Bayes}
-\subsection{Decision Trees}
 \subsection{Support Vector Machines}
-
-\section{Evaluation}
-\subsection{Correctness}
-Precision, recall, $F_1$, error, accuracy
-\subsection{Usefulness}
-ROC curves
-\subsection{Scalability}
-\subsubsection{Architecture}
-\subsubsection{Running time}
-\subsubsection{Memory usage}
+\subsection{k-Nearest-Neighbor}
 
 \section{Related products}
 
