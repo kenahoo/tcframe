@@ -1,23 +1,55 @@
-\documentclass[a4paper,twocolumn]{article}
+\documentclass[twocolumn]{article}
+\usepackage{sample}
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
 
+
+\raggedbottom
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
 \title{A Framework for Text Categorization}
-\author{Ken Williams \and Rafael A. Calvo}
+
+\author{
+{\em Ken Williams}\\[1ex]
+School of Electrical\\
+and Information Engineering\\
+The University of Sydney\\
+Bldg J03, Sydney NSW 2006\\[1ex]
+{\em kenw@ee.usyd.edu.au}
+\and
+{\em Rafael A. Calvo}\\[1ex]
+School of Electrical\\
+and Information Engineering\\
+The University of Sydney\\
+Bldg J03, Sydney NSW 2006\\[1ex]
+{\em rafa@ee.usyd.edu.au}
+}
+\date{}
+
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
 
-\begin{center}
-School of Electrical and Information Engineering\\
-The University of Sydney\\
-Bldg J03, Sydney NSW 2006\\
-\{rafa, kenw\}@ee.usyd.edu.au
-\end{center}
 
-\section*{Abstract}
+        \begin{figure}[b]
+	~\\
+        \noindent
+        {\small\bf\raggedright
+        Proceedings of the 7th Australasian 
+	Document Computing Symposium,\\
+	Sydney, Australia,
+        December 16, 2002.
+        }
+        \end{figure}
 
+
+\subsection*{\centering Abstract}
+%IEEE allows italicized abstract
+\noindent
+{\it 
 In this paper we discuss the architecture of an object-oriented
 application framework (OOAF) for text categorization. We describe the
 system requirements and the software engineering strategies that
@@ -26,6 +58,10 @@ designing a highly reusable OOAF architecture facilitates the
 development of new applications.  We also highlight the key text
 categorization features of the framework, as well as practical
 considerations for application developers.
+}
+
+\paragraph{Keywords} 
+XXX A list of keywords based on those given in the Call for Papers should be included.
 
 
 \section{Introduction}
@@ -443,7 +479,7 @@ bleeding-edge development versions are available via CVS at
 http://www.sourceforge.net/projects/ai-categorizer/ .
 
 
-\bibliographystyle{plain}
+\bibliographystyle{sample}
 \bibliography{TC-references}
 
 
