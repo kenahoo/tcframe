@@ -473,3 +473,177 @@ $O(|\train|^4)$.  This may make their use with large numbers of
 documents prohibitive unless the standard algorithms are modified.
 
 
+\section{Performance Measures}
+\label{measures}
+
+Several statistical measures have become standard in the area of
+evaluating Text Categorization systems.\cite[p. 33]{sebastiani:02}
+Some of the most prevalant are based on the notions of
+\emph{precision} and \emph{recall} from the field of Information
+Retrieval.\cite{rijsbergen:79} Precision, often denoted by the symbol
+$\pi$, measures the probability that a document assigned by the TC
+system to a given category actually belongs to that category.
+Conversely, recall, denoted by $\rho$, measures the probability that a
+document actually belonging to a certain category will be assigned
+during testing to that category.\cite[p. 33]{sebastiani:02}
+
+The probabilities mentioned above can be estimated during testing by
+comparing how often the TC system's category choices match the correct
+categories.  A valuable tool for this analysis is the ``contingency
+table,'' which summarizes the results of the experiment for a given
+category.  Table \ref{onecat-contingency} shows a contingency table
+for the category $c_i$, i.e. any arbitrary category in the
+categorization scheme of the corpus.  Here, $A_i$, etc. represent the
+number of documents that fall into the given situation, i.e. $A_i$ is
+the number of test documents assigned to category $c_i$ by both the
+expert and the TC system.
+
+This allows us to estimate $\pi$ and $\rho$, whose true values are
+$P(Expert=Y | System=Y)$ and $P(System=Y | Expert=Y)$, respectively,
+in terms of the entries in the contingency table.  Since the number of
+documents assigned to category $c_i$ by the TC system is $A_i+B_i$,
+and the number assigned by the expert is $A_i+C_i$, our estimates for
+$\pi$ and $\rho$ are $\frac{A_i}{A_i + B_i}$ and $\frac{A_i}{A_i +
+C_i}$, respectively.
+
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\cline{3-4}
+\multicolumn{2}{c|}{} & \multicolumn{2}{c|}{\textbf{Expert choice}} \\
+\cline{3-4}
+\multicolumn{2}{c|}{} & Yes & No \\
+\hline
+\textbf{System} & Yes & $A_i$ & $B_i$ \\
+\cline{2-4}
+\textbf{choice} & No  & $C_i$ & $D_i$ \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Contingency table for category $c_i$}
+\label{onecat-contingency}
+\end{table}
+
+
+$\pi$ and $\rho$ give valuable information about the performance of a
+TC system, but neither provides an isolated rating of the system's
+quality.  The reason is that either measure can usually be improved in
+a system to the detriment of the other.\cite[p. 35]{sebastiani:02} For
+instance, the \emph{trivial acceptor} categorizer, which assigns every
+document to every category, will have a perfect $\rho$ score of 1, but
+its precision will be unacceptably low on any nontrivial task.
+
+Therefore, a measure that combines $\pi$ and $\rho$ is desirable as an
+overall measure of the quality of the TC system.  One such measure is
+the $F_\beta$ measure, first introduced to the Information Retrieval
+literature by van Rijsbergen \cite[ch. 7]{rijsbergen:79}.  It is
+defined by the equation $F_\beta = \frac{(\beta^2 + 1)\pi\rho}{\beta^2
+\pi + \rho}$, where $0 \leq \beta \leq \infty$.  The $\beta$ parameter
+provides a continuous way to balance between the importance of $\pi$
+and $\rho$, with values closer to 0 emphasizing $\pi$, values closer
+to $\infty$ emphasizing $\rho$, and a value of 1 balancing the two
+measures equally.  Without specific knowledge of an application's
+requirements (for instance, whether false positives for a certain
+category are more problematic than false negatives), one may presume
+that $\pi$ and $\rho$ are equally important, and therefore the
+literature often uses $F_1$ as a measure of the quality of a TC system
+on a particular category.
+
+${F_1}_i$ may be derived in terms of the entries of the per-category
+contingency table as follows:
+
+\begin{equation*}
+\begin{split}
+{F_1}_i 
+ & = \frac{ 2 \pi_i \rho_i}{\pi_i + \rho_i} \\[6pt]
+ & = \frac{ \frac{2 {A_i}^2}{(A_i+B_i)(A_i+C_i)} } { \frac{A_i}{A_i+B_i} + \frac{A_i}{A_i+C_i} } \\[6pt]
+ & = \frac{ 2 {A_i}^2 }                            { A_i(A_i+C_i) + A_i(A_i+B_i) } \\[6pt]
+ & = \frac{ 2 A_i }                                { 2 A_i + B_i + C_i } \\[6pt]
+\end{split}
+\end{equation*}
+
+Two other measures of categorization quality, \emph{error} and
+\emph{accuracy}, are also sometimes encountered in the TC literature.
+These are simple measures which can also be defined in terms of the
+contingency table in Table \ref{onecat-contingency}: $error =
+\frac{B_i+C_i}{A_i+B_i+C_i+D_i)}$, and $accuracy =
+\frac{A_i+D_i}{A_i+B_i+C_i+D_i)}$.  In other words, error is the
+proportion of the system's decisions that matched the expert's
+choices, and accuracy is the proportion that did not.  As summarized
+in \cite[p. 34]{sebastiani:02}, these are not always useful measures
+of categorization quality, because the \emph{trivial rejector} (a
+system that never assigns any documents to any category) will often
+have a lower error and higher accuracy than most nontrivial
+categorizers.  Nonetheless, error will be measured for the evaluation
+tasks here, because it may give insight into the character of the
+system's performance.
+
+
+\subsection{Combining Measures Across Categories}
+\label{combining-measures}
+
+Section \ref{measures} introduced several performance measures that
+may be defined to evaluate a categorizer on a single category.  In
+order to evaluate the categorizer's overall performance on the entire
+set of test documents, it is desirable to combine the per-category
+scores $\pi_i$, $\rho_i$, and ${F_1}_i$ into overall scores for the
+entire category set.
+
+Two methods for doing this are standard in the literature.  The first
+is called \emph{micro-averaging}, and sums the terms in the
+contingency table for all categories simultaneously rather than in
+per-category tables.  In other words, the micro-averaged $\pi$,
+$\rho$, and $F_1$, notated $\pi^\mu$, $\rho^\mu$, and $F^\mu_1$, are
+defined in terms of the per-category contingency tables by the
+following equations.
+
+\begin{equation*}
+ \pi^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+B_i}} \qquad
+\rho^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+C_i}} \qquad
+ F^\mu_1 = \frac{\sum_{i=1}^{|C|}{2 A_i}} {\sum_{i=1}^{|C|}{2 A_i+B_i+C_i}} \qquad
+\end{equation*}
+
+Micro-averaging gives equal weight to each categorization decision
+made by the system, or equivalently, to each document in the corpus,
+regardless of how many categories it belongs to.
+
+An alternative to micro-averaging is \emph{macro-averaging}, in which
+the per-category scores $\pi_i$, $\rho_i$, and ${F_1}_i$ are simply
+averaged to find the macro-averaged $\pi$, $\rho$, and $F_1$, notated
+$\pi^M$, $\rho^M$, and $F^M_1$.  The following equations describe this
+procedure.
+
+\begin{equation*}
+ \pi^M = \frac{\sum_{i=1}^{|C|}{\pi_i}}   {|C|} \qquad
+\rho^M = \frac{\sum_{i=1}^{|C|}{\rho_i}}  {|C|} \qquad
+ F^M_1 = \frac{\sum_{i=1}^{|C|}{{F_1}_i}} {|C|} \qquad
+\end{equation*}
+
+Macro-averaging gives equal weight to each category in the corpus,
+regardless of how many documents it contains.  Thus it provides a
+good counterpart to micro-averaging; macro-averaging will place more
+emphasis on rare categories than micro-averaging, so reporting both
+scores is typically useful to evaluate the system as a whole.
+
+Note that the error and accuracy measures are unaffected by micro-
+vs. macro-averaging, as shown in the following derivation.  This uses
+the observation that $A_i+B_i+C_i+D_i = |\test|$, a consequence of the
+fact that exactly one of the terms on the left side will be
+incremented with each decision about whether a document from the test
+set belongs to $c_i$ or not.
+
+\begin{equation*}
+\begin{split}
+error^M
+ & = \frac{\sum_{i=1}^{|\cats|}{error_i}}  {|\cats|} \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{A_i+B_i+C_i+D_i} }} { \sum_{i=1}^{|\cats|}{1} } \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{|\test|} }}         { \sum_{i=1}^{|\cats|}{1} } \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{|\test|} } \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{A_i+B_i+C_i+D_i} } \\[6pt]
+ & = error^\mu
+\end{split}
+\end{equation*}
+
+
