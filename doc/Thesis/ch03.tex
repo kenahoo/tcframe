@@ -1,6 +1,6 @@
 \chapter{\aicat\ Framework Design}
 
-AI::Categorizer is a set of Perl modules that implements an
+\aicat\ is a set of Perl modules that implements an
 object-oriented framework for text categorization.  It provides
 classes for managing documents, categories, machine learners,
 categorization hypotheses, and categorization results.
@@ -306,43 +306,106 @@ categorization result of its own. \cite[p. 30]{sebastiani:02} Often,
 an ensemble learner may outperform each of its constituent members on
 the general categorization task.  \cite{tumer:98}
 
-To implement ensemble learners within \aicat\, the Composite
+To implement ensemble learners within \aicat, the Composite
 pattern may be applied to the \class{Learner} class to create a
-\class{Learner::Ensemble} subclass.  Figure \ref{Composite-ensemble}
+\ensemble\ subclass.  Figure \ref{Composite-ensemble}
 shows the classes participating in this pattern.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Composite.pdf}
-\caption{The Composite pattern in the \class{Learner::Ensemble} class}
+\caption{The Composite pattern in the \ensemble\ class}
 \label{Composite-ensemble}
 \end{figure}
 
-Since \class{Learner::Ensemble} is a subclass of the abstract
+Since \ensemble\ is a subclass of the abstract
 \class{Learner} class, it conforms to the \class{Learner} interface.
 This is crucial to implementation of the Composite pattern--it means
-that clients may use the \class{Learner::Ensemble} class without
+that clients may use the \ensemble\ class without
 knowing that it implements an ensemble learner behind the scenes.  In
 this way, transparent ensemble learning is achieved through
 polymorphism.
 
-According to \cite[XXX]{sebastiani:02}, ensemble learning techniques
+According to \cite[p. 30]{sebastiani:02}, ensemble learning techniques
 can be specified by (1) a set of individual learners (the ``members''
 in Figure \ref{Composite-ensemble}), and (2) a mechanism for combining
-the output of the individual learners.  The \class{Learner::Ensemble}
+the output of the individual learners.  The \ensemble\
 class can provide generic support for creating the member learners of
 the ensemble, but the combination mechanism may take many different
 forms.  Such algorithms are an active area of Machine Learning
-research.  As such, \class{Learner::Ensemble} may be subclassed in
-order to implement different combination mechanisms.
+research.  As such, \ensemble\ may be subclassed in
+order to implement different combination mechanisms.  Since these
+subclasses implement the combination algorithm in different ways, they
+may themselves be seen as carrying out a Strategy pattern (see section
+\ref{Strategy}).
 
 
 \subsection{Adapter}
 
-The Adapter pattern ``XXX.'' \cite[p. XXX]{gamma:95}  It is commonly
+The Adapter pattern ``converts the interface of a class into another
+interface clients expect.'' \cite[p. 139]{gamma:95} It is commonly
 used when an existing resource provides the functionality necessary
 for a certain task, but the interface of that resource doesn't match
 the interface necessary for the environment in which that task must be
-performed.  For example, ...
+performed.  For example, a framework may require that a particular
+role is implemented by subclasses of a certain abstract class.  This
+helps unify functionality by taking advantage of polymorphic
+abstraction. \cite[p. 5]{fayad:99} That functionality may already be
+present in an existing body of code outside the framework.  An Adapter
+can help bridge the gap between the two code bodies by letting the
+external code function inside the framework.\footnote{An Adapter may
+sometimes be called a Wrapper.  Both terms will be used in this
+discussion.}
+
+Many developers in the text categorization community create their
+software as demonstrations of novel algorithms, or as stand-alone
+libraries that implement one small part of the overall text
+categorization task.  The majority of cutting-edge research will be
+implemented in this way, if a public implementation is available at
+all.  In order to leverage this work for a categorization framework,
+some adaptation is invariably necessary.  Unless a developer happened
+to be using \aicat\ as a development environment, her implementation
+will not be directly usable as a framework element.  Thus Adapters
+provide a mechanism for keeping the framework current with advances in
+the field of text categorization.
+
+Figure \ref{Adapter-learner} shows an instance of how the Adapter
+pattern is present in \aicat's \class{Learner} class.  The abstract
+\class{Learner} class specifies a common interface that all subclasses
+must conform to.  Several of its concrete subclasses implement their
+functionality using a framework-external resource.  For example,
+\class{Learner::DecisionTree} uses the stand-alone module
+\class{AI::DecisionTree} for implementation.  \class{Learner::Weka}
+is a wrapper around the ``Weka'' Machine Learning system.
+\class{Learner::SVM} is a wrapper around a framework-external
+\class{Algorithm::SVM} module, which is itself a wrapper around the
+\texttt{libsvm} C library.\cite{libsvm}\footnote{Note that
+\class{Learner::SVM}, Weka, and \texttt{libsvm} are not part of the
+contributed work of this thesis, as they are written by other authors.}
+
+Note that these four Adapter examples exhibit three very different
+applications of the Adapter pattern.  \class{Learner::DecisionTree}
+exhibits a very straightforward Adapter usage as presented in
+\cite{gamma:95}--an existing standalone class exists that implements the
+needed functionality, and its interface is adapted to the framework
+requirements by a simple wrapping subclass.  The \class{Learner::SVM}
+wrapper is also fairly straightforward.  However, the other two
+wrappers exhibit well the highly heterogeneous nature of the text
+categorization domain.  The main reason for the adaptation in the
+\class{Algorithm::SVM} class is to provide a Perl interface to a C
+library.  The \class{Learner::Weka} adapter combines language
+adaptation (in this case, Java to Perl) with functionality
+transformation (mapping Weka's methods to the required \class{Learner}
+interface).
+
+The current implementation of \class{Learner::Weka} interfaces with
+Weka through its command-line interface, but this is not a design
+constraint.  Future implementations may embed the Weka system inside
+the \class{Learner::Weka} module for reasons of efficiency or platform
+compatibility.  Because this interface is hidden using an Adapter
+pattern, the implementation may be changed freely.
+
+A major benefit of using Adapters comes in the area of reusability.
+XXX \ldots
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Adapter.pdf}
@@ -351,6 +414,7 @@ performed.  For example, ...
 \end{figure}
 
 \subsection{Strategy}
+\label{Strategy}
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Strategy.pdf}
 \caption{The Strategy pattern in the Learner class}
