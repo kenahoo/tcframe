@@ -2,6 +2,7 @@
 data_root: corpora/reuters-21578
 stopword_file: corpora/reuters-21578/SMART.stoplist
 progress_file: "/tmp/reuters-NB"
+outfile: "results/reuters-NB.txt"
 learner_class: "::NaiveBayes"
 tfidf_weighting: xfx
 stemming: porter
