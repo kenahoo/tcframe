@@ -7,7 +7,7 @@ usefully applied to several different use cases, including ones that
 the framework designer may not be able to foresee.  The framework must
 also be extensible by subclassing, and must therefore have enough
 structure that the relationships among classes are well-defined, yet
-flexible enough that the framework developer can make appropriate
+flexible enough that the application developer can make appropriate
 modifications.
 
 In designing the \aicat\ framework, attention has been paid to three
@@ -915,5 +915,43 @@ future work.
 
 Hierarchical categorization is the process of categorizing documents
 into a set of categories possessing a treelike structure.  The
-hierarchical nature of the category set may be exploited for reasons
-of both efficiency and accuracy.\cite{dumais:00}
+hierarchical nature of the category set may be exploited for both
+increased efficiency and improved accuracy.\cite{dumais:00}  Because
+some common categorization problems are inherently hierarchical, the
+field of hierarchical categorization has seen significant attention in
+the research literature.\cite[p. 7]{sebastiani:02}
+
+In the \aicat\ framework, hierarchical categorization has not
+explicitly been supported in the architecture.  The set of categories
+in any framework categorization task is assumed to be a simple list of
+named sets of documents, with no hierarchical structure.  However,
+there are at least two ways of dealing with hierarchical
+categorization tasks using the framework.
+
+The first way is to simply transform the hierarchical set of
+categories into a simple flat list, by prepending each category's name
+with the names of all its parent categories.  In this way, the
+framework will assign any category in the flat list of categories, and
+then the results can be transformed back into members of the
+hierarchical category set.  The main advantage of this technique is
+that it is simple to apply, with a natural and transparent
+transformation between structured and flat category sets.  The main
+disadvantage is that the system is not really performing hierarchical
+categorization at all, so it is not taking advantage of any of the
+hierarchical category structure for efficiency or accuracy
+improvements.
+
+The second way to achieve hierarchical categorization using \aicat\ is
+to manually break the categorization task into several smaller tasks,
+building a separate machine learner for each splitting node in the
+category hierarchy.  This is a common approach to hierarchical
+categorization in the literature
+\cite{dumais:00,koller:97,chakrabarti:98}, and seems a natural mapping
+of the hierarchical problem into a hierarchical solution.  The main
+disadvantage with this method is that the framework provides no direct
+support for creating a hierarchy of categorizers and using them for
+categorization, so the client must create and maintain code for the
+hierarchical aspect of the task.  This is another possible area of
+future work, and another student in the Web Engineering Group at
+Sydney University is currently working toward a solution for using
+\aicat\ in hierarchical categorization.
