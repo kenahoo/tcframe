@@ -1,5 +1,7 @@
 Outline of Ken Williams' thesis work
 
+$Header$
+
 * Goals
 
 ** Build a framework for document classification using the state-of-the-art techniques in the literature
@@ -28,5 +30,27 @@ Outline of Ken Williams' thesis work
 
 * Planning
 
-** See 'docs/framework_design.txt' in the CVS repository
+** Class Hierarchy
+
+See 'docs/classes.xml' (a UML diagram) in the CVS repository for class
+relationships.
+
+** Design Goals
+
+The framework must be able to accommodate functionality in a number of
+essential areas, providing common behavior while allowing users and
+developers to customize behavior through parameter specification
+and/or subclassing.  These essential areas include prior knowledge
+data format, document structure, data tokenizing, linguistic stemming,
+feature selection, vector space modeling, machine learning algorithm
+choice, and hypothesis behavior.
+
+The framework will be designed in such a way that it will be able to
+grow, adding functionality as needs are assessed.  This growth should
+occur without adversely affecting users who have built applications
+based on earlier versions of the framework.  Users should be able to
+routinely take advantage of both bug fixes and feature enhancements in
+the core framework.
+
+** Critical Path
 
