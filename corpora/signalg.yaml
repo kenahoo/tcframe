@@ -6,5 +6,5 @@ stemming: porter
 test_set: '/home/halvards/work/signalg/signalg.test'
 training_set: '/home/halvards/work/signalg/signalg.train'
 stopword_file: 'corpora/signalg-small/SMART.stoplist'
-save_progress: 'corpora/signalg'
+progress_file: 'corpora/signalg'
 verbose: 1
