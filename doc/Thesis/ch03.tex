@@ -1,4 +1,5 @@
 \chapter{\aicat\ Framework Design}
+\label{design}
 
 Framework design is a difficult task in general, because a
 well-designed framework must allow for several kinds of
@@ -85,6 +86,7 @@ members of a business team.
 
 
 \section{Use Cases}
+\label{use-cases}
 
 In order to better understand and document how the framework will be
 used, an analysis of use cases is often
@@ -127,12 +129,51 @@ researcher is repeating the same process many times on different data
 sets, different processes many times on the same data set, or using a
 different methodology.
 
+In most cases, the researcher will also need a way to keep track of
+experimental procedures and settings so that results under different
+conditions can be compared.  This functionality may be directly
+provided by a categorization framework, or it may be provided by
+application layers written on top of the framework.
+
+
 \subsection{Embedded applications}
+\label{embedded-apps}
 
+In order to be useful in real-world applications, a categorization
+framework may need to function in multiple kinds of embedded
+environments.  For example, a web-based application might embed
+categorization functionalities directly in the web server, or a
+categorization-enabled database might embed a categorizer directly in
+the database engine.  A TC framework that can exist in these
+environments will increase its usefulness.
 
+\subsection{Client-server applications}
 
-\subsection{Client/server applications}
+An alternative to the embedded applications described in Section
+\ref{embedded-apps} is to use a client-server model.  In this model,
+the application developer creates a dedicated categorization server
+which communicates over a data socket with clients.  The main
+application (such as the web server or database described above)
+communicates over a data socket with the categorization server.
+Recent standardizations in protocols such as SOAP or XML/RPC
+\cite{XXX-xmlrpc} have provided commonly-available, easy-to-use tools
+for creating these kinds of applications, and since a single
+categorization server can provide services to multiple application
+clients, developers may reduce development time when building TC
+applications in this manner.  In addition, using the client-server
+model allows organizations to separate the categorization system from
+the front-end application, which may be necessary when the document
+data is sensitive or proprietary.
+
 \subsection{Database cooperation}
+
+Since organizations may wish to store important data in a relational
+database, a TC framework can provide important services by cooperating
+directly with the database.  This cooperation may involve retrieving
+documents from the database, retrieving document-category membership
+information from the database, using the database as a storage medium
+for the learned categorization model, or providing categorization
+services to database queries in the form of SQL functions.
 
 \section{Overview of \aicat\ class hierarchy}
 \label{class-overview}
@@ -168,8 +209,8 @@ notation is used here, with some elements borrowed from common UML
 
 Figure \ref{inheritance-uml} shows the inheritance relationships among
 classes in the \aicat\ framework.  Note that this diagram
-indicates the \emph{capabilities} of the framework more than it
-indicates its \emph{architecture}.  For instance, the framework
+illustrates the \emph{capabilities} of the framework more than it
+illustrates its \emph{architecture}.  For instance, the framework
 currently understands several document types, including plain text
 documents and documents in the ``SMART'' format.  If the framework is
 extended by writing additional subclasses of existing classes, the
@@ -179,9 +220,13 @@ framework.
 Note that the inheritance diagram is not particularly enlightening
 about how various classes cooperate to perform text categorization
 tasks.  The inheritance relationships are set at compile-time and do
-not change while the framework is in use.\footnote{Perl allows the
-dynamic reassignment of inheritance, but this capability isn't used
-in the framework.}
+not change while the framework is in use.  Note also that in any given
+application, only one member of each inheritance hierarchy will
+typically be instantiated; an application using the SVM algorithm for
+categorization will not instantiate other Learner classes.  So while
+the inheritance hierarchy diagram provides information about the
+capabilities of the framework, it provides little information about
+the structure of an application that uses the framework.
 
 Another way to examine the framework is to examine the run-time
 relationships between its classes.  This often provides a much more
@@ -389,13 +434,13 @@ aggregate structures.
 
 \end{itemize}
 
-The first and third reasons are most germane to the document iteration
+The first and third reasons are most germane to the TC document iteration
 process.  As explained in section \ref{Document storage}, it is
 important that the framework can directly import documents from their
 various underlying storage mechanisms in order to prevent unnecessary
 duplication of data.  In order to hide the details of the storage
 mechanism from the rest of the framework, a \class{Collection} object
-retrieves documents from several storage mechanisms and returns them
+retrieves documents from the storage mechanism and returns them
 as \class{Document} objects.  It provides a unified interface to iteration
 over stored documents so that the various classes that need to perform
 this iteration (chiefly \class{Learner} and \class{KnowledgeSet}) don't need to be
@@ -683,6 +728,7 @@ the other subclasses in the diagram are planned.
 
 
 \subsection{Factory Method}
+\label{factory-method}
 
 In any framework of sufficient size and customizability, attention
 must be paid to the issue of how specific classes are chosen for the
@@ -807,7 +853,7 @@ capabilities to every class participating in the framework hierarchy.
 Figure \ref{factory-constructors} shows an example of how this
 inheritance functions.  The abstract \aclass{ObjectFactory}
 class\footnote{The \aclass{ObjectFactory} name is used here only for
-discussion purposes.  See Chapter \ref{Implementation} for the actual
+discussion purposes.  See Section \ref{constructor-methods} for the actual
 implementation details.} adds the ability for any class derived from
 it to declare the relationships discussed in the previous paragraph.
 It also manages the creation of subordinate objects.  For instance,
@@ -844,7 +890,7 @@ and can specify constructor parameters without invoking the
 constructors directly.  Framework code doesn't create subordinate
 objects directly, but defers creation to factory methods inherited
 from superclasses.  In this way, subclassing is kept to a minimum, and
-the framework structure can be highly parameterized.
+the framework runtime structure can be highly parameterized.
 
 \section{Limitations}
 
