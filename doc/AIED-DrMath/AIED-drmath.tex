@@ -179,30 +179,34 @@ from the archived questions.
 Object Oriented Application Frameworks (OOAF) are software engineering artifacts 
 that improve reusability of design and implementation \cite{fayad:97, fayad:99}.
 
-The framework used in this project\footnote{\url{http://sourceforge.net/projects/ai-categorizer/}}
-was designed to provide a 
-consistent way to build document categorization systems.\cite{williams:02}  It allows the developer to 
-focus on the quality of the more critical and complex modules by allowing reuse of 
-common, simple base modules. In this project we extended the framework to fit our 
-particular needs by adding a K-nearest neighbour `Learner' module. 
+The framework used in this project was designed to provide a
+consistent way to build document categorization
+systems.\cite{williams:02} It allows the developer to focus on the
+quality of the more critical and complex modules by allowing reuse of
+common, simple base modules.  The framework already has
+implementations of Support Vector Machine (SVM), \naive\ Bayes, and
+Decision Tree classifiers \cite{yang:99, sebastiani:02}. Other methods
+such as Neural Networks \cite{calvo:00, calvo:01} and
+K-Nearest-Neighbor classifiers are under development.
 
-The framework already has implementations of support vector machines (SVM), 
-\naive\ Bayes, and Decision Trees \cite{yang:99, sebastiani:02}. Other methods such 
-as neural networks \cite{calvo:00, calvo:01} are being developed.
-
-Also, an alternative Collection class was built to allow for the data to be read from a 
-database instead of directly from file. These extensions are built by sub-classing two 
-of the main classes in the framework. Class inheritance contributes to code reuse and 
+In this project we extended the framework by adding an alternative
+Collection class to allow for the data to be read directly from a
+database instead of from a file system.  Framework extensions are built by subclassing
+the main classes in the framework. Class inheritance contributes to code reuse and 
 quality. The framework also provides statistical analysis of experimental results, and 
-produced the performance measures discussed in section 4. The framework is written 
-in the Perl language. The architecture and language choice enabled us to easily build the 
+produced the performance measures discussed in Section \ref{results}.
+
+The framework's architecture and language choice enabled us to easily build the 
 framework into postgreSQL through postgreSQL's PL/Perl and PL/perlU support. 
 This support allows the creation of procedural language functions through the use of 
-the "Create Function" SQL command. Using this support and the pl/perlu language 
+the "CREATE FUNCTION" SQL command. Using this support and the PL/perlU language 
 we were able to build a "launching" function that invoked the categorization 
 framework on the document to be classified. This means that the only command 
 necessary to categorize a document is a basic insert statement with a function call in 
-place of a value for the category of the document.
+place of a value for the category of the document, as shown in Figure \ref{sql-insert}.
+This statement can be further simplified through the creation of a pl/psql 
+trigger function which fires automatically on insertion and passes the necessary values 
+to the \method{categorize} function.
 
 \begin{figure}
 \begin{verbatim}
@@ -218,10 +222,6 @@ place of a value for the category of the document.
 \caption{Example document insertion statement with categorization}
 \label{sql-insert}
 \end{figure}
-
-The statement in Figure \ref{sql-insert} can be further simplified through the creation of a pl/psql 
-trigger function which fires automatically on insertion and passes the necessary values 
-to the categorize function. 
 
 If the categorization is to take place within a database, where often categorized 
 documents are going to be appended to the learning set, a learning algorithm which has 
@@ -258,6 +258,7 @@ rumbaugh:91}, by integrating it in this way, the classification task
 (and framework) can also be designed into larger OO systems.
 
 \section{Method and Results}
+\label{results}
 
 The training set of the Dr Math corpus (5305 documents) was loaded into a database 
 table named "documents". This table consisted of 3 columns, name, content and 
@@ -270,6 +271,20 @@ recall\footnote{Recall is the proportion of the target items that the
 system selected, i.e. tp/(tp+fn).  Precision is the proportion of
 selected items the system got right, i.e. tp/(tp+fp).} was then used
 to calculate the F1 measure \cite{calvo:01,sebastiani:02}.
+
+\begin{table}
+\begin{tabular}{|r|r|r|r|}
+\hline
+Method   & $MaF_1$ & $MiF_1$ & Error \\ \hline
+NB       & 0.226   & 0.361   & 0.022 \\ \hline
+Baseline & 0.018   & 0.042   & 0.031 \\ \hline
+\end{tabular}
+\caption{Macro- and Micro-averaged performance scores}
+\label{results-main}
+\end{table}
+
+XXX - ``baseline'' was calculated using only class prior probabilities.  Needs discussion.
+
 
 \begin{table}
 \begin{tabular}{|r|r|r|r|r|}
