@@ -300,7 +300,7 @@ documents, the Iterator pattern allows clients of the \class{Collection} class
 to use memory efficiently.  A \class{Collection} object will typically defer
 creation of its \class{Document} objects until its client calls its
 \method{next} method.  In this way, the \class{Collection} doesn't store all
-the \class{Document} objects in memory simultanously---if the client needs to do so,
+the \class{Document} objects in memory simultaneously---if the client needs to do so,
 it can, or it can merely query properties of each document and dispose
 of them in turn.
 
@@ -328,9 +328,9 @@ passing data to the proper constructors in order to instantiate
 The Composite pattern ``lets clients treat individual objects and
 compositions of objects uniformly.'' \cite[p. 163]{gamma:95} It is
 often used to represent trees or other data structures in which the
-form of a subset of the structure is not qualitiatively different from
+form of a subset of the structure is not qualitatively different from
 the form of the entire structure.  In simple terms, this means that
-the same kinds of operations---iteration over subnodes, inspection of
+the same kinds of operations---iteration over sub-nodes, inspection of
 the root node, and so on---can be performed on the entire tree, a
 subtree, or even a single node.
 
@@ -431,7 +431,7 @@ contributed work of this thesis, as they are written by other authors.}
 Note that these four Adapter examples exhibit three very different
 applications of the Adapter pattern.  \class{Learner::DecisionTree}
 exhibits a very straightforward Adapter usage as presented in
-\cite{gamma:95}---an existing standalone class exists that implements the
+\cite{gamma:95}---an existing stand-alone class exists that implements the
 needed functionality, and its interface is adapted to the framework
 requirements by a simple wrapping subclass.  The \class{Learner::SVM}
 wrapper is also fairly straightforward.  However, the other two
@@ -477,7 +477,7 @@ framework.
 \label{Strategy}
 
 The Strategy pattern defines ``a family of algorithms, encapsulates
-each one, amd makes them interchangeable.'' \cite[p. 315]{gamma:95}
+each one, and makes them interchangeable.'' \cite[p. 315]{gamma:95}
 It is used when a domain task needs to be carried out, but there may
 be several ways to carry out that task, and it is important to let the
 user or client choose from among these alternatives.
@@ -607,7 +607,7 @@ framework being used---in reality, the client code would have to
 accept responsibility for creating all the objects in the framework,
 not just the four pictured here.
 
-For these reaons, it is often better if the framework can provide
+For these reasons, it is often better if the framework can provide
 support for object creation and enforcement of the framework
 relationships.  An example of this situation is pictured in Figure
 \ref{better-constructors}.  Here, the patterns of object creation more
@@ -680,7 +680,10 @@ object creation in a consistent, centralized manner based on these
 declarations.  In a sense, this approach extends the implementation
 language to be able to express the important framework relationships
 directly, rather than letting them emerge implicitly from patterns of
-usage in the code.
+usage in the code.  Client code then supplies parameters that inform
+the top-level object about which classes should be instantiated and
+what parameters should be passed to each class's constructors, and the
+framework itself directs object the creation process.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/factory-constructors.pdf}
@@ -709,51 +712,30 @@ and \class{Learner} objects will automatically be created by the
 provided by its \aclass{ObjectFactory} superclass when it needs to
 create them.
 
+It is important to note that this is not a direct application of
+either the Factory Method or Abstract Factory patterns in
+\cite{gamma:95}.  The standard Factory Method pattern requires
+separate subclasses to create the concrete subclasses.  A closer
+variation is the ``Parameterized Factory Method''
+\cite[p. 110]{gamma:95}, which lets the specific subordinate class
+be determined by switching among several known classes.  This is
+closer to the data-driven approach employed in \aicat, but doesn't
+address the issue of how the subordinate classes must actually be
+created at runtime.  The Abstract Factory pattern is also similar in
+that the creation of multiple objects is centralized, but in \aicat\ a
+separate factory object is not necessary.
+
 This approach effectively solves the problems with the first two
-approaches considered here. XXX...
-
-\section{Specifying framework relationships}
-\label{class-container}
-
-In object-oriented programming, the language itself usually provides
-first-class support for describing inheritance relationships between
-classes.  For instance, a C++ or Java \texttt{class} declaration lists
-its superclasses explicitly, and Perl specifies inheritance via each
-class's \texttt{@INC} array.  Because inheritance is directly
-implemented by the language, it is easy for framework users to
-understand inheritance relationships, and these relationships are
-expressed straightforwardly in the framework code.\footnote{Contrast
-this with object-oriented programming in languages like C that don't
-have inherent OO support, where understanding the inheritance
-structures can be much more challenging.\cite[p. 7]{fayad:99}}
-
-However, effective frameworks have many complicated interrelationships
-besides inheritance.  These need to be specified somehow in the
-implementation language of the framework so that the proper
-relationships are created, and they need to be specified in
-documentation so that users of the framework understand the structure
-of the software they're using.
-
-In addition, as explained in Section \ref{class-overview}, these
-relationships are typically much more important and enlightening to
-users of the framework than the inheritance relationships.  It is
-desirable to treat these relationships in a unified manner, so that
-all identical collaborations in the framework are specified in and
-will function in similar ways.\cite[p. 13]{fayad:99}
-
-Since Perl lacks first-class support for specifying patterns of
-collaboration (as is the case with most common OO languages), a
-language extension called \class{Class::Container} has been employed
-in the \aicat\ framework to unify these issues.  Using this extension,
-each class explicitly
-declares any other objects it cooperates with in certain types of
-relationships.  Because these declarations are made explicitly and
-don't just emerge from usage patterns in the implementation code,
-certain types of functionality may be handled centrally and
-consistently, greatly easing the burden of implementing these
-relationships and aiding framework flexibility.
-
-For example, XXX \ldots
+approaches considered here.  The client code is freed from having to
+create multiple framework objects, and the framework relationships are
+expressed explicitly in the framework code, not in the client code or
+implicitly in the framework implementation.  Clients are also able to
+easily change which classes participate in the framework hierarchy,
+and can specify constructor parameters without invoking the
+constructors directly.  Framework code doesn't create subordinate
+objects directly, but defers creation to factory methods inherited
+from superclasses.  In this way, subclassing is kept to a minimum, and
+the framework structure can be highly parameterized.
 
 \section{Limitations}
 
