@@ -79,6 +79,17 @@ categorization hypotheses, and categorization results.
 
 \section{General Text Categorization Considerations}
 \subsection{Document format}
+\label{Document format}
+
+XXX... However, many Text Categorization data sets are quite large.  They may
+commonly be larger than the amount of available memory on the machine
+processing them.  This has two important implications.  First,
+converting the documents to a special format so that the framework can
+access them may be impossible or undesirable for reasons of time,
+space, and data redundancy.  Second, a mechanism 
+
+unnecessary copies of the data, 
+
 \subsection{Document structure}
 \subsection{Tokenizing of data}
 \subsection{Linguistic stemming}
@@ -232,7 +243,7 @@ their own products whenever possible.
 The AI::Categorizer framework is designed for maximum re-use in many
 kinds of situations \ldots XXX.
 
-For brevity, we will omit the ``AI::Categorizer::'' prefix from class
+For brevity, the ``AI::Categorizer::'' prefix will be omitted from class
 names in this discussion.  It is to be understood that any class
 within the AI::Categorizer framework (except the top-level class
 AI::Categorizer itself) is prefixed by the ``AI::Categorizer::''
@@ -288,6 +299,12 @@ classes, but will differ in implementation.  Therefore, the
 relationships indicated in this diagram indicate stable aspects of the
 framework that do not change when the framework is extended by
 subclassing.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/classes-uml.pdf}
+\caption{Class composition diagram for AI::Categorizer}
+\label{classes-uml}
+\end{figure}
 
 Some examination of the basic relationships between classes and the
 responsibilities of each class is helpful before looking at the design
@@ -380,22 +397,87 @@ aggregate information about the results.  This is often used in order
 to determine the quality (as measured by precision, recall, error,
 etc.) of a Learner on a collection of test documents.
 
-\end{description}
+\item[AI::Categorizer]
 
-\begin{figure}
-\includegraphics[width=\linewidth]{figures/classes-uml.pdf}
-\caption{Class composition diagram for AI::Categorizer}
-\label{classes-uml}
-\end{figure}
+XXX need to write about the umbrella class
+
+\end{description}
 
 \section{Design Patterns in AI::Categorizer}
 
+In order to shed light on the design of the AI::Categorizer framework,
+analysis ...
+
+
 \subsection{Iterator}
+
+The Iterator pattern provides ``a way to access the elements of an
+aggregate object sequentially without exposing its underlying
+representation.'' \cite[p. 257]{gamma:95} Its main purpose is to
+decouple the traversal process on an object's aggregate members from
+the object's internal data structure implementation.  In this way,
+clients can iterate through aggregate objects without knowing the
+objects' internal structure.
+
+In the AI::Categorizer framework, it is often necessary to iterate
+through collections of documents and perform some action on them.  For
+example, the documents may form a training set for a Learner to base a
+model on, or they may form a test set on which to evaluate the model.
+
+The Collection class implements the Iterator pattern
+\cite[p. 257]{gamma:95} over documents in the framework.  Figure
+\ref{Iterator-collection} shows the main relationships involved in
+this pattern.
+
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Iterator.pdf}
 \caption{The Iterator pattern in the Collection class}
 \label{Iterator-collection}
 \end{figure}
+
+
+\cite[p. 259]{gamma:95} suggests that the most common reasons for
+using a formal custom iterator are:
+
+\begin{itemize}
+
+\item to access an aggregate object's contents without exposing its
+internal representation.
+
+\item to support multiple traversals of aggregate objects.
+
+\item to provide a uniform interface for traversing different
+aggregate structures.
+
+\end{itemize}
+
+The first and third reasons are most germane to the document iteration
+process.  As explained in section \ref{Document format}, it is
+important that the framework can directly import documents from their
+various underlying storage mechanisms in order to prevent unnecessary
+duplication of data.  In order to hide the details of the storage
+mechanism from the rest of the framework, a Collection object
+retrieves documents from several storage mechanisms and returns them
+as Document objects.  It provides a unified interface to iteration
+over stored documents so that the various classes that need to perform
+this iteration (chiefly Learner and KnowledgeSet) don't need to be
+aware of storage issues.  In this sense, the ``internal
+representation'' of the aggregate structure is often external to the
+framework itself, and may be files in a filesystem, entries in a
+database, records in an XML document, among others.
+
+In addition to providing a generic interface to a stored collection of
+documents, the Iterator pattern allows clients of the Collection class
+to use memory efficiently.  A Collection object will typically defer
+creation of its Document objects until its client calls its
+\texttt{next()} method.  In this way, the Collection doesn't store all
+the Documents in memory simultanously--if the client needs to do so,
+it can, or it can merely query properties of the Documents and dispose
+of them in turn.
+
+In order to decouple the storage mechanism from the internal format of
+the document, a Collection class can return many ...
+
 
 \subsection{Composite}
 \begin{figure}
