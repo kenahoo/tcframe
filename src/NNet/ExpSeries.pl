@@ -41,26 +41,26 @@ my $ALPHA 	= 	0.9;
 print "\nCleaning up:\n";
 veryclean();
 
-print "\nPreparing a series of experiments:\n";
-prepare();
+#print "\nPreparing a series of experiments:\n";
+#prepare();
 
-print "\nCreating spec file $data/spec\n";
-create_spec("$bin/smart.11.0/lib", $K);
+#print "\nCreating spec file $data/spec\n";
+#create_spec("$bin/smart.11.0/lib", $K);
 
-print "\nCreating vector:\n";
-create_vec();
+#print "\nCreating vector:\n";
+#create_vec();
 
-print "\nSelecting features:\n";
-select_features();
+#print "\nSelecting features:\n";
+#select_features();
 
-print "\nCreating NNet data files:\n";
-create_trn_nnt();
+#print "\nCreating NNet data files:\n";
+#create_trn_nnt();
 
-print "\nTraining NNet:\n";
-train_nnt();
+#print "\nTraining NNet:\n";
+#train_nnt();
 
-print "\nQuerying NNet:\n";
-query_nnt();
+#print "\nQuerying NNet:\n";
+#query_nnt();
 
 #########################################################
 # shouldn't need any changes below this
@@ -139,7 +139,6 @@ sub create_trn_nnt {
 	   " -f $COR.$MTHD -n $N -o $COR.tst.nnt");
 }
 
-# Low level: Subs to run all above
 sub mycall {
     my $cmd = shift;
     print "% $cmd\n";
