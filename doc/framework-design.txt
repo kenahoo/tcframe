@@ -1,5 +1,9 @@
-Design Doc for TCFRame;
-TCFRame is an application framework for classification (mostly docs)
+                         Design Doc for TCFrame
+
+TCFrame is an application framework for classification.  It is
+designed primarily for document classification, but should function
+well on other types of data since it doesn't care what its tokens
+represent.
 
 
 package TCFrame
@@ -14,13 +18,12 @@ Methods:
 
 package TCFrame::Classifier
 # Type of learning classifier
-# All classifiers should be subclasses of AI::Categorize, and conform
-# to its interface.
+# All classifiers should conform to the AI::Categorize interface.
 
 
 package TCFrame::Classifier::NNet
-# Neural Nets, at this it just a wraper to previous work.  Needs to be
-# adapted to AI::Categorize model
+# Neural Nets, at this point just a wraper to previous work.  Needs to be
+# adapted to AI::Categorize model.
 
 Attributes:
 	MOMENTUM = 0.5;
@@ -56,7 +59,7 @@ Methods:
 
 
 package TCFrame::Collection
-#The class provides collection wide utilities and data structures.
+# Provides collection-wide utilities and data structures.
 # A collection can also be called a "corpus".
 
 Atributes:
@@ -81,7 +84,3 @@ Methods:
 package TCFrame::Collection::Map
 # Manages a mapping between categories & documents.  Can look up
 # either by category or by document, so we use a double hash.
-
-
-
-
