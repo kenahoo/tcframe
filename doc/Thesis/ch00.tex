@@ -1,50 +1,78 @@
 \chapter{Abstract}
 
-XXX - Needs to focus more on outcomes of this project, less on background.
-
 The field of automatic Text Categorization (TC) concerns the creation
-of categorizer functions which assign categories from a pre-defined
-set of labels to documents based on the documents' content.  The most
-successful modern approaches to TC employ Machine Learning to create
-these categorizer functions automatically from a training set of
-documents similar to the ones in the target application.
+of categorizer functions, usually involving Machine Learning
+techniques, to assign labels from a pre-defined set of categories to
+documents based on the documents' content.  Because of the many
+variations on how this can be achieved and the diversity of
+applications in which it can be employed, creating specific TC
+applications is often a difficult task.
 
-Techniques for creating the categorizer functions are the subject of
-active research in the Machine Learning and Language Technology academic
-communities, and every stage of the process has many variations.
-Because of this complexity, the creation of TC applications is usually
-a complicated process requiring a great deal of expertise in TC, the
-application domain, and software development.
-
-This thesis concerns the creation of an Object-Oriented Application
-Framework for Text Categorization.  Frameworks provide a way to
-address difficult software engineering problems by encapsulating the
-aspects of applications that tend to remain common from one
-application to the next, while allowing variation in the aspects that
-tend to change.  This allows significant code and design reuse when
-building new applications.
-
-Framework design is among the most difficult tasks in software
-engineering, and requires a great deal of problem analysis,
-architecture design, and product evaluation.  Design Patterns have
-grown popular in order to manage the complexities of these aspects and
-to facilitate communication among those involved with the
-Object-Oriented design of large software systems.  This thesis uses
-Design Patterns to examine several of the important internal
-relationships among framework classes.
+This thesis concerns the design, implementation, and testing of an
+Object-Oriented Application Framework for Text Categorization.  By
+encoding expertise in the architecture of the framework, many of the
+barriers to creating TC applications are eliminated.  Developers can
+focus on the domain-specific aspects of their applications, leaving
+the generic aspects of categorization to the framework.  This allows
+significant code and design reuse when building new applications.
 
 Chapter \ref{intro} provides an introduction to automatic Text
-Categorization and Object-Oriented Application Frameworks, as well as
-an overview of three related products in the TC space.
-Chapter \ref{background-tc} gives a detailed account of the main technical
-issues in Text Categorization that a TC framework must take into
-account.  Chapter \ref{design} discusses design issues in creating the
-framework, motivating the design by consideration of the
-framework's audience and common usage scenarios, and showing some
-possible limitations of the framework's design.  Chapter
-\ref{Implementation} is a short discussion of implementation issues.
+Categorization, Ob\-ject-Oriented Application Frameworks, and Design
+Patterns.  Some common application areas and benefits of using
+automatic TC are discussed.  Frameworks are defined and their
+advantages compared to other software engineering strategies are
+presented.  Design patterns are defined and placed in the context of
+framework development.  An overview of three related products in the
+TC space, Weka, Autonomy, and Teragram, follows.
+
+Chapter \ref{background-tc} contains a detailed presentation of Text
+Categorization.  TC is formally defined, followed by a detailed
+account of the main functional areas in Text Categorization that a
+modern TC framework must provide.  These include document tokenizing,
+feature selection and reduction, Machine Learning techniques, and
+categorization runtime behavior.  Four Machine Learning techniques
+(\naive\ Bayes categorizers, k-Nearest-Neighbor categorizers, Support
+Vector Machines, and Decision Trees) are presented, with discussions
+of their core algorithms and the computational complexity involved.
+Several measures for evaluating the quality of a categorizer are then
+defined, including precision, recall, and the $F_\beta$ measure.
+
+The design of a framework that addresses the functional areas from
+Chapter \ref{background-tc} is presented in Chapter \ref{design}.
+This design is motivated by consideration of the framework's audience
+and some expected usage scenarios.  The core architectural classes in
+the framework are then presented, and Design Patterns are employed in
+a detailed discussion of the cooperative relationships among framework
+classes.  This is the first known use of Design Patterns in an
+academic work on Text Categorization software.  Following the
+presentation of the framework design, some possible design limitations
+are discussed.
+
+The design in Chapter \ref{design} has been implemented as the \aicat\
+Perl package.  Chapter \ref{Implementation} is a short discussion of
+implementation issues, including considerations in choosing the
+programming language.  Special consideration is given to the
+implementation of constructor methods in the framework, since they are
+responsible for enforcing the structural relationships among framework
+classes.  Three data structure issues within the framework are then
+discussed: feature vectors, sets of document or category objects, and
+the serialized representation of a framework object.
+
 Chapter \ref{Evaluation} evaluates the framework from several
-different perspectives, and Chapter \ref{Conclusion} concludes.
+different perspectives on two corpora.  The first corpus is the
+standard Reuters-21578 benchmark corpus, and the second is assembled
+from messages sent to an educational ask-an-expert service.  Using
+these corpora, the framework is evaluated on the measures introduced
+in Chapter \ref{background-tc}.  The performance on the first corpus
+is compared to the well-known results in \cite{yang:99}.  The \naive\
+Bayes categorizer is found to be competitive with standard
+implementations in the literature, and the Support Vector Machine and
+k-Nearest-Neighbor implementations are outperformed by comparable
+systems by other researchers.  The framework is then evaluated in
+terms of its resource usage, and several applications using \aicat\
+are presented in order to show the framework's ability to function in
+the usage scenarios discussed in Chapter \ref{design}.
+
 
 \chapter{Acknowledgments}
 
