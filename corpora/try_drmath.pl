@@ -83,7 +83,7 @@ if (0) {
 }
 
 # Categorize test set
-if (1) {
+if (0) {
   warn "restoring from $name-save3";
   my $nb = AI::Categorizer::Categorizer::NaiveBayes->restore_state("$name-save3");
   my $e = new AI::Categorizer::Experiment;
@@ -92,11 +92,11 @@ if (1) {
   my %totals;
   my @metrics = qw(precision recall F1);
 
+  local $|=1;
   opendir my($dir), "$name/test" or die $!;
   while (my $file = readdir $dir) {
     next if $file =~ /^\./;
     
-    print "$file: @{$cats->{$file}}\n";
     my $body = do {open my $fh, "$name/test/$file" or die $!; local $/; <$fh>};  
     my $d = new AI::Categorizer::Document(
 					  name => $file,
@@ -104,10 +104,25 @@ if (1) {
 					 );
     my $h = $nb->categorize($d);
     $e->add_hypothesis($h, $cats->{$file});
+    print '.';
+    #print "$file: @{$cats->{$file}} => @{[ $h->categories ]}\n";
   }
+  print "\n";
   closedir $dir;
 
-  print $e->display_stats;
+  Storable::store($e, 'experiment');
+
+  print $e->stats_table;
+}
+
+if (1) {
+  my $e = Storable::retrieve('experiment');
+  my $cats = $e->category_stats;
+  my @metrics = qw(precision recall F1 error);
+  print join("\t", 'category', @metrics), "\n";
+  while (my ($cat, $stats) = each %$cats) {
+    print join("\t", $cat, map $stats->{$_}, @metrics), "\n";
+  }
 }
 
 ########################################################################
