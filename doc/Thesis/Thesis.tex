@@ -7,9 +7,8 @@
 \usepackage{amsfonts}
 \usepackage[htt]{hyphenat}
 \usepackage{url}
-
-\DeclareMathOperator*{\ArgMax}{ArgMax}
-\DeclareMathOperator{\Entr}{H}
+\usepackage{pdfpages}
+\usepackage{ootools}
 
 \doublespace
 
@@ -21,12 +20,8 @@ DO NOT DISTRIBUTE}
 \author{Ken Williams}
 
 % Some custom commands I use
-\newcommand{\method}[1]{\texttt{#1()}}
-\newcommand{\param}[1]{\texttt{#1}}
-\newcommand{\class}[1]{\lccode`:`:\texttt{#1}}
-\newcommand{\aclass}[1]{\emph{\class{#1}}}
-\newcommand{\aicat}{\class{AI::Cat\-e\-gor\-i\-zer}}
 \newcommand{\naive}{Na\"\i ve}
+\newcommand{\aicat}{\class{AI::Cat\-e\-gor\-i\-zer}}
 
 \newcommand{\cats}{\mathcal{C}}
 \newcommand{\docs}{\mathcal{D}}
@@ -34,34 +29,13 @@ DO NOT DISTRIBUTE}
 \newcommand{\test}{\mathcal{T}^e}
 \newcommand{\func}{\mathcal{K}}
 
+\DeclareMathOperator*{\ArgMax}{ArgMax}
+\DeclareMathOperator{\Entr}{H}
+
 \newcommand{\term}[1]{\emph{#1}}
-\newenvironment{code}%
- {\rule{\textwidth}{1pt}\verbatim}%
- {\endverbatim\rule{\textwidth}{1pt}}
-
-% Commands/environments for creating UML class specification boxes
-\newenvironment{classbox}[1]%
- {\begin{tabular}{|l|}
-  \hline \multicolumn{1}{|c|}{#1}}%
- {\\ \hline
-  \end{tabular}}
-
-\newenvironment{abstractclass}[1]%
- {\begin{classbox}{\textit{#1}}}%
- {\end{classbox}}
-
-\newenvironment{concreteclass}[1]%
- {\begin{classbox}{\textbf{#1}}}%
- {\end{classbox}}
-
-\newcommand{\attributes}{\\ \hline}
-\newcommand{\methods}{\\ \hline}
-\newcommand{\attr}[2][]{\texttt{#1} #2}
-\newcommand{\meth}[3][void]{\texttt{#1} #2(\texttt{#3})}
-\newcommand{\ameth}[3][void]{\meth[#1]{\textit{#2}}{#3}}
-\newcommand{\s}{[]}
 
 \hyphenation{database data-base}
+
 
 \begin{document}
 
@@ -111,11 +85,17 @@ DO NOT DISTRIBUTE}
 \include{ch06}
 
 \appendix
-\include{ap01}
-%\include{ap02}
-%\include{ap03}
+\addcontentsline{toc}{chapter}{Appendix A: A Framework for Text Categorization}
+\includepdf[pages=-]{ap01.pdf}
+\addcontentsline{toc}{chapter}{Appendix B: Automatic Categorization of Announcements \\
+                               on the Australian Stock Exchange}
+\includepdf[pages=-]{ap02.pdf}
+\addcontentsline{toc}{chapter}{Appendix C: Automatic Categorization of Questions \\
+                               for a Mathematics Education Service}
+\includepdf[pages=-]{ap03.pdf}
 
 \backmatter
+\addcontentsline{toc}{chapter}{Bibliography}
 \bibliographystyle{plain}
 \bibliography{TC-references}
 
