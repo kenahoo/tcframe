@@ -451,11 +451,12 @@ seemed to give the best performance.  Note, that the macro-averaged
 precision is higher than recall, but the micro-averaged recall is
 higher than precision, indicating that it is not possible to
 simultaneously find the optimal threshold for both rare and common
-categories.  Thus individual thresholds for each category would
+categories.  Thus using individual thresholds for each category should
 increase $F_1$ scores if optimized properly.  The $k$ parameter
+in this experiment
 (indicating the number of similar documents to consider when
 categorizing) was set to 45, and the number of features considered was
-set to 2415, according with the values used in \cite{yang:99}.
+set to 2415, both to match the values used in \cite{yang:99}.
 
 The kNN implementation in \aicat\ is fairly new, and is an adaptation
 of work by another researcher.  The ability to optimize per-category
