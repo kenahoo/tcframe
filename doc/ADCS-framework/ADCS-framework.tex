@@ -1,4 +1,5 @@
 \documentclass[a4paper,twocolumn]{article}
+\usepackage{graphicx}
 
 \title{A Framework for Text Categorization}
 \author{Ken Williams \and Rafael A. Calvo}
@@ -168,9 +169,14 @@ our framework is implemented as the \texttt{AI::Categorizer} module.
 The framework supports several functional areas of Text
 Categorization. We describe them here together with the tradeoffs and
 design decisions that are useful to other researchers developing TC
-systems.
+systems.  A diagram of the main classes and their relationships is 
+found in Figure \ref{classes}.
 
-XXX insert UML design summary
+\begin{figure}
+\includegraphics[width=\linewidth]{classes-uml}
+\caption{The main classes in \texttt{AI::Categorizer}}
+\label{classes}
+\end{figure}
 
 
 \subsection{Data format}
@@ -216,8 +222,9 @@ this structure.
 
 
 \subsection{Tokenizing of data}
-The default implementation tokenizes document data by extracting all
-things that look like words.  This is usually sufficient in English,
+The default implementation tokenizes document data by extracting 
+all non-whitespace byte sequences between word-character 
+boundaries.  This is usually sufficient in English,
 but non-English language documents or documents with unusual content
 will certainly necessitate custom tokenization.  To achieve this, the
 user may subclass the \texttt{Document} class and override its
