@@ -157,41 +157,6 @@ The Dr. Math corpus is not available for direct download, but interested
 parties may contact the author for details.
 
 
-\subsection{Signal G}
-
-The Signal G corpus consists of 136,630 financial announcement
-documents from the Australian Stock Exchange (ASX)\cite{asx:02} issued
-between January 4 and December 29, 2000.  The documents are divided
-into a training set of 95,525 documents and a test set of 41,105
-documents.  The total size of the corpus is about 342 MB.
-
-Each document has been
-manually categorized by the ASX according to whether it indicates ``market
-sensitivity'' or not.  Market sensitivity is a subjective label indicating
-whether the given document has potential to affect the issuing
-company's share value, trading volume, or other properties on the
-exchange.  Every document is a member of either the ``sensitive'' or
-``insensitive'' category---this can be viewed as two categories that
-partition the corpus, or as a single category that some documents
-belong to and others don't.  This discussion assumes the former.
-
-Of the 136,630 corpus documents, about 34.0\% are marked as
-market sensitive, and the rest are marked as insensitive.
-
-Work with the Signal G corpus has previously been described in
-\cite{calvo:02}, which focused on the financial context of the
-application and the ability of TC methods to aid in the business
-processes of the financial organizations involved.
-
-Signal G is available to the public, member organizations, and
-information vendors.  Our data set was supplied by the Capital Markets
-Collaborative Research Centre.  For future groups who receive
-permission from the CMCRC to work with this data, we have converted it
-into an XML format with a DTD specification.  The data is not
-available for direct download, but interested parties may contact the
-Australian Stock Exchange for details.
-
-
 \section{Quality of Categorization}
 \label{Quality}
 
@@ -400,70 +365,6 @@ best results for this experiment were found when using a feature set
 with 3000 features and $k=15$.
 
 
-\subsection{Signal G}
-
-The results of testing \aicat\ on the Signal G corpus
-have been previously described in detail in \cite{calvo:02}, but the
-important points will be discussed here.  Table
-\ref{signalg-sens-results} summarizes the findings.  Because there are
-only two categories in this corpus, the scores for the baseline
-categorizer are much higher than in the other corpora.
-
-The Signal G corpus contains many more documents than the other
-corpora, and this caused some issues for categorization.
-
-For the NB, SVM, and kNN categorizers, a feature set with 5000 terms
-was used, which is larger than the feature set used in
-\cite{calvo:02}.  No real attempt was made to optimize the size of the
-feature set, but it was felt that a larger feature set might give
-better performance, and (XXX - this was/was not the case).
-
-The \naive\ Bayes categorizer was
-
-
-\begin{table}
-\begin{center}
-\begin{tabular}{|r c c c c c c c|}
-\hline
-%              maR       maP       maF1      miR          miP         miF1
-method    & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ &   error \\
-\hline
-NB        &   .90    &  .90    &  .90    &  .84       &  .83      &  .83      &         \\
-SVM       &   .79    &  .80    &  .80    &  .82       &  .82      &  .82      &         \\
-kNN       \\
-Baseline  &   .5018  &  .4988  &  .5003  &  .5544     &  .5511    &  .5527    &  .4486  \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Results of \aicat\ on Signal G (Sensitivity) corpus}
-\label{signalg-sens-results}
-\end{table}
-
-
-\subsection{Signal G (Report Type)}
-
-The results of testing \aicat\ on the Signal G (Sensitivity) corpus
-have also been previously described in \cite{calvo:02}.  Table
-\ref{signalg-rt-results} summarizes the present findings.
-
-\begin{table}
-\begin{center}
-\begin{tabular}{|r c c c c c c c|}
-\hline
-%              maR       maP       maF1      miR          miP         miF1
-method    & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ &   error \\
-\hline
-NB        \\
-SVM       \\
-kNN       \\
-Baseline  &   .0452  &  .0286  &  .0286  &  .0356     &  .0354    &  .0355    &  .0234  \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Results of \aicat\ on Signal G (Report Type) corpus}
-\label{signalg-rt-results}
-\end{table}
-
 \section{Efficiency}
 \label{Efficiency}
 
@@ -516,9 +417,6 @@ ApteMod    & SVM & 133.1s & 126.6s  & 2332.3s &  448.2s \\
            & NB  &  44.8s &  43.2s  &    7.2s &   46.7s \\
 Dr. Math   & SVM &  43.7s &  42.8s  &  734.5s &  118.9s \\
            & kNN &  43.8s &  42.2s  &    6.6s &  725.2s \\ \hline
-           & NB  &   &   &   & \\
-Signal G   & SVM &   &   &   & \\
-  (Sens)   & kNN &   &   &   & \\ \hline
 \end{tabular}
 \end{center}
 \caption[Time required for the experiments in Section \ref{Quality}]
@@ -539,9 +437,6 @@ ApteMod    & SVM & 12.2M & 50.6M  & 876.6M & 31.1M \\
            & NB  & 8.7M  & 24.1M  & 24.1M  & 11.0M \\
 Dr. Math   & SVM & 9.4M  & 26.3M  & 304.7M & 21.5M \\
            & kNN & 9.0M  & 25.1M  & 28.1M  & 21.9M \\ \hline
-           & NB  &   &   &   & \\
-Signal G   & SVM &   &   &   & \\
-  (Sens)   & kNN &   &   &   & \\ \hline
 \end{tabular}
 \end{center}
 \caption[Memory usage for the experiments in Section \ref{Quality}]
