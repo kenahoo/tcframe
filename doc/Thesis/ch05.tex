@@ -499,7 +499,7 @@ method    & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ & 
 \hline
 NB        &   .2338  &  .2677  &  .2358  &  .3766     &  .3542    &  .3651    &  .0215  \\
 SVM       &   .3333  &  .1562  &  .1946  &  .4211     &  .2273    &  .2952    &  .0330  \\
-kNN       &   .2343  &  .2692  &  .2128  &  .3602     &  .3501    &  .3551    &  .0215  \\
+kNN       &   .2372  &  .2824  &  .2154  &  .3607     &  .3572    &  .3590    &  .0212  \\
 Baseline  &   .0156  &  .0176  &  .0161  &  .0406     &  .0421    &  .0413    &  .0310  \\
 \hline
 \end{tabular}
@@ -514,7 +514,28 @@ framework.  However, the noteworthy points will be discussed below.
 
 Using the \naive\ Bayes categorizer, the $F_1$ scores are about 0.24
 when macro-averaged and 0.37 when micro-averaged.  This is not as
-dramatic a difference as seen on the ApteMod corpus, where the 
+dramatic a difference as seen on the ApteMod corpus, where the
+micro-averaged scores are approximately double the macro-averaged
+scores.  In this experiment, the number of features considered was set
+to 2000, though varying this parameter between 1500 and 3000 seems to
+produce similar results.
+
+Using the SVM categorizer, $F_1$ scores were again worse than with NB,
+but in this case the recall with SVM was higher than the
+precision---the opposite of the situation on the ApteMod corpus.
+Again, a mechanism for trading off $\rho$ and $\pi$ would be
+desirable.  The best scores with SVM were obtained when using no
+feature selection at all, i.e. using all 8824 features when building
+the SVM models.  This is an indication of SVM's robustness to noise in
+the data sets it considers.
+
+With the kNN categorizer, results were competitive with the NB
+categorizer.  Note that $F_1^M$ for kNN is lower than each of $\rho^M$
+and $\pi^M$---this somewhat counterintuitive situation, unique to
+macro-averaging, can arise when the per-category scores $\rho_i$ are
+sometimes greater than $\pi_i$ and sometimes less than $\pi_i$.  The
+best results for this experiment were found when using a feature set
+with 3000 features and $k=15$.
 
 
 \subsubsection{Signal G (Sensitivity)}
