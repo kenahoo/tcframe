@@ -9,10 +9,44 @@ not form a design specification, but it describes both the conceptual
 environment and the vocabulary necessary to understand the design
 discussion in Chapter \ref{design}.
 
+\section{Formal Definitions}
+
+The goal of automatic Text Categorization is to automatically produce specialized
+functions that can process natural-language documents, assigning zero
+or more user-defined labels to them based on their content.  More
+formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
+previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
+function $\func$ that maps from $\docs$ to the set of all subsets of $\cats$.
+
+XXX - create a diagram of a classifier's action on sets
+
+In
+some applications, categorizers assign only a single label to each
+document, so a categorizer is often a function that maps directly from
+$\docs$ to $\cats$.  Often an intermediate function is useful for ``soft'' or 
+``rank-based'' categorization, mapping from $\docs \times \cats$ to
+the set of real numbers $\mathbb{R}$ in order to assign a score to
+each category $c_j$ for each document $d_i$.  The scored categories
+may then be presented to a human expert in decreasing order, and the
+human may then make the final decision on the document's category
+membership.
+
+The standard modern approach to creating new categorizer functions is
+to build them using Machine Learning techniques from a set of training
+documents $\train$.\cite[p. 2]{sebastiani:02} This is a set of
+user-provided, pre-labeled documents that follows a category
+distribution similar to the distribution of $\docs$, and whose contents
+provide information about what sorts of documents should be mapped to
+what sorts of categories.  Algorithms can then be developed that make
+generalizations about the relationship between document content and
+document category, encoding these generalizations in the learned function $\func$.
+
+
+
 \section{The Text Categorization Process}
 
-In order to train a categorizer as described in Section
-\ref{tc-intro}, the user must begin with a \emph{training corpus},
+In order to train a categorizer in the above manner, the user must
+begin with a \emph{training corpus},
 hereafter referred to as $\train$.  This is a set of documents which
 are pre-labeled with categories that are considered to be fully
 correct---typically, they have been manually assigned by a

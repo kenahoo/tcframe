@@ -3,52 +3,69 @@
 \section{Automatic Text Categorization}
 \label{tc-intro}
 
-XXX - need to have more of a summary about why TC and IR are important
-(from Rafael: ``start with an overview of why TC and IR are important,
-in layman terms.  You need to sell the need for your work, you can not
-start with the description of vector models. You can mention
-information overload, the need for knowledge management, document and
-email filetering and routing, etc'')
-
-The field of automatic Text Categorization is an extremely active area
-of current research and application.  It is a multi-disciplinary
-field, attracting attention from the Linguistics, Computer Science,
+The field of automatic Text Categorization (TC) is an extremely active
+area of current research and application.  It is multi-disciplinary,
+attracting attention from the Linguistics, Computer Science,
 Engineering, and Business communities.  Its applicability is broad,
 with many potential uses for large businesses as well as individuals.
 A recent survey article from the Association of Computing Machinery
-provides a good introduction to the field.\cite{sebastiani:02}
+provides a good introduction to the field. \cite{sebastiani:02}
 
-XXX - don't get technical here, move technical stuff to chapter 2
+The goal of automatic Text Categorization is to create systems that
+can automatically place text-based documents into predefined
+categories.  For example, one system may assign general-interest news
+stories themes such as ``sports,'' ``finance,'' or ``politics.''
+Another system may automatically categorize an email user's email
+messages by routing them into folders.  In these scenarios, the news
+story or email message plays the role of a ``document,'' and the news
+theme or email folder plays the role of a ``category.''  The system's
+categorization decisions may be based on any arbitrary properties of
+the documents, usually (though not always) some analysis of the text
+content of each document.
 
-The goal of automatic Text Categorization is to automatically produce specialized
-functions that can process natural-language documents, assigning zero
-or more user-defined labels to them based on their content.  More
-formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
-previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
-function $\func$ that maps from $\docs$ to the set of all subsets of $\cats$.
+The standard modern approach to TC involves using Machine Learning to
+create categorizers automatically, rather than manually specifying the
+criteria that a document must fulfill in order to belong to each
+category. \cite[p. 2]{sebastiani:02} The Machine Learning process that
+creates categories typically examines a set of documents which have
+been pre-assigned with categories, and makes inductive abstractions
+based on this data that will assist it in categorizing future
+documents. \cite[ch. XXX]{mitchell:97}
 
-XXX - create a diagram of a classifier's action on sets
+Because the process of creating categorizers is automatic, and the
+categorization process itself is also automatic, efficient TC systems
+requiring no human intervention can be created that process large
+numbers of documents very quickly.  In practice, human intervention
+may sometimes be applied in either phase, because manual tuning of the
+parameters that govern the creating of a categorizer may improve its
+performance, and because a human expert may assist the categorizer in
+making decisions, or vice versa.
 
-In
-some applications, categorizers assign only a single label to each
-document, so a categorizer is often a function that maps directly from
-$\docs$ to $\cats$.  Often an intermediate function is useful for ``soft'' or 
-``rank-based'' categorization, mapping from $\docs \times \cats$ to
-the set of real numbers $\mathbb{R}$ in order to assign a score to
-each category $c_j$ for each document $d_i$.  The scored categories
-may then be presented to a human expert in decreasing order, and the
-human may then make the final decision on the document's category
-membership.
+The following quotation from \cite{sebastiani:02} provides a sense of
+the broad range of applications currently using TC methods:
 
-The standard modern approach to creating new categorizer functions is
-to build them using Machine Learning techniques from a set of training
-documents $\train$.\cite[p. 2]{sebastiani:02} This is a set of
-user-provided, pre-labeled documents that follows a category
-distribution similar to the distribution of $\docs$, and whose contents
-provide information about what sorts of documents should be mapped to
-what sorts of categories.  Algorithms can then be developed that make
-generalizations about the relationship between document content and
-document category, encoding these generalizations in the learned function $\func$.
+\begin{quote}
+TC is now being applied in many contexts, ranging from document
+indexing based on a controlled vocabulary, to document filtering,
+automated metadata generation, word sense disambiguation, population
+of hierarchical catalogues of Web resources, and in general any
+application requiring document organization or selective and adaptive
+document dispatching.
+\end{quote}
+
+Because of the recent explosion in volume of electronic data due to
+the advent of the World Wide Web and the widespread use of email for
+business and personal communication, many new applications may benefit
+from using TC methods.  Two application areas investigated during the
+course of this candidature include the use of TC methods to determine
+potential market impact of corporate financial announcements
+\cite{calvo:02}, and to assist educational mentors in managing a
+stream of messages sent to a mathematics question-and-answer service
+\cite{williams:02}.  These tasks are currently performed by humans
+with special knowledge about the particular relationships between
+documents and categories, and any gains in efficiency brought by
+automation may significantly aid the business processes of such
+organizations.
 
 \section{Object-Oriented Application Frameworks}
 
