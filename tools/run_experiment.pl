@@ -5,17 +5,28 @@ use AI::Categorizer;
 
 my (%opt, %do_stage);
 parse_command_line(@ARGV);
+@ARGV = grep !/^-\d$/, @ARGV;
 
 my $c = new AI::Categorizer(%opt);
 
-if (keys %do_stage) {
-  $c->scan_features     if $do_stage{1};
-  $c->read_training_set if $do_stage{2};
-  $c->train             if $do_stage{3};
-  $c->evaluate_test_set if $do_stage{4};
-  print $c->stats_table if $do_stage{5};
-} else {
-  $c->run_experiment;
+%do_stage = map {$_, 1} 1..5 unless keys %do_stage;
+
+run_section('scan_features',     1, \%do_stage);
+run_section('read_training_set', 2, \%do_stage);
+run_section('train',             3, \%do_stage);
+run_section('evaluate_test_set', 4, \%do_stage);
+print $c->stats_table if $do_stage{5};
+
+sub run_section {
+  my ($section, $stage, $do_stage) = @_;
+  return unless $do_stage->{$stage};
+  if (keys %$do_stage > 1) {
+    print " % $0 @ARGV -$stage\n";
+    system($0, @ARGV, "-$stage") == 0
+      or die "Couldn't run $0: $!";
+    return;
+  }
+  return $c->$section();
 }
 
 sub parse_command_line {
