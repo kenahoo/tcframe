@@ -4,8 +4,10 @@ stopword_file: corpora/reuters-21578/SMART.stoplist
 progress_file: "/tmp/reuters-KNN"
 outfile: "results/reuters-KNN.txt"
 learner_class: "::KNN"
+features_class: "AI::Categorizer::FeatureVector::FastDot"
 tfidf_weighting: xfx
 stemming: porter
-features_kept: 2000
+features_kept: 2415
+k_value: 45
 threshold: 0.1
 verbose: 1

@@ -2,7 +2,9 @@
 data_root: corpora/drmath-1.00
 stopword_file: corpora/drmath-1.00/SMART.stoplist
 progress_file: "/tmp/drmath-KNN"
+outfile: "results/drmath-KNN.txt"
 learner_class: "::KNN"
+features_class: "AI::Categorizer::FeatureVector::FastDot"
 tfidf_weighting: xfx
 stemming: porter
 threshold: 0.12
