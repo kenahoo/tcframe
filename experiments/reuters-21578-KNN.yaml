@@ -7,4 +7,5 @@ learner_class: "::KNN"
 tfidf_weighting: xfx
 stemming: porter
 features_kept: 2000
+threshold: 0.1
 verbose: 1
