@@ -1,6 +1,67 @@
-
-
 \chapter{Conclusion}
 \label{Conclusion}
 
-XXX need to write
+This thesis has presented the background, design, implementation, and
+evaluation of a new object-oriented application framework for Text
+Categorization.  The framework does not include any novel work in Text
+Categorization algorithms, but it has been designed with the intention
+of facilitating such novel work.
+
+The evaluation in Chapter \ref{Evaluation} shows that the \naive\
+Bayes implementation gives results consistent with the work of others
+in the TC literature, and that the framework's k-Nearest-Neighbor and
+Support Vector Machine Implementations are not yet comparable with the
+state-of-the-art implementations of the algorithms referenced in the
+literature.
+
+The architectural quality of the framework is difficult to evaluate
+directly, but several analysis approaches have been presented in this
+thesis.  Several aspects of the framework's design have been presented
+as instances of Design Patterns, indicating that they may align with
+current best-practices in framework development.  Example applications
+of several types have also been discussed, indicating that the
+framework can support the use cases presented in Section
+\ref{use-cases}.
+
+\section{Further Work}
+
+Since one of the main goals of framework development is that the
+framework should be easily extensible and developers can add new
+functionality with a minimum of effort, there are many avenues for
+further work with the framework.  For instance, adding common
+functionality in the core framework is helpful as the framework
+progresses from a whitebox to a more blackbox style of usage.
+
+A selection of some of the most desirable directions for further work
+is presented here, in no particular order.
+
+\begin{itemize}
+\item As mentioned in Section \ref{imp-featurevectors}, different
+  feature vector data structures may be desirable in different
+  situations.  To provide framework users with the flexibility to make
+  trade-offs between speed, memory, and complexity, the sparse
+  \texttt{C}-level structure described there should be implemented.
+\item Many new algorithms are continually being developed and refined
+  in the TC literature, and the most promising and general-purpose of
+  these should be incorporated into the framework.
+\item In order to allow application developers to use and extend the
+  framework more easily, different kinds of documentation, such as
+  tutorials and recipes, should be written.  \cite{fayad:99} suggests
+  that multiple kinds of documentation can aid framework adoption.
+\item The current Support Vector Machine and k-Nearest-Neighbor
+  categorizers should be investigated and improved so that they
+  deliver performance matching the published results in the well-known
+  TC literature.
+\item It might be helpful if the functionality in the \naive\ Bayes
+  categorizer were available as a separate module outside the
+  framework, so that developers interested in Machine Learning
+  problems outside the TC domain could apply the algorithms it
+  implements.  The implementation in \aicat\ could then become a
+  simple Adapter to the outside module.
+\item The framework should be put to use in a hierarchical
+  categorization application, with possible hierarchical functionality
+  added to the framework to support such usage.
+\item Alternate feature selection algorithms, such as the $\chi^2$ and
+  $IG$ algorithms discussed in Section \ref{dim-reduction}, should be
+  implemented and added to the core framework.
+\end{itemize}
