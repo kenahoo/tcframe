@@ -1,14 +1,44 @@
 #!/usr/bin/perl
 
-my $name = pop @ARGV or die "Usage: $0 [options] <corpus-directory>\n";
-$name =~ s,/$,,;
-
 use strict;
+use AI::Categorizer;
 
-use Getopt::Long;
-my %opt = (learner => 'AI::Categorizer::Learner::NaiveBayes', features_kept => 1000);
-Getopt::Long::Configure("bundling");
-GetOptions( \%opt, 'format=s', 'features_kept=s', 'learner=s', 1, 2, 3, 4, 5 );
+die "Error: Odd number of option/value tokens found on command line\n" if @ARGV % 2;
+my (%opt, %do_stage);
+%opt = (verbose => 1);
+while (@ARGV) {
+  if ($ARGV[0] =~ /^-(\d+)$/) {
+    $do_stage{$1} = 1;
+    shift @ARGV;
+
+  } elsif ( $ARGV[0] =~ /^--/ ) {
+    my ($k, $v) = splice @ARGV, 0, 2;
+    $k =~ s/^--//;
+
+    if ($k =~ /^(\w+)_class$/) {
+      my $name = $1;
+      $v =~ s/^::/AI::Categorizer::\u${name}::/;
+    }
+    $opt{$k} = $v;
+
+  } else {
+    die "Unknown option format '$ARGV[0]'.  Do you mean '--$ARGV[0]'?\n";
+  }
+}
+
+my $c = new AI::Categorizer(%opt);
+
+if (keys %do_stage) {
+  $c->scan_features     if $do_stage{1};
+  $c->read_training_set if $do_stage{2};
+  $c->train             if $do_stage{3};
+  $c->evaluate_test_set if $do_stage{4};
+  print $c->stats_table if $do_stage{5};
+} else {
+  $c->run_experiment;
+}
+
+__END__
 
 use vars qw(%format);
 %format = 
