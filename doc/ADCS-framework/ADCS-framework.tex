@@ -3,8 +3,14 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
+\usepackage[htt]{hyphenat}
 
 \newcommand{\naive}{Na\"\i ve}
+\newcommand{\method}[1]{\texttt{#1()}}
+\newcommand{\class}[1]{\texttt{#1}}
+\newcommand{\param}[1]{\texttt{#1}}
+\newcommand{\aicat}{\texttt{AI::Cat\-e\-gor\-i\-zer}}
+
 
 \raggedbottom
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -207,7 +213,7 @@ natively object-oriented, with a very flexible object
 model. \cite{conway:99}
 
 In Perl, the basic unit of reusable code is called a \emph{module};
-our framework is implemented as the \texttt{AI::Categorizer} module.
+our framework is implemented as the \aicat\ module.
 
 \section{Functional Areas}
 
@@ -219,11 +225,11 @@ systems.
 Figure \ref{classes-uml} shows the architecture of the
 framework. Attributes and methods of each class have been removed for
 the sake of brevity. Each of the classes will be discussed in the
-context of their Text Categorization function. \texttt{Categorizer} is
+context of their Text Categorization function. \class{Categorizer} is
 the top level class, which manages the data-related classes
-(\texttt{KnowledgeSet}, \texttt{Collection}, \texttt{Document} and
-\texttt{Category}), as well as the machine learning \texttt{Learner}
-classes and \texttt{Hypothesis}, and a class for reporting the
+(\class{KnowledgeSet}, \class{Collection}, \class{Document} and
+\class{Category}), as well as the machine learning \class{Learner}
+classes and \class{Hypothesis}, and a class for reporting the
 results.
 
 
@@ -238,12 +244,12 @@ Since documents come in a wide variety of formats such as XML, plain text,
 or PDF, the framework should support the
 importing of knowledge in several formats and have a mechanism by
 which the user may extend these capabilities for a particular
-environment.  The base class \texttt{Document} allows the user to
+environment.  The base class \class{Document} allows the user to
 specify the content as a string.  The user may also subclass the
-\texttt{Document} class, overriding the \texttt{parse()} method for
+\class{Document} class, overriding the \method{parse} method for
 direct importing of data in its natively stored format.
 
-In the \texttt{Collection} class and its subclasses, the framework
+In the \class{Collection} class and its subclasses, the framework
 also supports the notion of a collection of stored documents, such as
 a directory of text files, a database of stored documents, or an XML
 file containing multiple documents.  The most common storage formats
@@ -252,20 +258,20 @@ formats can be implemented through subclassing.  Note that the
 document format and collection format are independent characteristics;
 a project may have a directory of text files, a directory of XML
 files, or a directory of PDF files, but these would all be handled by
-the \texttt{Collection::Files} class with the appropriate
-\texttt{Document::} class.  Likewise, a project may have a collection
+the \class{Collection::Files} class with the appropriate
+\class{Document} subclass.  Likewise, a project may have a collection
 of XML documents stored in a single file, as a directory of files, or
 in a database, but these would all be parsed by the
-\texttt{Document::XML} class with the appropriate \texttt{Collection}
-class. Note that \texttt{Document} and its subclasses exist mainly for
+\class{Document::XML} class with the appropriate \class{Collection}
+subclass. Note that \class{Document} and its subclasses exist mainly for
 the purpose of importing data; after the data is read and parsed, the
-rest of the system will throw away the \texttt{Document} object,
-keeping only its \texttt{FeatureVector} object and the list of
-\texttt{Categories} associated with the \texttt{Document}.
+rest of the system will throw away most of the information in the \class{Document} object,
+keeping only its \class{FeatureVector} object and the list of
+\class{Categories} associated with the \class{Document}.
 
 \subsection*{Structured documents}
 Each document may have several sections of content, such as ``body'',
-``subject'', ``signature'', and so on.  In \texttt{AI::Categorizer},
+``subject'', ``signature'', and so on.  In \aicat,
 the user specifies the content by providing a hash of key-value pairs,
 where the key indicates the name of the section, and the value is a
 string containing the content data.  The user may also specify
@@ -281,8 +287,8 @@ all non-whitespace byte sequences between word-character
 boundaries.  This is usually sufficient in English,
 but non-English language documents or documents with unusual content
 will certainly necessitate custom tokenization.  To achieve this, the
-user may subclass the \texttt{Document} class and override its
-\texttt{tokenize()} method if a different algorithm is required.  We
+user may subclass the \class{Document} class and override its
+\method{tokenize} method if a different algorithm is required.  We
 may also add other tokenizing options to the default implementation,
 controlled by parameters, if other common tokenizing needs are found.
 
@@ -290,22 +296,22 @@ controlled by parameters, if other common tokenizing needs are found.
 The default implementation provides support for the Porter stemming
 algorithm, a standard algorithm for removing morphemes from English
 words to obtain their ``stems,'' or root forms.  By default no
-stemming is performed, but a \texttt{stemming} parameter can be set to
+stemming is performed, but a \param{stemming} parameter can be set to
 \texttt{porter} to activate stemming.  Alternatively, the user may
-override the \texttt{stem\_words()} method of the \texttt{Document}
+override the \method{stem\_words} method of the \class{Document}
 class for custom stemming.  This may be extremely important in highly
 morphological languages or in certain application domains.
 
 \subsection*{Feature selection}
-Feature selection is handled by the \texttt{KnowledgeSet} class's
-\texttt{scan\_features()} and \texttt{select\_features()} methods.
-The \texttt{select\_features()} method works on an entire
-\texttt{KnowledgeSet} in-memory at once.  The
-\texttt{scan\_features()} method is a quicker and less
+Feature selection is handled by the \class{KnowledgeSet} class's
+\method{scan\_features} and \method{select\_features} methods.
+The \method{select\_features} method works on an entire
+\class{KnowledgeSet} in-memory at once.  The
+\method{scan\_features} method is a quicker and less
 memory-consuming way to select features before reading in the whole
 data set, but it requires the user to make two passes through the data
 set to actually read in the documents.  Both methods return a
-\texttt{FeatureVector} (feature vs. value) to the framework, which
+\class{FeatureVector} (feature vs. value) to the framework, which
 saves the list of highest-ranking features to use when parsing future
 documents.
 
@@ -317,54 +323,54 @@ We will add more criteria as the project develops.
 
 \subsection*{Vector space modeling}
 The full range of TF/IDF weighting from \cite{salton:88} are
-supported, controlled by a \texttt{tfidf\_weighting} parameter.  If
+supported, controlled by a \param{tfidf\_weighting} parameter.  If
 the user wants to employ a different weighting scheme, the
-\texttt{weigh\_features()} method in the \texttt{KnowledgeSet} class
+\method{weigh\_features} method in the \class{KnowledgeSet} class
 may be overridden.
 
 \subsection*{Machine Learning algorithm}
 Choosing machine learning algorithms is done
-by choosing a subclass of the \texttt{Learner} class.  Several
+by choosing a subclass of the \class{Learner} class.  Several
 algorithms have already been implemented including \naive\ Bayes
 \cite{lewis:98}, Support Vector Machines \cite{scholkopf:99}
 \cite{cortes:95}, Neural Networks \cite{calvo:01} \cite{yang:99},
 k-Nearest Neighbors \cite{yang:99}, and Decision Trees
-\cite{quinlan:89}.  Any \texttt{Learner} class needs to implement the
-virtual methods \texttt{create\_model()} and \texttt{get\_scores()},
-which supply the semantics behind the \texttt{train()} and
-\texttt{categorize()} methods, respectively.  Since many Machine
+\cite{quinlan:89}.  Any \class{Learner} class needs to implement the
+virtual methods \method{create\_model} and \method{get\_scores},
+which supply the semantics behind the \method{train} and
+\method{categorize} methods, respectively.  Since many Machine
 Learning algorithms are implemented as a series of binary decisions
 concerning individual category memberships, an abstract
-\texttt{Learner::Boolean} class is provided to help developers of new
+\class{Learner::Boolean} class is provided to help developers of new
 categorizers--in this case, one need only implement the smaller
-\texttt{create\_boolean\_model()} and \texttt{get\_boolean\_score()}
+\method{create\_boolean\_model} and \method{get\_boolean\_score}
 methods.
 
-Note that the \texttt{Learner} class does dual duty as a learner and a
+Note that the \class{Learner} class does dual duty as a learner and a
 categorizer.  No class distinction is made in the framework between a
-\texttt{Learner} before and after it has been trained--they are
+\class{Learner} before and after it has been trained--they are
 objects of the same class.  This allows for the possibility of on-line
 learning, in which a trained learner incrementally uses additional
 training examples to improve its current model.
 
 \subsection*{Machine Learning parameters}
 Because each ML algorithm may have several implementation parameters
-to control behavior, each \texttt{Learner} subclass accepts different
+to control behavior, each \class{Learner} subclass accepts different
 parameters.  To facilitate the wide variety of parameters that
-different classes may require, we use the \texttt{Class::Container}
+different classes may require, we use the \class{Class::Container}
 module\footnote{available at http://search.cpan.org/author/\\
 KWILLIAMS/Class-Container-0.08/}.  This module allows each
-\texttt{Learner} subclass to declare the parameters it accepts, so
+\class{Learner} subclass to declare the parameters it accepts, so
 that a Neural Network class can declare arguments for number of input,
 hidden, and output nodes, a k-Nearest Neighbor class can declare
 arguments for $k$ and for thresholding strategies, and so on.  These
 parameters are passed through the framework transparently using a
 variation on the ``Factory Method'' pattern. \cite{gamma:95}
 
-In fact, the \texttt{Learner} and its subclasses are not the only
+In fact, the \class{Learner} and its subclasses are not the only
 pieces of the framework in which varying parameters control
 operations.  Because this situation is common throughout the
-framework, \texttt{Class::Container} is employed consistently for all
+framework, \class{Class::Container} is employed consistently for all
 structural classes in the framework.  This goes a long way toward
 reducing the number of classes necessary to implement varying
 behavior.
@@ -376,10 +382,10 @@ applications (e.g. automatic email routers) may only be interested in
 the ``best N categories,'' where N is often 1.  These scenarios are
 supported by the Hypothesis class, which provides a generic interface
 to the scoring decisions of the categorizers.  Methods like
-\texttt{categories()}, \texttt{best\_category()}, and
-\texttt{in\_category()} provide application-level access to
+\method{categories}, \method{best\_category}, and
+\method{in\_category} provide application-level access to
 categorization decisions based on the scores assigned by the
-\texttt{Learner} class.
+\class{Learner} class.
 
 \subsection*{On-line training}
 Some machine learning algorithms can easily integrate new knowledge
@@ -387,24 +393,24 @@ into the knowledge base without going through the potentially
 expensive process of re-training the categorizer from scratch.  For
 instance, most kNN implementations can do this, whereas most Neural
 Network implementations cannot.  For categorizers that support this, a
-virtual \texttt{add\_knowledge()} method in the \texttt{Learner} class
-is supplied.  Currently no \texttt{Learner} subclasses in
-\texttt{AI::Categorizer} support on-line learning, but the
+virtual \method{add\_knowledge} method in the \class{Learner} class
+is supplied.  Currently no \class{Learner} subclasses in
+\aicat\ support on-line learning, but the
 architecture supports it when an implementation is needed.
 
 
 \section{Framework Customization}
 
-Like C++ and Java, Perl is natively object-oriented, but unlike them it does not have strict separation of compilation and execution stages.  Rather, the compiler and interpreter work in tandem, trading back and forth to execute a Perl application, allowing runtime compilation of code.  In addition, Perl's object model is fairly loosely bound (similar in this respect to Objective-C's model), permitting class names to be stored in variables and/or specified at runtime.  Because of these properties, the choice of specific classes to be used in the framework can be made at runtime, controlled by parameters, facilitated by the \texttt{Class::Container} module.  It allows several classes to cooperate as a framework without having to know about each others' class names, constructor parameters, and so on, and provides the glue to do strict early checking of parameter names and types, facilitating transparent factory patterns within the framework.
+Like C++ and Java, Perl is natively object-oriented, but unlike them it does not have strict separation of compilation and execution stages.  Rather, the compiler and interpreter work in tandem, trading back and forth to execute a Perl application, allowing runtime compilation of code.  In addition, Perl's object model is fairly loosely bound (similar in this respect to Objective-C's model), permitting class names to be stored in variables and/or specified at runtime.  Because of these properties, the choice of specific classes to be used in the framework can be made at runtime, controlled by parameters, facilitated by the \class{Class::Container} module.  It allows several classes to cooperate as a framework without having to know about each others' class names, constructor parameters, and so on, and provides the glue to do strict early checking of parameter names and types, facilitating transparent factory patterns within the framework.
 
 For instance, to use the built-in SVM learner, one could either create
-an \texttt{AI::Categorizer::SVM} object directly, or one could specify
+an \aicat\texttt{::SVM} object directly, or one could specify
 the class name by providing it as a value for the
-\texttt{learner\_class} parameter.  This behavior is implemented at
-the framework level, so different \texttt{Document},
-\texttt{Collection}, \texttt{FeatureVector}, etc. classes can be
-pressed into service by the \texttt{document\_class},
-\texttt{collection\_class}, and \texttt{feature\_vector\_class}
+\param{learner\_class} parameter.  This behavior is implemented at
+the framework level, so different \class{Document},
+\class{Collection}, \class{FeatureVector}, etc. classes can be
+pressed into service by the \param{document\_class},
+\param{collection\_class}, and \param{feature\_vector\_class}
 parameters, respectively.  This helps facilitate quick architectural
 changes, letting developers drop their own subclasses into the
 framework with relative ease.
@@ -418,7 +424,7 @@ We have evaluated our framework by building classifiers in several
 applications.  We have implemented \naive\ Bayes, Support Vector
 Machine, k-Nearest-Neighbor, and Decision Tree classifiers in the
 framework.  We have trained classifiers using the standard Reuters
-ApteMod corpus, and obtained similar results to the ones described in
+ApteMod corpus and obtained similar results to the ones described in
 \cite{yang:99}.  We have also trained and tested classifiers on other
 corpora in financial, educational, and discussion group domains.  Due
 to space constraints and the proprietary nature of some of our other
@@ -471,47 +477,47 @@ a replacement for it.
 
 To this end, we have tried to make the framework very inter-operable
 and provide interfaces to existing TC products.  For instance, we have
-implemented a \texttt{Learner} subclass called \texttt{Learner::Weka}
+implemented a \class{Learner} subclass called \class{Learner::Weka}
 to provide an interface to any Weka classifier the user would like to
-use.  In this way, \texttt{AI::Categorizer} benefits when progress is
+use.  In this way, \aicat\ benefits when progress is
 made in Weka, as well as the other way around.
 
 We hope to create interfaces to other existing products as well.  If the
-\texttt{AI::Categorizer} project gains enough momentum that other
+\aicat\ project gains enough momentum that other
 people wish to contribute code to it, we will encourage this code to
 be as independent and generic as possible so that we may simply
 create an interface to it in our framework.  For instance, this is 
 how the SVM learner in our framework was created recently--our
-\texttt{AI::Categorizer::SVM} class is just a thin wrapper around a
-generic \texttt{Algorithm::SVM} module by another author we
+\aicat\class{::SVM} class is just a thin wrapper around a
+generic \class{Algorithm::SVM} module by another author we
 collaborated with, and this in turn is a wrapper around the C library
 \texttt{libsvm}.
 
 It is our hope that this strategy will extend the reach of both our
 framework and related existing and new TC software.
 
-In designing the AI::Categorizer framework architecture, we have
+In designing the \aicat\ framework architecture, we have
 focused on aspects of Text Categorization that tend to remain common
 from one task to the next, allowing for growth in aspects that tend to
 change.  For instance, we have specified that document features are
-encapsulated in a FeatureVector object, but we have not specified that
+encapsulated in a \class{FeatureVector} object, but we have not specified that
 object's internal implementation.  Likewise, we have specified that
-the Machine Learning TC algorithms are encapsulated by the Learner
+the Machine Learning TC algorithms are encapsulated by the \class{Learner}
 class, but the specific algorithms will tend to vary from task to
 task.
 
 In the first public versions of the framework, we have tended to
 implement the simplest versions of each of these classes, with more
 elaborate or optimized implementations deferred to later work.  For
-instance, our FeatureVector class is currently implemented using Perl
+instance, our \class{FeatureVector} class is currently implemented using Perl
 hashes, but other implementations (for instance, using C structs to
 implement sparse integer vectors) may be implemented in order to
-improve memory usage and/or speed.  Other Learner subclasses may also
+improve memory usage and/or speed.  Other \class{Learner} subclasses may also
 be added, and the existing subclasses may be improved to provide more
 feature-rich implementations or improve efficiency.  Because they are
 encapsulated in subclasses, these implementations may be traded at
 will, allowing experimentation with different implementations.  In
-particular, we expect the Learner and FeatureSelector areas of the
+particular, we expect the \class{Learner} and \class{FeatureSelector} areas of the
 framework to grow as new algorithms are added and existing algorithms
 are informed by current research.
 
@@ -530,7 +536,7 @@ analysis of its architecture may be useful to those embarked in building
 their own TC systems, so we have discussed the design decisions of the
 different functionalities supported by the framework.
 
-Periodic point-releases of \texttt{AI::Categorizer} are available at
+Periodic point-releases of \aicat\ are available at
 http://www.cpan.org/modules/by-authors/id/KWILLIAMS/ , and
 bleeding-edge development versions are available via CVS at
 http://www.sourceforge.net/projects/ai-categorizer/ .
