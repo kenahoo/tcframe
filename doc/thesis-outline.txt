@@ -1,0 +1,23 @@
+Outline of Ken Williams' thesis work
+
+* Goals
+
+** Build a framework for document classification using the state-of-the-art techniques in the literature
+
+** Improve on existing classification methods
+
+** Build a useful application that uses the framework
+
+** The framework should be publically available under open license
+
+** The framework should be useful in a broad range of situations
+
+* Assessment criteria
+
+** The successful use of the framework by other people not involved in this project will demonstrate its usefulness
+
+** The successful use of the application by anyone will demonstrate its usefulness
+
+** Publication of previously unknown results, or previously unseen performance metrics, will demonstrate improvement on published classification methods
+
+** Duplication of literature-published performance metrics will demonstrate successful implementation of standard techniques
