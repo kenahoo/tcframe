@@ -11,17 +11,23 @@
 
 % Commands/environments for creating UML class specification boxes
 \newenvironment{classbox}[1]%
- {\begin{tabular}{|l|}
+ {\begin{singlespace}
+  \begin{center}
+  \begin{tabular}{|l|}
   \hline \multicolumn{1}{|c|}{#1}}%
  {\\ \hline
-  \end{tabular}}
+  \end{tabular}
+  \end{center}
+  \end{singlespace}}
 
 \newenvironment{abstractclass}[1]%
- {\begin{classbox}{\textit{#1}}}%
+ {\subsubsection{#1}
+  \begin{classbox}{\textit{#1}}}%
  {\end{classbox}}
 
 \newenvironment{concreteclass}[1]%
- {\begin{classbox}{\textbf{#1}}}%
+ {\subsubsection{#1}
+  \begin{classbox}{\textbf{#1}}}%
  {\end{classbox}}
 
 \newcommand{\attributes}{\\ \hline}
