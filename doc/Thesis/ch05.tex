@@ -473,7 +473,7 @@ system process:
   disk.
 \item[Read] The entire training corpus $\train$ is read into memory as
   a \class{KnowledgeSet}, using only the features determined in the
-  first step, and saved to disk as a data structure accessible for the
+  ``Scan'' step, and saved to disk as a data structure accessible for the
   next step.
 \item[Learn] A \class{Learner} object is created, and its
   \method{train} method is invoked using the \class{KnowledgeSet} from
