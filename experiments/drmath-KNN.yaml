@@ -7,6 +7,6 @@ learner_class: "::KNN"
 features_class: "AI::Categorizer::FeatureVector::FastDot"
 tfidf_weighting: xfx
 stemming: porter
-threshold: 0.12
+threshold: 0.1
 k_value: 15
 verbose: 1
