@@ -101,6 +101,7 @@ database management system. Section 4 discusses the quantitative
 results of the testing process and Section 5 concludes.
 
 \section{Dr. Math Corpus}
+\label{corpus}
 
 For the evaluation of our system we have tested the performance of the
 categorization system over a set of unstructured, informal documents
@@ -265,7 +266,7 @@ rumbaugh:91}, by integrating it in this way, the classification task
 \label{results}
 
 The 5305 training documents in the Dr. Math corpus were loaded into a database 
-table named "documents". This table consisted of 3 columns: name, content and 
+table named ``documents.'' This table consisted of 3 columns: name, content and 
 categories. The testing set was then inserted into the database, one document at a time 
 using a statement similar to that in Figure \ref{sql-insert}. After each insert a SELECT query was 
 run to extract the assigned categories. These categories were then compared to the 
@@ -277,65 +278,72 @@ selected items the system got right, i.e. tp/(tp+fp).} were then used
 to calculate the $F_1$ measure \cite{calvo:01,sebastiani:02}.
 
 \begin{table}
-\begin{tabular}{|r|r|r|r|}
+\begin{tabular}{|r|r|r|r|r|r|}
 \hline
-Method   & $MaF_1$ & $MiF_1$ & Error \\ \hline
-NB       & 0.226   & 0.361   & 0.022 \\ \hline
-Baseline & 0.018   & 0.042   & 0.031 \\ \hline
+         & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
+NB       & 0.246   & 0.226   & 0.226   & 0.361   & 0.022 \\ \hline
+kNN      & 0.211   & 0.186   & 0.179   & 0.257   & 0.025 \\ \hline
+Baseline & 0.019   & 0.018   & 0.018   & 0.042   & 0.031 \\ \hline
 \end{tabular}
-\caption{Macro- and Micro-averaged performance scores}
+\caption{Macro- and Micro-averaged performance scores.}
 \label{results-main}
 \end{table}
 
-XXX - ``baseline'' was calculated using only class prior probabilities.  Needs discussion.
 
-XXX - find a home for this
-The kNN module created has two customizable variables: threshold and k-value. The 
-k-value governs how many neighbours are consulted to decide the category of the 
-document. The threshold governs the confidence of the learner required to apply a 
-category to a document. For example if a learner identifies 10 neighbours (i.e. k-value 
-= 10) and finds 10 unique categories amongst those neighbours, the confidence for 
-each category would be 10%. If the threshold is set to 0.15 the learner will not apply 
-any category to the new document. Thus the threshold is a good control of precision 
-within the classification system.
+The results in Table \ref{results-main} show the performance of the
+categorization algorithms.  The precision, recall, and $F_1$ scores
+can be computed using macro-averaging, which gives equal weight to
+each category, or micro-averaging, which gives equal weight to each
+document. \cite{yang:99, sebastiani:02} For the kNN algorithm, we used
+a $k$ value of 15 and a categorization threshold of 0.12, which seemed
+to perform the best in our investigations.  We also include in Table
+\ref{results-main} the results of a baseline classifier, which simply
+assigns categories randomly to each test document based on the
+frequency of categories in the training set.
+
+Next, we turned our attention to ways of improving performance on the
+test set.  As mentioned in Section \ref{corpus}, each category name is
+a combination of two components, a level and a topic.  This suggests
+that separate categorizers could be trained to recognize the two
+components separately, perhaps with more success than a single
+categorizer may have on the two components together.
+
+Table \ref{results-NB} shows the success of a \naive\ Bayes
+categorizer, and Table \ref{results-baseline} shows a baseline
+categorizer for comparison.  We give results for the ``Level'' task,
+the ``Topic'' task, and 
+
+Comparing the ``Both'' task to the NB
 
 
+We trained
+separate \naive\ Bayes categorizers on the two tasks
 
 \begin{table}
-\begin{tabular}{|r|r|r|r|r|}
+\begin{tabular}{|r|r|r|r|r|r|}
 \hline
-k  & Threshold & Precision & Recall & $F_1$ \\ \hline
-8  & 0.12 & 0.391 & 0.253 & 0.307 \\ \hline
-8  & 0.15 & 0.524 & 0.238 & 0.327 \\ \hline
-10 & 0.12 & 0.447 & 0.252 & 0.322 \\ \hline
-10 & 0.15 & 0.617 & 0.228 & 0.333 \\ \hline
-15 & 0.12 & 0.640 & 0.231 & 0.339 \\ \hline
-15 & 0.15 & 0.740 & 0.211 & 0.328 \\ \hline
+Task     & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
+Level    & 0.524   & 0.626   & 0.570   & 0.671   & 0.223 \\ \hline
+Topic    & 0.339   & 0.314   & 0.313   & 0.440   & 0.026 \\ \hline
+Both     &    &    &    &    &  \\ \hline
 \end{tabular}
-\caption{Macro averages against k-value and threshold}
-\label{macro-results}
+\caption{Performance of \naive\ Bayes classifier on various subtasks.}
+\label{results-NB}
 \end{table}
 
 \begin{table}
-\begin{tabular}{|r|r|r|r|r|}
+\begin{tabular}{|r|r|r|r|r|r|}
 \hline
-k  & Threshold & Precision & Recall & $F_1$ \\ \hline
-8  & 0.12 & 0.259 & 0.319 & 0.286 \\ \hline
-8  & 0.15 & 0.296 & 0.291 & 0.293 \\ \hline
-10 & 0.12 & 0.265 & 0.327 & 0.293 \\ \hline
-10 & 0.15 & 0.339 & 0.282 & 0.308 \\ \hline
-15 & 0.12 & 0.332 & 0.304 & 0.317 \\ \hline
-15 & 0.15 & 0.397 & 0.260 & 0.314 \\ \hline
+Task     & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
+Level    & 0.326   & 0.319   & 0.322   & 0.468   & 0.328 \\ \hline
+Topic    & 0.029   & 0.027   & 0.027   & 0.067   & 0.041 \\ \hline
+Both     &    &    &    &    &  \\ \hline
 \end{tabular}
-\caption{Micro averages against k-value and threshold}
-\label{micro-results}
+\caption{Performance of baseline classifier on various subtasks.}
+\label{results-baseline}
 \end{table}
 
-The results in Table \ref{macro-results} show that a Macro precision of 0.75 can be achieved for k=15 
-and a threshold of 0.15, this is a good performance considering that this is noisy data 
-and a small data set. Larger k or thresholds reduce the recall performance The recall 
-was generally poor and this is probably due to the lack of training data and short, 
-noisy and sometimes incoherent documents.
+
  
 \begin{figure}
 XXX Insert macro performance graph here...
