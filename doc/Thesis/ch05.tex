@@ -345,8 +345,11 @@ error^M
 
 Using the measures defined in Sections \ref{measures} and
 \ref{combining-measures}, categorization experiments were performed on
-each of the four corpora described in Section \ref{Corpora}.  The
-parameters controlling each experiment were optimized to provide the
+each of the four corpora described in Section \ref{Corpora}.  Several
+experimental parameters (e.g. category membership thresholds) can be
+set for each experiment; for the ApteMod corpus these were set to
+match the parameters used in \cite{yang:99}, where known.  For the
+other corpora they were optimized to provide the
 best performance on the test set---in this sense, the test set might
 be thought of more correctly as a validation set, because in a strict
 testing environment the performance on the test set should not
@@ -366,26 +369,35 @@ that category by the baseline categorizer.
 
 \subsubsection{ApteMod}
 
-Table \ref{aptemod-results} summarizes the results of the 
-
+Table \ref{aptemod-results} summarizes the results of three different
+machine learning methods in \aicat\ as compared with the baseline
+categorizer described above.  Table \ref{aptemod-yang} gives similar
+scores from a well-known comparitive study of common categorization
+algorithms.\cite{yang:99} Where possible, the present study has
+attempted to duplicate the findings in \cite{yang:99}, though in some
+cases there is not enough information to duplicate the findings
+exactly, and in some cases the \aicat\ framework lacks certain
+features mentioned in \cite{yang:99}.  These differences will be
+discussed below.
 
 \begin{table} \label{aptemod-results}
 \begin{center}
 \begin{tabular}{|r c c c c c c c|}
 \hline
-method & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ & error \\
+%              maR       maP       maF1      miR          miP         miF1
+method    & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ &   error \\
 \hline
-NB       & .3659 & .4969 & .3959 & .7238 & .8514 & .7824 & .00555 \\
-SVM      & .0836 & .2932 & .1148 & .4726 & .8657 & .6114 & .00807 \\
-kNN      & \\
-Baseline & .0135 & .0142 & .0137 & .1645 & .1664 & .1654 & .02287 \\
+NB        &   .3659  &  .4969  &  .3959  &  .7238     &  .8514    &  .7824    &  .00555 \\
+SVM       &   .0836  &  .2932  &  .1148  &  .4726     &  .8657    &  .6114    &  .00807 \\
+kNN       &   .2655  &  .3856  &  .2903  &  .7650     &  .7975    &  .7809    &  .00591 \\
+Baseline  &   .0135  &  .0142  &  .0137  &  .1645     &  .1664    &  .1654    &  .02287 \\
 \hline
 \end{tabular}
 \end{center}
 \caption{Results of \aicat\ on ApteMod corpus}
 \end{table}
 
-\begin{table}
+\begin{table} \label{aptemod-yang}
 \begin{center}
 \begin{tabular}{|r c c c c c c c|}
 \hline
@@ -400,6 +412,60 @@ kNN & ? & ? & .5242 & .8339 & .8807 & .8567 & .00385 \\
 \caption{Results from \cite{yang:99} on ApteMod corpus}
 \end{table}
 
+In the case of the \naive\ Bayes categorizer (NB), the results match
+\cite{yang:99} closely, with a slightly greater $F_1^M$ and a slightly
+smaller $F_1^\mu$. (XXX - not sure whether I can say that the
+differences are statistically insignificant or not.  Need to
+understand Yang's stats tests better?)  To match the experimental
+settings in \cite{yang:99}, the size of the feature-set was set to
+2000.
+
+For the Support Vector Machine categorizer (SVM), the performance is
+significantly worse than the findings in \cite{yang:99}.  The reasons
+for this are not clear---\aicat\ currently uses an SVM implementation
+based on the \texttt{libsvm} C library \cite{libsvm}, whereas
+\cite{yang:99} used $SVM^{light}$ as its
+implementation.\cite{joachims:99a} Since the macro-averaged scores are
+particularly bad, it may be inferred that \cite{libsvm} is not
+performing well on rare categories.  In both studies, a linear SVM
+kernel was used, 
+
+For the k-Nearest-Neighbor categorizer (kNN), $results are comparable
+with NB, but are not as good as the kNN results in \cite{yang:99}.
+The major difference between the two implementations is that the
+implementation in \cite{yang:99} finds per-category membership
+thresholds by optimizing performance on a validation set, while the
+implementation in \aicat\ uses a single membership threshold for all
+categories, settable by the user.  In this experiment the threshold
+was set to 0.1, a value which is not meaningful in itself, but which
+seemed to give the best performance.  Note, that the macro-averaged
+precision is higher than recall, but the micro-averaged recall is
+higher than precision, indicating that it is not possible to
+simultaneously find the optimal threshold for both rare and common
+categories.  Thus individual thresholds for each category would
+increase $F_1$ scores if optimized properly.  The $k$ parameter
+(indicating the number of similar documents to consider when
+categorizing) was set to 45, and the number of features considered was
+set to 2415, according with the values used in \cite{yang:99}.
+
+The kNN implementation in \aicat\ is fairly new, and is an adaptation
+of work by another researcher.  The ability to optimize per-category
+thresholds is considered a useful future addition to the framework,
+and will be added soon.
+
+For all three categorizers, the \param{tfidf\_weighting} was set to
+\texttt{xfx}, indicating that words are weighted by the logarithm of
+their inverse document frequency.  This is the same setting used in
+\cite{yang:99}.  One other possible difference between \cite{yang:99}
+and the current experiment is that \cite{yang:99} used either a
+$\chi^2$ or \emph{information gain} criterion (it is not clear which
+criterion was used with which categorizer) for feature selection,
+while \emph{document frequency} was used here.  This should not be a
+major factor in the results, as document frequency has been shown to
+produce results competitive with other feature selection methods on
+this corpus. \cite{yang:97}
+
+
 
 \subsubsection{Dr. Math}
 \subsubsection{Signal G (Sensitivity)}
@@ -410,9 +476,3 @@ kNN & ? & ? & .5242 & .8339 & .8807 & .8567 & .00385 \\
 
 \section{Applications}
 \label{Applications}
-
-\section{Dissemination}
-XXX - perhaps eliminate this section
-
-\subsection{Documentation}
-\subsection{Community involvement}
