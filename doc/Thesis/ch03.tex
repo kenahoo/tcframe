@@ -237,7 +237,7 @@ enlightening analysis of a framework, since modern framework design
 often favors object composition over class inheritance for its
 important structural relationships. \cite[p. 20]{gamma:95}
 
-The diagram in figure \ref{classes-uml} shows the
+The diagram in Figure \ref{classes-uml} shows the
 most important run-time relationships between classes in the
 \aicat\ framework.  In this diagram, no inheritance
 relationships are shown---any inheritance hierarchies are represented
@@ -468,7 +468,7 @@ threshold, and \method{categorize} translates this data into a
  \attributes
   \attr[hash]{features}
  \methods
-  \meth[int]{euclidean\_length}{} \\
+  \meth[float]{euclidean\_length}{} \\
   \meth{scale}{float} \\
   \meth[FeatureVector]{intersection}{FeatureVector} \\
   \meth[float]{dot}{FeatureVector}
@@ -537,13 +537,25 @@ framework's \class{Experiment} class is therefore quite small,
 inheriting most of its functionality from the more general-purpose
 module.
 
-\class{Experiment} contains a \method{add_hypothesis} method for
+\class{Experiment} contains a \method{add\_hypothesis} method for
 adding \class{Hypothesis} objects to the set of data to be summarized,
-and 
+and implements a \method{stats\_table} method for showing the a
+summary of the data in table format with a specified number of
+significant figures.
 
-XXX have to finish this here
-
-\item[AI::Categorizer]
+\item
+\begin{concreteclass}{AI::Categorizer}
+ \attributes
+  \attr[KnowledgeSet]{knowledge\_set} \\
+  \attr[Learner]{learner} \\
+  \attr[Collection]{test\_set}
+ \methods
+  \meth{scan\_features}{} \\
+  \meth{read\_training\_set}{} \\
+  \meth{train}{} \\
+  \meth{evaluate\_test\_set}{}
+  \meth{run\_experiment}{} \\
+\end{concreteclass}
 
 An umbrella class \aicat\ sits above the rest of the classes,
 providing a convenient interface to a complete system for text
@@ -552,6 +564,32 @@ instantiate an object of this class.  Note that the term \aicat\ can
 refer either to the framework as a whole, or to the umbrella class.
 The distinction will be made clear in this text where it is necessary
 to do so.
+
+The main benefits of having an umbrella class in the framework are
+that the object constructor mechanism described in Section
+\ref{factory-method} can operate consistently across the entire
+framework, and that it provides a very high-level interface, requiring
+very little application-specific code to invoke the framework's
+functionality.
+
+The most important attributes of the \aicat\ class are a
+\class{Learner}, a \class{KnowledgeSet} that the \class{Learner}
+trains on, and a \class{Collection} of documents that the
+\class{Learner} can be tested on.  Because not every usage of this
+class need involve both training and testing, the \class{KnowledgeSet}
+and \class{Collection} attributes may be null if they are not needed
+by the particular application.
+
+The \method{scan\_features} method invokes feature selection using the
+\class{KnowledgeSet}'s \class{FeatureSelector}.  The resultant list of
+desired features can be used by the \method{read\_training\_set}
+method, which populates the \class{KnowledgeSet} with data from the
+training corpus.  The \method{train} method invokes the
+\class{Learner}'s \method{train} method on the \class{KnowledgeSet},
+and the \method{evaluate\_test\_set} method invokes the
+\class{Learner}'s \method{categorize\_collection} method on the test
+collection.  A \method{run\_experiment} method automates the running
+of these four methods and shows the user a summary of the results.
 
 \end{description}
 
@@ -1210,8 +1248,10 @@ Section \ref{imp-featurevectors} for more on this topic).
 In an application using structured documents, two options exist for
 taking advantage of this structure using \aicat.  One option is to
 ``flatten'' the structure of the document into a traditional feature
-vector representation. (XXX - need to explain further, with
-references)  
+vector representation.  However, it is not always clear to the
+developer how this flattening should be done, and the flattening
+process may lose valuable information about document structure, making
+categorization results sub-optimal.
 
 Another option if the document structure is just a sequence of
 document sections and not arbitrarily nested structures is to use the
