@@ -288,10 +288,33 @@ shows the classes participating in this pattern.
 \label{Composite-ensemble}
 \end{figure}
 
+Since \class{Learner::Ensemble} is a subclass of the abstract
+\class{Learner} class, it conforms to the \class{Learner} interface.
+This is crucial to implementation of the Composite pattern--it means
+that clients may use the \class{Learner::Ensemble} class without
+knowing that it implements an ensemble learner behind the scenes.  In
+this way, transparent ensemble learning is achieved through
+polymorphism.
 
+According to \cite[XXX]{sebastiani:02}, ensemble learning techniques
+can be specified by (1) a set of individual learners (the ``members''
+in Figure \ref{Composite-ensemble}), and (2) a mechanism for combining
+the output of the individual learners.  The \class{Learner::Ensemble}
+class can provide generic support for creating the member learners of
+the ensemble, but the combination mechanism may take many different
+forms.  Such algorithms are an active area of Machine Learning
+research.  As such, \class{Learner::Ensemble} may be subclassed in
+order to implement different combination mechanisms.
 
 
 \subsection{Adapter}
+
+The Adapter pattern ``XXX.'' \cite[p. XXX]{gamma:95}  It is commonly
+used when an existing resource provides the functionality necessary
+for a certain task, but the interface of that resource doesn't match
+the interface necessary for the environment in which that task must be
+performed.  For example, ...
+
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Adapter.pdf}
 \caption{The Adapter pattern in the Learner class}
