@@ -1,28 +1,33 @@
 \chapter{Conclusion}
 \label{Conclusion}
 
-XXX - relate more to ideas in introduction
-
 This thesis has presented the background, design, implementation, and
 evaluation of a new object-oriented application framework for Text
 Categorization.  The framework has been designed to facilitate novel
 work in Text Categorization research and rapid development of TC
 applications.
-
 The framework does not include any novel work in Text
 Categorization algorithms, but it has been designed with the intention
 of facilitating such novel work.
 
+\section{Evaluation and Outcomes}
+
 The evaluation in Chapter \ref{Evaluation} shows that the \naive\
-Bayes implementation gives results consistent with the work of others
-in the TC literature, and that the framework's k-Nearest-Neighbor and
-Support Vector Machine Implementations are not yet comparable with the
+Bayes implementation in \aicat\ gives results consistent with the work of others
+in the TC literature, and that the k-Nearest-Neighbor and
+Support Vector Machine implementations are not yet comparable with the
 state-of-the-art implementations of the algorithms referenced in the
-literature.
+literature.  It also shows the relative efficiencies of the three
+algorithms during the four main execution phases of a TC application:
+the \naive\ Bayes learner is fairly efficient in all phases, the SVM
+learner requires significant resources during the training phase, and
+the kNN learner requires significant resources during the test
+categorization phase.  This confirms facts about these core algorithms
+known from their research literature.
 
 The architectural quality of the framework is difficult to evaluate
 directly, but several analysis approaches have been presented in this
-thesis.  Several aspects of the framework's design have been presented
+thesis.  Several \linebreak aspects of the framework's design have been presented
 as instances of Design Patterns, indicating that they may align with
 current best-practices in framework development.  Example applications
 of several types have also been discussed, indicating that the
