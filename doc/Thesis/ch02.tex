@@ -485,7 +485,7 @@ known as \emph{smoothing}.
 The \naive\ Bayes algorithm is fairly fast and non-memory-intensive.
 Because its training process consists merely of counting the features
 of the training documents, its training time scales linearly with
-$|\train|$.  Categorization is also fairly fast, because all the
+$|\train|$.  Categorization is also fairly fast because all the
 pre-computed probabilities $P(f_{il}|c_j)$ may simply be looked up in
 an array.  Categorization of a single document therefore scales
 linearly with $|\cats|$.  Because the system need only store feature
@@ -549,7 +549,7 @@ the documents most similar to the document to be categorized, SVM
 algorithms learn a \emph{decision surface} during training which
 divides the vector space into regions that indicate category
 membership.  Categorization then simply consists of determining which
-side of the decision surface each document to be categorized lies on.
+side of the decision surface each document lies on.
 
 One key advantage of SVMs is that they can deal well with very large
 feature spaces, both in terms of the correctness of the categorization
@@ -668,9 +668,9 @@ literature often uses $F_1$ as a measure of the quality of a TC system
 on a particular category.
 
 ${F_1}_i$ may be derived in terms of the entries of the per-category
-contingency table as follows:
+contingency table as in Equation (\ref{f1-deriv}).
 
-\begin{equation*}
+\begin{equation} \label{f1-deriv}
 \begin{split}
 {F_1}_i 
  & = \frac{ 2 \pi_i \rho_i}{\pi_i + \rho_i} \\[6pt]
@@ -678,7 +678,7 @@ contingency table as follows:
  & = \frac{ 2 {A_i}^2 }                            { A_i(A_i+C_i) + A_i(A_i+B_i) } \\[6pt]
  & = \frac{ 2 A_i }                                { 2 A_i + B_i + C_i } \\[6pt]
 \end{split}
-\end{equation*}
+\end{equation}
 
 Two other measures of categorization quality, \emph{error} and
 \emph{accuracy}, are also sometimes encountered in the TC literature.
@@ -703,23 +703,23 @@ system's performance.
 Section \ref{measures} introduced several performance measures that
 may be defined to evaluate a categorizer on a single category.  In
 order to evaluate the categorizer's overall performance on the entire
-set of test documents, it is desirable to combine the per-category
+set of test documents it is desirable to combine the per-category
 scores $\pi_i$, $\rho_i$, and ${F_1}_i$ into overall scores for the
 entire category set.
 
 Two methods for doing this are standard in the literature.  The first
-is called \emph{micro-averaging}, and sums the terms in the
+is called \emph{micro-averaging}, which sums the terms in the
 contingency table for all categories simultaneously rather than in
 per-category tables.  In other words, the micro-averaged $\pi$,
 $\rho$, and $F_1$, notated $\pi^\mu$, $\rho^\mu$, and $F^\mu_1$, are
 defined in terms of the per-category contingency tables by the
-following equations.
+equations in (\ref{micro-defs}).
 
-\begin{equation*}
+\begin{gather} \label{micro-defs}
  \pi^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+B_i}} \qquad
-\rho^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+C_i}} \qquad
- F^\mu_1 = \frac{\sum_{i=1}^{|C|}{2 A_i}} {\sum_{i=1}^{|C|}{2 A_i+B_i+C_i}} \qquad
-\end{equation*}
+\rho^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+C_i}} \\[6pt]
+ F^\mu_1 = \frac{\sum_{i=1}^{|C|}{2 A_i}} {\sum_{i=1}^{|C|}{2 A_i+B_i+C_i}} \notag
+\end{gather}
 
 Micro-averaging gives equal weight to each categorization decision
 made by the system, or equivalently, to each document in the corpus,
@@ -728,14 +728,14 @@ regardless of how many categories it belongs to.
 An alternative to micro-averaging is \emph{macro-averaging}, in which
 the per-category scores $\pi_i$, $\rho_i$, and ${F_1}_i$ are simply
 averaged to find the macro-averaged $\pi$, $\rho$, and $F_1$, notated
-$\pi^M$, $\rho^M$, and $F^M_1$.  The following equations describe this
+$\pi^M$, $\rho^M$, and $F^M_1$.  The equations in \ref{macro-defs} describe this
 procedure.
 
-\begin{equation*}
+\begin{gather} \label{macro-defs}
  \pi^M = \frac{\sum_{i=1}^{|C|}{\pi_i}}   {|C|} \qquad
 \rho^M = \frac{\sum_{i=1}^{|C|}{\rho_i}}  {|C|} \qquad
  F^M_1 = \frac{\sum_{i=1}^{|C|}{{F_1}_i}} {|C|} \qquad
-\end{equation*}
+\end{gather}
 
 Macro-averaging gives equal weight to each category in the corpus,
 regardless of how many documents it contains.  Thus it provides a
@@ -751,13 +751,13 @@ micro- and macro-averaged scores can be a good indicator of the
 difference in performance of the system on common and rare categories.
 
 Note that the error and accuracy measures are unaffected by micro-
-vs. macro-averaging, as shown in the following derivation.  This uses
+vs. macro-averaging, as shown in Equation \ref{error-macro}.  This uses
 the observation that $A_i+B_i+C_i+D_i = |\test|$, a consequence of the
 fact that exactly one of the terms on the left side will be
-incremented with each decision about whether a document from the test
-set belongs to $c_i$ or not.
+incremented with each decision about whether or not a document from the test
+set belongs to $c_i$.
 
-\begin{equation*}
+\begin{equation} \label{error-macro}
 \begin{split}
 error^M
  & = \frac{\sum_{i=1}^{|\cats|}{error_i}}  {|\cats|} \\[6pt]
@@ -767,5 +767,5 @@ error^M
  & = \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{A_i+B_i+C_i+D_i} } \\[6pt]
  & = error^\mu
 \end{split}
-\end{equation*}
+\end{equation}
 

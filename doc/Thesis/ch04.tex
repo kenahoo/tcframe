@@ -21,7 +21,7 @@ rather its object-oriented derivatives like \texttt{C++} and
 Objective-\texttt{C}), Java, and Perl.  Each of these languages has
 its advantages and disadvantages, and a full comparison between them
 is beyond the scope of this thesis.  Perl was ultimately chosen for
-the \aicat\ project, which provides the following benefits.
+the \aicat\ project, providing the following benefits:
 
 \begin{itemize}
 \item Perl is widely known to be a powerful text processing tool
@@ -29,7 +29,7 @@ the \aicat\ project, which provides the following benefits.
    relatively easy for users of the framework to customize its
    processing capabilities.
 \item A large number of contributed Perl modules are freely available
-   for many different tasks on the CPAN \cite{cpan}, which extends the
+   for many different tasks on the CPAN \cite{cpan}, extending the
    domain of applicability of the framework.
 \item Perl is an expressive high-level language that allows for rapid
    prototyping, so the framework developers and application developers
@@ -45,7 +45,7 @@ the \aicat\ project, which provides the following benefits.
    JPL toolkit.  This allows for maximum reusability of the
    framework as described in Section \ref{embedded-apps}.
 \item Code from other languages can be embedded within Perl
-   applications, using either the XS extension mechanism for
+   applications using either the XS extension mechanism for
    \texttt{C} code, or the Inline embedding mechanism for several
    languages, including \texttt{C} and its derivatives, Java, Tcl,
    Assembler, and Python, among others.  This allows the framework to
@@ -55,8 +55,7 @@ the \aicat\ project, which provides the following benefits.
    libraries from various sources without locking the developer into a
    language choice.
 \item There is an active community of users interested in using a
-   Perl-native text categorization framework.  This community can
-   contribute back to the framework project.  Several community
+   Perl-native text categorization framework.  Several community
    members have already contributed feedback, bug fixes, and
    application ideas for the \aicat\ project.
 \end{itemize}
@@ -70,7 +69,7 @@ the \class{Class::Con\-tain\-er} module from CPAN\footnote{The
 previous project \cite{rolsky:02} and greatly extended for the \aicat\
 project.} implements the abstract parent class \aclass{ObjectFactory}
 shown in Figure \ref{factory-constructors}.  It provides the generic
-specification of object constructor parameters, as well as generic
+specification of object constructor parameters as well as generic
 mechanisms for creating subordinate objects within the framework.
 
 \begin{figure}

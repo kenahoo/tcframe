@@ -15,7 +15,7 @@ In designing the \aicat\ framework, attention has been paid to three
 primary areas: the framework's audience motivates the interface, use
 cases motivate the functionality, and algorithms and data structures
 motivate the implementation.  In this chapter the functionality and
-interface decisions will be discussed in detail, with implementation
+interface decisions will be discussed in detail.  Implementation will be
 discussed primarily in Chapter \ref{Implementation}.  However, some
 implementation issues inevitably motivate design, so they will be
 mentioned in this chapter as appropriate.
@@ -52,8 +52,8 @@ A researcher will often extend the framework with custom code that
 implements new functionality.  For instance, the researcher may
 implement new machine learning algorithms or variations on existing
 algorithms.  Researchers will also need tools for comparing the
-results of categorization experiments, and may find it convenient to
-use a user interface for running common kinds of experiments.
+results of categorization experiments and may find it convenient to
+have a graphical interface for running common kinds of experiments.
 
 Although a researcher will often need to write low-level framework
 extension code, that code will often be called from a high level.  A
@@ -169,7 +169,7 @@ application (such as the web server or database described above)
 communicates over a data socket with the categorization server.
 Recent standardizations in protocols such as SOAP \cite{soap} and XML/RPC
 \cite{xmlrpc} have provided commonly-available, easy-to-use tools
-for creating these kinds of applications, and since a single
+for creating these kinds of applications.  Since a single
 categorization server can provide services to multiple application
 clients, developers may reduce development time when building TC
 applications in this manner.  In addition, using the client-server
@@ -270,6 +270,9 @@ subclassing.
 \label{classes-uml}
 \end{figure}
 
+\section{Framework classes}
+\label{framework-classes}
+
 Some examination of the basic relationships between classes and the
 responsibilities of each class is helpful before looking at the design
 in more detail.  The following classes form the main framework roles
@@ -280,14 +283,6 @@ define \method{new} constructor methods, not shown in the UML
 specifications, that accept various parameters (usually corresponding
 to the member attributes).  For a complete reference, please see the
 \aicat\ documentation.
-
-\section{Framework classes}
-\label{framework-classes}
-
-This section introduces each of the major \aicat\ classes as shown in
-Figure \ref{classes-uml}.  For each class a partial UML class
-specification rectangle is shown, indicating the attributes and
-methods most important to this discussion.
 
 \begin{concreteclass}{KnowledgeSet}
  \attributes
