@@ -30,8 +30,8 @@ amenable to one categorization technique or another.
 The main data sets used for testing are listed in this section.
 Unless otherwise noted below, a list of common English words from
 \cite{salton:89} was used as a ``stoplist,'' or a set of terms to
-completely exclude from processing.  This is a common technique from
-Information Retrieval,\cite{XXX} as it is assumed that these words
+completely ignore when processing documents.  This is a common technique from
+Information Retrieval,\cite{XXX-manning} as it is assumed that these words
 possess little or no information about the target categories, and that
 they will only slow processing and add noise to the data.
 
@@ -68,8 +68,9 @@ students.\cite{drmath} Each message belongs to one or more categories,
 with category names indicating both math topic and grade level,
 e.g. ``High School Geometry.''  The ontology is generally not
 separable into two separate category sets for independent topic and
-level categorizations, in part because certain topic and level
-combinations like ``Elementary School Calculus'' don't exist.
+level categorizations, in part because many topic and level
+combinations like ``Elementary School Calculus'' don't exist in the
+category scheme.
 
 The 26 MB corpus is divided into a training set with 5,304 documents
 and a test set with 1,326 documents.  As with the ApteMod corpus, the
