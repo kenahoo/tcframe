@@ -1,4 +1,36 @@
-\chapter*{Abstract}
+\chapter{Abstract}
+
+The field of automatic Text Categorization (TC) concerns the creation
+of categorizer functions which assign categories from a pre-defined
+set of labels to documents based on the documents' content.  The most
+successful modern approaches to TC employ Machine Learning to create
+these categorizer functions automatically from a training set of
+documents similar to the ones in the target application.
+
+Techniques for creating the categorizer functions are the subject of
+active research in the Machine Learning and Text Processing academic
+communities, and every stage of the process has many variations.
+Because of this complexity, the creation of TC applications is usually
+a complicated process requiring a great deal of expertise in TC, the
+application domain, and software development.
+
+This thesis concerns the creation of an Object-Oriented Application
+Framework for Text Categorization.  Frameworks provide a way to
+address difficult software engineering problems by encapsulating the
+aspects of applications that tend to remain common from one
+application to the next, while allowing variation in the aspects that
+tend to change.  This allows significant code and design reuse when
+building new applications.
+
+Framework design is among the most difficult tasks in software
+engineering, and requires a great deal of problem analysis,
+architecture design, and product evaluation.  Design Patterns have
+grown popular in order to manage the complexities of these aspects and
+to facilitate communication among those involved with the
+Object-Oriented design of large software systems.  This thesis uses
+Design Patterns to examine several of the important internal
+relationships among framework classes.
+
 XXX (Will write this last)
 
 \chapter*{Acknowledgments}
@@ -7,7 +39,7 @@ I would like to thank Rafael Calvo for his expert supervision of my
 thesis, and for giving me the opportunity to pursue this project.  The
 rest of the Web Engineering Group---Jae-Moon Lee, Xiaobo Li, Nick
 Carroll, and Gosia Mandrela---provided valuable testing and feedback
-on \aicat\ and created a quite pleasant working environment.  The
+on \aicat\ and created a quite pleasant research environment.  The
 Language Technology group---particularly Casey Whitelaw, Elisabeth
 Crawford, and Jon Patrick---was also a good source of feedback and
 inspiration.  The Open-Source community provided incentives to write
@@ -175,3 +207,14 @@ the following contributions were accomplished:
   (see Chapter \ref{Evaluation}).
 \end{itemize}
 
+\section*{Organization of the Thesis}
+
+Chapter \ref{background-tc} gives a detailed account of the main technical
+issues in Text Categorization that a TC framework must take into
+account.  Chapter \ref{design} discusses design issues in creating the
+\aicat\ framework, motivating the design by consideration of the
+framework's audience and common usage scenarios, and showing some of
+the limitations of the framework's design.  Chapter
+\ref{Implementation} is a short discussion of implementation issues.
+Chapter \ref{Evaluation} evaluates the framework from several
+different perspectives, and Chapter \ref{Conclusion} concludes.
