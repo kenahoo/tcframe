@@ -20,19 +20,18 @@
 
 \author{
 {\em Rafael A. Calvo}\\[1ex]
-School of Electrical\\
-and Information Engineering\\
+Web Engineering Group\\
 The University of Sydney\\
 Bldg J03, Sydney NSW 2006\\[1ex]
 {\em rafa@ee.usyd.edu.au}
 \and
 {\em Ken Williams}\\[1ex]
-School of Electrical\\
-and Information Engineering\\
+Web Engineering Group\\
 The University of Sydney\\
 Bldg J03, Sydney NSW 2006\\[1ex]
 {\em kenw@ee.usyd.edu.au}
 }
+\date{}
 
 \begin{document}
 
@@ -66,20 +65,10 @@ and report type, which classifies each announcement into one of the
 report categories defined by the ASX. We have tried Neural Networks, a
 Na\"\i ve Bayes classifier, and Support Vector Machines and achieved
 good results.
-
-Section \ref{introduction} of this paper discusses the problem and
-application domain area, emphasizing the importance of language
-technologies in the financial information arena. Section \ref{data}
-describes the Signal G data set.  Section \ref{methods} describes the
-different machine learning techniques and the categorization framework
-that we have used to perform these types of categorization
-tasks. Section \ref{results} describes the quantitative results and
-section \ref{conclusion} concludes.
 }
 
 \paragraph{Keywords} 
-XXX
-A list of keywords based on those given in the Call for Papers should be included.
+Document Management, Document Workflow
 
 \section{Introduction}
 \label{introduction}
@@ -105,13 +94,8 @@ happening with a particular company. This allows investors to make
 decisions based on information that is up to date and is equivalent to
 the information that company insiders might have. There is little
 doubt about the value of the information contained in these
-announcements, and there are a number of research groups developing
-novel applications using this data. These applications include alert
-systems where brokers receive notification (e.g. over email or SMS) of
-important announcements, intelligent repositories where the
-information shown to users is filtered using ``information profiles''
-that they can build, and several other applications that require the
-automatic processing of announcements.  We describe in this article
+announcements, and several research groups are developing
+novel applications using this data.  We describe in this article
 the evaluation of categorization techniques used to build these
 applications.
 
@@ -124,34 +108,32 @@ announcements from the ASX's Signal G, which provides subscribers with
 company announcements issued by companies or the ASX in accordance
 with listing rules.
 
+Section \ref{data} of this paper
+describes the Signal G data set.  Section \ref{methods} describes the
+different machine learning techniques and the categorization framework
+that we have used to perform these types of categorization
+tasks. Section \ref{results} describes the quantitative results and
+section \ref{conclusion} concludes.
+
 \section{Data Description}
 \label{data}
 
 In this paper we assess performance on two tasks: ``report type'' and
 ``market sensitivity'' categorization. Report type is ``a code to
-categorize company announcements'' \cite{asx:02} and may take values
+categorize company announcements'' \cite{asx:02} and may take one of 144 values
 like ``annual report'' or ``takeover announcement.'' Market
 sensitivity is a boolean category indicating whether an announcement
 contains information that may influence trading in the issuing
 company. This allows users of this data to select which announcements
 are critical.
 
-The Signal G documents are created as follows: the ASX's Company
-Announcement Platform (CAP) receives the announcements produced by
-organizations (by fax, email or other means), processing and
-centralizing all the information that is then delivered through the
-Signal G feed. The processing may include several filtering steps --
-for instance, the announcement may be summarized if it is beyond a
-certain length.  After such processing, each announcement is manually
-assigned to one of 144 report types, and is classified as either
-market sensitive or not. From the total 136,630 documents used, 46,530
-are marked as sensitive and 90,100 as not sensitive. For this last
-assignment one or more human classifiers (based on experience) state
-whether or not the document may have an effect on the value of the
-share, volume of trading, or other market measurements.  Table
+Currently, both kinds of category assignments on the Signal G
+documents are made manually by the ASX.  Table
 \ref{signalg-sensitivity} shows the distribution of documents with
 respect to the sensitivity category, as well as our split between
-training and testing documents.
+training and testing documents.  Figure \ref{signalg-reptype} shows
+the report type category distribution.
+
 
 \begin{table}
 \begin{tabular}{|r|r|r|r|}
@@ -169,12 +151,9 @@ Total    & 46530     & 90100        & 136630\\
 \label{signalg-sensitivity}
 \end{table}
 
-The report type labels are highly skewed across categories.  The most
+Note that the report type labels are highly skewed across categories.  The most
 common category contains 10,064 documents, while ten categories have
 fewer than five documents each.
-
-A more complete picture of the report type category distribution can
-be seen in Figure \ref{signalg-reptype}.
 
 \begin{figure}
 \includegraphics[angle=90,width=\linewidth]{signalg-reptype}
@@ -196,41 +175,24 @@ into an XML format.
 
 We have compared three machine learning methods that have provided
 some of the best performances in other classification tasks
-\cite{yang:99}: Support Vector Machines (SVM), Na\"\i ve Bayes (NB),
-and Neural Networks (NN). It is not possible to describe them
-thoroughly in this article, so we will only summarize those issues
-that might be required to reproduce the results.
+\cite{yang:99}: Support Vector Machines (SVM) \cite{scholkopf:99}
+\cite{joachims:99}, \naive\ Bayes (NB) \cite{lewis:98}, and Neural
+Networks (NN) \cite{calvo:00} \cite{calvo:01}. It is not possible to
+describe them thoroughly in this article, so we will only summarize
+those issues that might be required to reproduce the results.  Our
+\naive\ Bayes and SVM implementations are described in
+\cite{williams:02}.
 
-Our Na\"\i ve Bayes algorithm is implemented within the
-AI::Cat\-e\-go\-riz\-er framework, an open source categorization
-framework written in Perl by Ken Williams.\footnote{Available at 
-http://www.cpan.org/modules/by-authors/id/KWILLIAMS/} The framework
-has been designed to facilitate the construction of new categorization
-applications following best practices in framework engineering
-\cite{fayad:99}. Na\"\i ve Bayes categorizers are one of several
-well-studied probabilistic categorizers \cite{lewis:98}. Most text
-categorization research using probabilistic methods uses NB, so a
-number of authors have described them and shown experimental results
-on a number of data sets \cite{yang:99}.
+Because of the inability of our SVM implementation to handle the size
+of our training set, we had to only train on 8000 documents at a time
+in order to finish the experiments in a reasonable amount of time.
+The SVM was not able to perform the report type, only the sensitivity
+task.  Future work may dramatically improve training speed by using
+recently developed training optimizations in the literature, enabling
+us to train on a larger number of documents and presumably to improve
+our correctness as a result.
 
-Support Vector Machines were developed by Vapnik and colleagues during
-1995-1996 \cite{cortes:95} \cite{scholkopf:99}. They were first used
-in document categorization by \cite{joachims:98} \cite{joachims:99}
-and used by other authors in experimental comparisons with other
-methods \cite{yang:99}.  Our SVM implementation uses AI::Categorizer
-for initial text processing, then passes the data through to the
-libsvm package for training and testing \cite{libsvm}.  Because of the
-size of our training set, we had to only train on 8000 documents at a
-time in order to finish the experiments in a reasonable amount of
-time.  Future work to libsvm or a replacement may dramatically improve
-training speed by using recently developed training optimizations,
-enabling us to train on a larger number of documents and presumably to
-improve our correctness as a result.
-
-Neural Networks have been widely used and described in the document
-classification literature. \cite{yang:99} \cite{calvo:00}
-\cite{calvo:01} The neural network parameters are iteratively adjusted
-to fit the training data until error stops improving. We have used a
+Our Neural Network architecture \cite{calvo:00} \cite{calvo:01} used a
 backpropagation algorithm that minimizes quadratic error. The input
 layer has as many units (neurons) as document features retained. The
 number of hidden units is determined by optimising the performance on
@@ -238,8 +200,7 @@ a cross-validation set. There is one output unit for each possible
 category, with activation values between 0 and 1. For each document,
 the classifier will assign any category whose output unit is greater
 than 0.5. In our experiment, we used 3-fold cross-validation and
-averaged the weights of the three resultant neural networks.  Our NN
-software is the same as in \cite{calvo:00} and \cite{calvo:01}.
+averaged the weights of the three resultant neural networks.
 
 Each categorizer was trained on the 95,525 training documents for each
 task, report type and sensitivity.  For the Neural Network
@@ -252,7 +213,30 @@ assumed that the performance on new data would be similar.
 
 Table \ref{algos} summarizes the general steps followed in the
 preparation of the experiments.  TF/IDF weights are given in the
-notation followed by \cite{salton:88}.
+notation followed by \cite{salton:88}.  Our experimental process was
+as follows:
+
+\begin{enumerate}
+
+\item Linguistic dimensionality reduction: A list of stopwords
+\cite{salton:89} was removed from the document collection and the
+Porter stemming algorithm was applied \cite{manning:99}.
+\item Statistical dimensionality reduction: Chi Squared or Document
+Frequency criteria were employed to reduce the feature
+vector dimensionality \cite{manning:99} \cite{sebastiani:02}.
+\item Vectorization and weighting: The resulting documents were
+represented as vectors, using TF/IDF weighting \cite{salton:88}
+\cite{yang:97}.
+\item Architecture: The selected terms were used as input features to
+the classifier. Some of the algorithms allow several architectures,
+and the best algorithm was chosen by optimising the results on a
+cross-validation set.
+\item Training: We generated a cross-validation set randomly. These
+documents were set aside and the Neural Network was trained on the
+remaining ones.
+
+
+\end{enumerate}
 
 \begin{table*}
 \begin{tabularx}{\linewidth}{|r|l|l|l|l|X|}
@@ -286,30 +270,6 @@ biasing toward the performance on common classes.  Since different
 learning algorithms will perform differently on common and rare
 categories, both micro-averaged and macro-averaged scores are
 typically reported to evaluate performance.
-
-Our experimental process was as follows:
-
-\begin{enumerate}
-
-\item Linguistic dimensionality reduction: A list of stopwords
-\cite{salton:89} was removed from the document collection and the
-Porter stemming algorithm was applied \cite{manning:99}.
-\item Statistical dimensionality reduction: Chi squared, document
-frequency, and other statistics are often used to reduce the feature
-vector dimensionality \cite{manning:99} \cite{sebastiani:02}.
-\item Vectorization and weighting: The resulting documents were
-represented as vectors, using TF/IDF weighting \cite{salton:88}
-\cite{yang:97}.
-\item Architecture: The selected terms were used as input features to
-the classifier. Some of the algorithms allow several architectures,
-and the best algorithm was chosen by optimising the results on a
-cross-validation set.
-\item Training: We generated a cross-validation set randomly. These
-documents were set aside and the Neural Network was trained on the
-remaining ones.
-
-
-\end{enumerate}
 
 \begin{table}
 \begin{tabular}{|c|c|c|c|c|c|c|}
