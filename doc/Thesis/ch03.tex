@@ -1,20 +1,19 @@
-\chapter{AI::Categorizer Framework Design}
+\chapter{\aicat\ Framework Design}
 
-The AI::Categorizer framework is designed for maximum re-use in many
+The \aicat\ framework is designed for maximum re-use in many
 kinds of situations \ldots XXX.
 
-For brevity, the ``AI::Categorizer::'' prefix will be omitted from class
+For brevity, the \aicat\texttt{::} prefix will be omitted from class
 names in this discussion.  It is to be understood that any class
-within the AI::Categorizer framework (except the top-level class
-AI::Categorizer itself) is prefixed by the ``AI::Categorizer::''
-namespace.
+within the \aicat\ framework (except the top-level class
+\aicat\ itself) is prefixed by \aicat\texttt{::}.
 
-\section{Overview of AI::Categorizer class hierarchy}
+\section{Overview of \aicat\ class hierarchy}
 
-In order to understand the structure of the AI::Categorizer framework,
+In order to understand the structure of the \aicat\ framework,
 multiple kinds of analysis are helpful.  We can examine the
 inheritance relationships of the classes that participate in
-AI::Categorizer, and indicate which classes inherit from each other.
+\aicat\, and indicate which classes inherit from each other.
 Since a class generally is a representation of certain
 responsibilities and capabilities, this lets us see how the set of
 responsibilities for one class may be implemented in different ways or
@@ -22,12 +21,12 @@ extended by its subclasses.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/inheritance-uml.pdf}
-\caption{Inheritance diagram for AI::Categorizer}
+\caption{Inheritance diagram for \aicat}
 \label{inheritance-uml}
 \end{figure}
 
 Figure \ref{inheritance-uml} shows the inheritance relationships among
-classes in the AI::Categorizer framework.  Note that this diagram
+classes in the \aicat\ framework.  Note that this diagram
 indicates the \emph{capabilities} of the framework more than it
 indicates its \emph{architecture}.  For instance, the framework
 currently understands several document types, including plain text
@@ -51,7 +50,7 @@ important structural elements. \cite[p. 20]{gamma:95}
 
 The diagram in figure \ref{classes-uml} shows the
 most important run-time relationships between classes in the
-AI::Categorizer framework.  In this diagram, no inheritance
+\aicat\ framework.  In this diagram, no inheritance
 relationships are shown--any inheritance hierarchies are represented
 only by their parent classes.  In general, a class and its subclass
 will share an interface and have identical relationships to other
@@ -62,13 +61,13 @@ subclassing.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/classes-uml.pdf}
-\caption{Class composition diagram for AI::Categorizer}
+\caption{Class composition diagram for \aicat}
 \label{classes-uml}
 \end{figure}
 
 Some examination of the basic relationships between classes and the
 responsibilities of each class is helpful before looking at the design
-in more detail.  The major classes in the AI::Categorizer framework
+in more detail.  The major classes in the \aicat\ framework
 are:
 
 \begin{description}
@@ -164,9 +163,9 @@ XXX need to write about the umbrella class
 
 \end{description}
 
-\section{Design Patterns in AI::Categorizer}
+\section{Design Patterns in \aicat}
 
-In order to shed light on the design of the AI::Categorizer framework,
+In order to shed light on the design of the \aicat\ framework,
 XXX \ldots.
 
 
@@ -180,7 +179,7 @@ the object's internal data structure implementation.  In this way,
 clients can iterate through aggregate objects without knowing the
 objects' internal structure.
 
-In the AI::Categorizer framework, it is often necessary to iterate
+In the \aicat\ framework, it is often necessary to iterate
 through collections of documents and perform some action on them.  For
 example, the documents may form a training set for a \class{Learner} to base a
 model on, or they may form a test set on which to evaluate the model.
@@ -278,7 +277,7 @@ categorization result of its own. \cite[p. 30]{sebastiani:02} Often,
 an ensemble learner may outperform each of its constituent members on
 the general categorization task.  \cite{tumer:98}
 
-To implement ensemble learners within AI::Categorizer, the Composite
+To implement ensemble learners within \aicat\, the Composite
 pattern may be applied to the \class{Learner} class to create a
 \class{Learner::Ensemble} subclass.  Figure \ref{Composite-ensemble}
 shows the classes participating in this pattern.
