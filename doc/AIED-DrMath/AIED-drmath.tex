@@ -1,11 +1,48 @@
-Streamlined Automatic Categorization of Mathematics Questions
-David Bell, Ken Williams, Rafael A. Calvo
-                   dave@student.usyd.edu.au, kenw@ee.usyd.edu.au, rafa@ee.usyd.edu.au
-School of Electrical and Information Engineering
-The University Of Sydney
+\documentclass[twocolumn]{article}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage[htt]{hyphenat}
+
+\newcommand{\naive}{Na\"\i ve}
+\newcommand{\method}[1]{\texttt{#1()}}
+\newcommand{\class}[1]{\texttt{#1}}
+\newcommand{\param}[1]{\texttt{#1}}
+\newcommand{\aicat}{\texttt{AI::Cat\-e\-gor\-i\-zer}}
 
 
-Abstract
+\title{Streamlined Automatic Categorization of Mathematics Questions}
+
+\author{
+{\em Ken Williams}\\[1ex]
+Web Engineering Group\\
+The University of Sydney\\
+Bldg J03, Sydney NSW 2006\\[1ex]
+{\em kenw@ee.usyd.edu.au}
+\and
+{\em Rafael A. Calvo}\\[1ex]
+Web Engineering Group\\
+The University of Sydney\\
+Bldg J03, Sydney NSW 2006\\[1ex]
+{\em rafa@ee.usyd.edu.au}
+\and
+{\em David Bell}\\[1ex]
+Web Engineering Group\\
+The University of Sydney\\
+Bldg J03, Sydney NSW 2006\\[1ex]
+{\em dave@student.usyd.edu.au}
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+
+\subsection*{\centering Abstract}
+\noindent
+{\it 
 This paper describes a new approach to managing a stream of questions about 
 mathematics by integrating a text categorization framework into a relational database 
 management system. The corpora studied is based on un-structured submissions to a 
@@ -13,8 +50,15 @@ questions and answers service in learning mathematics. The classification system
 been tested using a K-Nearest Neighbour learner built into the framework. The 
 performance results of the classifier are also discussed. The framework was integrated 
 into a postgreSQL database through the use of procedural trigger functions.
+}
 
-1. Introduction
+\paragraph{Keywords} 
+XXX Need to write...
+
+
+
+\section{Introduction}
+
 Questions and answers services are becoming more common, spanning from standard 
 customer relationship management to discussion forums in a particular discipline. In 
 general, these online services are supported by domain experts who attempt to answer 
@@ -24,12 +68,14 @@ done by organizing the service in such a way that users are encouraged to post t
 question in the appropriate area. However this approach is not always successful as 
 often the user will either ignore the organization or not know to which area their 
 question belongs. 
+
 These problems are common within a number of domains. Our test was performed on 
 the Dr. Math questions and answers service for students and teachers. The issues 
 discussed also apply to other similar systems such as customer relationship 
 management (CRM) and e-learning systems in general. These systems can use an 
 automatic text categorization framework to categorize the questions into the experts’ 
 area of interest, or into the appropriate customer support mailbox. 
+
 The downside of an automatic categorization approach is that integrating such 
 functionality into existing systems can be very complex, and often involves an in 
 depth understanding of text categorization techniques.  Also, the content is normally 
@@ -40,18 +86,21 @@ users and is thus more attractive to the average system administrator or applica
 developer. Also, application developers, do not have to re-implement the 
 classification software. They only need a machine learning professional to assist in 
 training the classifier, and once trained it can then be reused in different applications. 
+
 The applications of information retrieval have been well studied since the 1980s, as 
 discussed by Salton [Salton 1989,1991], and many of these methodologies have been 
 integrated into commercial database management systems that have free text search 
 capabilities. However, this integration does not seem to have penetrated the text 
 categorization domain.
+
 Section 2 discusses the data set that was used to test the system. Section 3 of the 
 paper discusses the text categorization framework and the extensions made to it, 
 including the implementation within the database management system and the 
 implementation of a "Learner" module. Section 4 discusses the quantitative results of 
 the testing process and Section 5 concludes.
 
-2. Dr Math corpus
+\section{Dr. Math Corpus}
+
 For the evaluation of our system we have tested the performance of the categorization 
 system over a set of unstructured, informal documents. These documents are mostly 
 written by students as questions to a Mathematics questions and answers service. 
@@ -61,6 +110,7 @@ and diagrams making linguistic analysis very difficult as well. The Dr. Math ser
 has about 300 volunteers answering hundreds of questions a day. The volunteers have 
 expertise in different areas of math and the site has won a number of awards for its 
 useful service. 
+
 The Dr Math corpus we used contains 6632 documents and was split into a testing 
 set of 1327 documents and a training set of 5305 documents.  There are 95 categories 
 in the corpus. The average number of documents in each category is 107.15 and the 
@@ -68,262 +118,43 @@ standard deviation of the number of documents in each category is 130.45. The ti
 each category and the corresponding number of documents is shown in Table 1. Note 
 that one document may have more than one category. 
 
+\begin{figure}
 Implicit Differentiation
 
 Find the slope of the tangent at the point (3,4) on the circle 
-x^2 + y^2 = 25.
+x\^2 + y\^2 = 25.
 
 My answer: I guess we would need to put it in the y = mx + b form. 
 
 Thanks for any help,
 Scott
-Figure 3. An example document of the Dr Math corpus.
+\caption{An example document from the Dr. Math corpus}
+\end{figure}
 
 Category names indicate an existing hierarchical ontology that was not used in our 
 tests due to the relatively small number of documents available.
 
-Table 1 Dr Math categories with document numbers
-Category
-Docs
-Category
-Docs
-about.math.high
-90
-large.elem
-44
-about.math.middle
-85
-linear.al.high
-90
-about.numbers.ele
-m
-131
-linear.eq.hig
-h
-29
-about.numbers.mi
-ddle
-241
-linearal.colle
-ge
-74
-addition.elem
-59
-logarithm.hig
-h
-100
-advanced.middle
-51
-logarithm.mi
-ddle
-20
-after.high
-18
-logic.college
-22
-algebra.high
-450
-logic.high
-102
-algebra.middle
-368
-logic.middle
-30
-algorithms.college
-37
-modern.colle
-ge
-63
-analysis.college
-49
-multiplication
-.elem
-93
-analysis.high
-78
-negative.high
-10
-calculus.college
-152
-negative.mid
-dle
-48
-calculus.high
-464
-numberth.col
-lege
-114
-complex.college
-32
-numberth.hig
-h
-450
-complex.high
-100
-permutations
-.high
-165
-defs.college
-47
-physics.colle
-ge
-29
-defs.elem
-3
-physics.high
-175
-defs.high
-40
-pi.middle
-63
-defs.middle
-14
-placevalue.el
-em
-29
-discrete.math.colle
-ge
-25
-polynomial.hi
-gh
-91
-discrete.math.high
-133
-practicalgeo
-m.high
-92
-division.elem
-86
-prob.stats.mi
-ddle
-63
-division.middle
-39
-probability.co
-llege
-80
-eq.gr.trans.high
-177
-probability.hi
-gh
-273
-equation.middle
-58
-project.elem
-16
-exponent.college
-5
-project.high
-33
-exponent.middle
-72
-puzzle.elem
-45
-factorial.middle
-8
-puzzle.high
-159
-factoring.middle
-85
-puzzle.middl
-e
-165
-fractal.high
-24
-ratio.middle
-45
-fraction.middle
-170
-series.high
-217
-fractions.elem
-170
-sets.high
-85
-function.high
-114
-squareroot.el
-em
-13
-geometry.college
-124
-squareroot.hi
-gh
-61
-geometry.elem
-78
-squareroot.m
-iddle
-51
-geometry.high
-878
-statistics.hig
-h
-98
-geometry.middle
-409
-subtraction.el
-em
-37
-golden.elem
-3
-symmetry.hig
-h
-9
-golden.high
-46
-terms.units.el
-em
-90
-grab.elem
-8
-terms.units.
-middle
-300
-graph.calc.high
-78
-transcendent
-al.high
-36
-graph.eq.middle
-12
-trig.college
-23
-history.elem
-50
-trig.high
-298
-history.high
-146
-volume.middl
-e
-14
-history.middle
-135
-wordproblem
-.elem
-42
-infinity.elem
-17
-wordproblem
-.middle
-280
-interest.high
-54
- 
- 
+\begin{figure}
+\caption{Category distribution for the 95 Dr. Math categories}
+\end{figure}
 
-3. Categorization Framework
+
+\section{Categorization Framework}
+
 Object Oriented Application Frameworks (OOAF) are software engineering artifacts 
 that improve reusability of design and implementation [Fayad et. al. 1997, 1999].
-The framework used in this project  [Williams, 2002] was designed to provide a 
+
+The framework used in this project\footnote{\url{http://sourceforge.net/projects/ai-categorizer/}}
+[Williams, 2002] was designed to provide a 
 consistent way to build document categorization systems. It allows the developer to 
 focus on the quality of the more critical and complex modules by allowing reuse of 
 common, simple base modules. In this project we extended the framework to fit our 
 particular needs by adding a K-nearest neighbour `Learner' module. 
+
 The framework already has implementations of support vector machines (SVM), 
 Naïve Bayes, and Decision Trees [Yang 1999, Sebastiani 2002]. Other methods such 
 as neural networks [Calvo 2000, 2001] are being developed.
+
 Also, an alternative Collection class was built to allow for the data to be read from a 
 database instead of directly from file. These extensions are built by sub-classing two 
 of the main classes in the framework. Class inheritance contributes to code reuse and 
@@ -338,14 +169,16 @@ framework on the document to be classified. This means that the only command
 necessary to categorize a document is a basic insert statement with a function call in 
 place of a value for the category of the document.
 
- "INSERT INTO documents (name, content, categories) VALUES ('my 
-name', 'my content', categorize ('my name','my content', 
-'documents');"
-Figure 1. Example document insertion statement with categorization
+\begin{figure}
+ INSERT INTO documents (name, content, categories) 
+ VALUES ('my name', 'my content', categorize('my name','my content', 'documents');
+\caption{Example document insertion statement with categorization}
+\end{figure}
 
 The statement in Figure 1 can be further simplified through the creation of a pl/psql 
 trigger function which fires automatically on insertion and passes the necessary values 
 to the categorize function. 
+
 If the categorization is to take place within a database, where often categorized 
 documents are going to be appended to the learning set, a learning algorithm which has 
 very little training overhead is ideal. This prevents the need to retrain a categorizer 
@@ -356,11 +189,14 @@ compared to the vectors of the documents in the learning set. The k documents wh
 are closest (in vector space) to the document to be classified are kept for reference. 
 These k documents are consulted and the most prevalent category amongst these 
 documents is assigned to the new document. 
+
 In the kNN learner module created, the comparison between vectors was made by 
 normalizing each vector and 
+
 finding their dot product. The dimension of each vector was, in this case, 
 representative of the prevalence of a keyword in the document. This in effect gives a 
 cosine of the two vectors being compared. 
+
 The kNN module created has two customizable variables: threshold and k-value. The 
 k-value governs how many neighbours are consulted to decide the category of the 
 document. The threshold governs the confidence of the learner required to apply a 
@@ -369,6 +205,7 @@ category to a document. For example if a learner identifies 10 neighbours (i.e. 
 each category would be 10%. If the threshold is set to 0.15 the learner will not apply 
 any category to the new document. Thus the threshold is a good control of precision 
 within the classification system.
+
 Since, the categorization performance is determined only by the classification 
 framework, all these methods should behave as they do in standalone mode (outside 
 the database). What the integration into the RDBMS does is to make the 
@@ -377,7 +214,8 @@ Since relational databases can be designed using an object oriented methodology 
 et.al. 1988, Rumbaugh et. al 1991], by integrating it in this way, the classification task 
 (and framework) can also be designed into larger OO systems.
 
-4. Method and Results
+\section{Method and Results}
+
 The training set of the Dr Math corpus (5305 documents) was loaded into a database 
 table named "documents". This table consisted of 3 columns, name, content and 
 categories. The testing set was then inserted into the database, one document at a time 
@@ -387,88 +225,34 @@ actual categories of that document. Through this comparison the performance of t
 categorization in terms of recall  and performance  was measured. The precision and 
 recall was then used to calculate the F1 measure [Calvo 2001, Sebastiani 2002].
 
-Table 2 Macro averages against k-value and threshold
-K-
-Value
-Threshold
-Macro 
-Prec
-Macro 
-Rec
-Macro 
-F1
-8
-0.12
-0.391
-0.253
-0.307
-8
-0.15
-0.524
-0.238
-0.327
-10
-0.12
-0.447
-0.252
-0.322
-10
-0.15
-0.617
-0.228
-0.333
-15
-0.12
-0.640
-0.231
-0.339
-15
-0.15
-0.740
-0.211
-0.328
+\begin{table}
+\begin{tabular}{|r|r|r|r|r|}
+\hline
+k  & Threshold & Precision & Recall & $F_1$ \\ \hline
+8  & 0.12 & 0.391 & 0.253 & 0.307 \\ \hline
+8  & 0.15 & 0.524 & 0.238 & 0.327 \\ \hline
+10 & 0.12 & 0.447 & 0.252 & 0.322 \\ \hline
+10 & 0.15 & 0.617 & 0.228 & 0.333 \\ \hline
+15 & 0.12 & 0.640 & 0.231 & 0.339 \\ \hline
+15 & 0.15 & 0.740 & 0.211 & 0.328 \\ \hline
+\end{tabular}
+\caption{Macro averages against k-value and threshold}
+\end{table}
 
+\begin{table}
+\begin{tabular}{|r|r|r|r|r|}
+\hline
+k  & Threshold & Precision & Recall & $F_1$ \\ \hline
+8  & 0.12 & 0.259 & 0.319 & 0.286 \\ \hline
+8  & 0.15 & 0.296 & 0.291 & 0.293 \\ \hline
+10 & 0.12 & 0.265 & 0.327 & 0.293 \\ \hline
+10 & 0.15 & 0.339 & 0.282 & 0.308 \\ \hline
+15 & 0.12 & 0.332 & 0.304 & 0.317 \\ \hline
+15 & 0.15 & 0.397 & 0.260 & 0.314 \\ \hline
+\end{tabular}
+\caption{Micro averages against k-value and threshold}
+\end{table}
 
-Table 3 Micro averages against k-value and threshold
-K-
-Value
-Threshold
-Micro 
-Prec
-Micro 
-Rec
-Micro 
-F1
-8
-0.12
-0.259
-0.319
-0.286
-8
-0.15
-0.296
-0.291
-0.293
-10
-0.12
-0.265
-0.327
-0.293
-10
-0.15
-0.339
-0.282
-0.308
-15
-0.12
-0.332
-0.304
-0.317
-15
-0.15
-0.397
-0.260
-0.314
 
 The results in table 3 show that a Macro precision of 0.75 can be achieved for k=15 
 and a threshold of 0.15, this is a good performance considering that this is noisy data 
@@ -492,9 +276,6 @@ achieved in this test however demonstrates that a KNN categorizer implemented
 within a database could have a high enough performance to be useful at classifying 
 unstructured and informal data sets. 
 Acknowledgements
-The authors gratefully acknowledge financial support from the Capital Markets 
-Collaborative Research Centre and the University Of Sydney. The authors also 
-acknowledge The Math Forum for giving permission to use and discuss their data. 
 
 References
 1. Blaha, M., Premerlani W. and Rumbaugh J., Relational Database design using an 
@@ -525,7 +306,17 @@ Surveys, 34(1):1-47, 2002
 7th Australasian Document Symposium, 2002.
 13. Yang, Y. and X. Liu. A re-examination of text categorization methods. In 22nd 
 Annual International SIGIR, pages 42–49, Berkley, August 1999.
-  http://sourceforge.net/projects/ai-categorizer/
 
  Recall is the proportion of the target items that the system selected. i.e. tp/(tp+fn)
  Precision is the proportion of selected items the system got right i.e. tp/(tp+fp)
+
+\section*{Acknowledgements}
+
+The authors gratefully acknowledge financial support from the Capital Markets 
+Collaborative Research Centre and the University Of Sydney. The authors also 
+acknowledge The Math Forum for giving permission to use and discuss their data. 
+
+\bibliographystyle{sample}
+\bibliography{TC-references}
+
+\end{document}
