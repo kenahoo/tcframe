@@ -956,7 +956,7 @@ rather in the specific decisions of the trained categorizer on
 documents presented to it by users.  Figure
 \ref{application-interface} demonstrates one simple such application,
 in which the trained categorizer is loaded into memory using the
-\method{restore\_state} method, then repeatedly asked to categorize
+\method{restore\_state} method (see Section \ref{saving-state}), then repeatedly asked to categorize
 documents using the \method{categorize} method.  Here the application
 uses the \method{best\_category} method to select only the single
 category with the best score, but another application may require
