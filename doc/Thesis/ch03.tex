@@ -80,7 +80,7 @@ important structural relationships. \cite[p. 20]{gamma:95}
 The diagram in figure \ref{classes-uml} shows the
 most important run-time relationships between classes in the
 \aicat\ framework.  In this diagram, no inheritance
-relationships are shown--any inheritance hierarchies are represented
+relationships are shown---any inheritance hierarchies are represented
 only by their parent classes.  In general, a class and its subclass
 will share an interface and have identical relationships to other
 classes, but will differ in implementation.  Therefore, the
@@ -119,7 +119,7 @@ representing the features present in all documents.
 
 Feature selection is performed by subclasses of the \class{FeatureSelector}
 class.  Each \class{KnowledgeSet} object contains a \class{FeatureSelector}
-object--the \class{KnowledgeSet} provides the information necessary to do
+object---the \class{KnowledgeSet} provides the information necessary to do
 feature selection, and the \class{FeatureSelector} performs the desired
 feature selection algorithm.
 
@@ -193,7 +193,7 @@ providing a convenient interface to a complete system for text
 categorization.  Most applications built using the framework will
 instantiate an object of this class.  Note that the term \aicat\ can
 refer either to the framework as a whole, or to the umbrella class.
-The distinction will be made clear in the text where it is necessary
+The distinction will be made clear in this text where it is necessary
 to do so.
 
 \end{description}
@@ -289,7 +289,7 @@ over stored documents so that the various classes that need to perform
 this iteration (chiefly \class{Learner} and \class{KnowledgeSet}) don't need to be
 aware of storage issues.  In this sense, the ``internal
 representation'' of the aggregate structure is often external to the
-framework itself--it may be files in a filesystem, entries in a
+framework itself---it may be files in a filesystem, entries in a
 database, records in an XML document, or another mechanism.
 
 In addition to providing a generic interface to a stored collection of
@@ -297,7 +297,7 @@ documents, the Iterator pattern allows clients of the \class{Collection} class
 to use memory efficiently.  A \class{Collection} object will typically defer
 creation of its \class{Document} objects until its client calls its
 \method{next} method.  In this way, the \class{Collection} doesn't store all
-the \class{Document} objects in memory simultanously--if the client needs to do so,
+the \class{Document} objects in memory simultanously---if the client needs to do so,
 it can, or it can merely query properties of each document and dispose
 of them in turn.
 
@@ -327,8 +327,8 @@ compositions of objects uniformly.'' \cite[p. 163]{gamma:95} It is
 often used to represent trees or other data structures in which the
 form of a subset of the structure is not qualitiatively different from
 the form of the entire structure.  In simple terms, this means that
-the same kinds of operations--iteration over subnodes, inspection of
-the root node, and so on--can be performed on the entire tree, a
+the same kinds of operations---iteration over subnodes, inspection of
+the root node, and so on---can be performed on the entire tree, a
 subtree, or even a single node.
 
 In fact, the Composite pattern does not apply only to tree
@@ -356,7 +356,7 @@ shows the classes participating in this pattern.
 
 Since \ensemble\ is a subclass of the abstract
 \class{Learner} class, it conforms to the \class{Learner} interface.
-This is crucial to implementation of the Composite pattern--it means
+This is crucial to implementation of the Composite pattern---it means
 that clients may use the \ensemble\ class without
 knowing that it implements an ensemble learner behind the scenes.  In
 this way, transparent ensemble learning is achieved through
@@ -428,7 +428,7 @@ contributed work of this thesis, as they are written by other authors.}
 Note that these four Adapter examples exhibit three very different
 applications of the Adapter pattern.  \class{Learner::DecisionTree}
 exhibits a very straightforward Adapter usage as presented in
-\cite{gamma:95}--an existing standalone class exists that implements the
+\cite{gamma:95}---an existing standalone class exists that implements the
 needed functionality, and its interface is adapted to the framework
 requirements by a simple wrapping subclass.  The \class{Learner::SVM}
 wrapper is also fairly straightforward.  However, the other two
@@ -523,8 +523,13 @@ and may therefore be treated uniformly.  The framework user or
 application designer, however, may choose judiciously among subclasses
 depending on the particular needs of the application.  Customizability
 of the Machine Learning algorithm is of paramount importance to the
-framework, since it would be useless to researchers if this were not
-the case.
+framework, since it would be useless to most researchers if this were
+not the case.  Many researchers may wish to write their own
+\class{Learner} subclasses, using this portion of the framework in the
+``whitebox'' paradigm.  Other researchers, and most application
+developers, will want to use existing framework classes in a
+``blackbox'' framework usage style. \cite[p. 10]{fayad:99} Either
+method is supported.
 
 Each \class{Learner} subclass must implement the abstract
 \method{train} and \method{categorize} methods in order to perform the
@@ -567,10 +572,65 @@ the other subclasses in the diagram are planned.
 
 \subsection{Factory Method}
 
+In any framework of significant size and customizability, attention
+must be paid to the issue of how specific classes are chosen for the
+various framework roles, how these classes are instantiated, and how
+the instantiated objects are connected to each other.  In the simplest
+possible case, the framework client code must create all objects and
+manually connect them to each other---for instance, in \aicat, the
+client code might create a \class{KnowledgeSet} object, a
+\class{Learner} object, an \aicat\ object, a \class{Collection}
+object, then populate the \aicat\ object with \class{KnowledgeSet} and
+\class{Learner} objects, and the \class{KnowledgeSet} with a
+\class{Collection}, thus satisfying the structural relationships
+indicated in Figure \ref{classes-uml} on page \pageref{classes-uml}.
+An approach like this is diagrammed in Figure
+\ref{naive-constructors}.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/naive-constructors.pdf}
+\caption{A simple approach to object construction}
+\label{naive-constructors}
+\end{figure}
+
+This approach works, but it is error-prone and cumbersome.  It forces
+every client to specify the framework relationships explicitly, when
+in fact these are fundamental relationships of the \emph{framework},
+not of the client code.  It makes little sense for this structural
+code to be outside the framework, and even less sense for it to be
+duplicated in every application that uses the framework.  Note too
+that Figure \ref{naive-constructors} only shows a small part of the
+framework being used---in reality, the client code would have to
+accept responsibility for creating all the objects in the framework,
+not just the four pictured here.
+
+For these reaons, it is often better if the framework can provide
+support for object creation and enforcement of the framework
+relationships.  An example of this situation is pictured in Figure
+\ref{better-constructors}.  Here, the patterns of object creation more
+closely follow the class relationships that will be used at runtime.
+This design is moving closer toward a factory-style pattern, in which
+object creation is delegated to another object. \cite{gamma:95}
+defines two specific kinds of factory patterns, ``Factory Methods''
+and ``Abstract Factories.''  Figure \ref{better-constructors} does not
+fit either of these patterns precisely, but it does fall under the
+general category of factory object creation.
+
+A scheme like that in Figure \ref{better-constructors} has both
+advantages and disadvantages compared with that in Figure
+\ref{naive-constructors}.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/better-constructors.pdf}
+\caption{A better approach to object construction}
+\label{better-constructors}
+\end{figure}
+
 XXX need to write \ldots
 
 
 \section{Specifying framework relationships}
+\label{class-container}
 
 In object-oriented programming, the language itself usually provides
 first-class support for describing inheritance relationships between
