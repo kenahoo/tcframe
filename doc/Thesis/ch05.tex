@@ -1,0 +1,63 @@
+\chapter{Evaluation}
+
+\section{Descriptions of corpora}
+During development and testing, several data sets are used for
+framework testing and application building.  The main data sets are
+listed here.
+
+
+\subsection{ApteMod (Reuters-21578)}
+
+
+The "ApteMod" version of the Reuters-21578 corpus has become a
+standard benchmark corpus in evaluating Text Categorization systems.
+It is a collection of 10,788 documents from the Reuters newswire
+service, partitioned into a training set with 7769 documents and a
+test set with 3019 documents.  The total size of the corpus is about
+17.5 Mb.  It is available from
+http://moscow.mt.cs.cmu.edu:8081/reuters\_21578/ in SMART format.
+
+
+\subsection{SignalG}
+This corpus consists of 122,919 financial announcement documents from
+the Australian Stock Exchange between January 4 and December 29, 2000.
+The documents are hand- categorized according to whether they indicate
+"market sensitivity" or not.  Every document is a member of either the
+"sensitive" or "insensitive" category--we can view this as two
+categories that partition the corpus, or as a single category
+"sensitive" that some documents belong to and others don't.  The
+documents are split into a training set of 81,814 documents and a test
+set of 41,105 documents.
+
+
+\subsection{DrMath}
+This is a smallish collection (26.5 Mb) of English-language messages
+sent to the "Ask Dr. Math" question-and-answer service for students
+(http://www.mathforum.org/dr.math/).  It consists of messages
+containing math questions, categorized by topic and grade level.  Each
+category specifies both topic and grade level information (i.e. "High
+School Geometry"), so these categorization tasks are not generally
+separable into a categorization by topic and a categorization by
+level.  The corpus is divided into a training set with 5304 documents
+and a test set with 1326 documents.  The corpus is not available for
+direct download, but you may contact Ken Williams for details.
+
+
+\subsection{Reuters-CRC}
+This is a collection of financial announcements gathered from the
+Reuters financial service in the year 2000.  It represents all
+announcements sent by the top 500 companies on the Australian Stock
+Exchange (determined by trading volume) during 2000.  There are 27,874
+documents, partitioned randomly into 18,568 training documents and
+9,306 test documents (105 Mb training, 52.5 Mb test).  We have imposed
+a categorization scheme on the data set by examining trends in related
+training data, so that each document becomes a member of either the
+category "insensitive" or "sensitive", similar to the SignalG data
+set.  The corpus is the property of Capital Markets Cooperative
+Research Centre and is not available for use by outside groups.
+
+
+\section{Performance evaluation}
+
+\section{Applications}
+

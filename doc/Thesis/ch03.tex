@@ -1,0 +1,316 @@
+\chapter{AI::Categorizer Framework Design}
+
+The AI::Categorizer framework is designed for maximum re-use in many
+kinds of situations \ldots XXX.
+
+For brevity, the ``AI::Categorizer::'' prefix will be omitted from class
+names in this discussion.  It is to be understood that any class
+within the AI::Categorizer framework (except the top-level class
+AI::Categorizer itself) is prefixed by the ``AI::Categorizer::''
+namespace.
+
+\section{Overview of AI::Categorizer class hierarchy}
+
+In order to understand the structure of the AI::Categorizer framework,
+multiple kinds of analysis are helpful.  We can examine the
+inheritance relationships of the classes that participate in
+AI::Categorizer, and indicate which classes inherit from each other.
+Since a class generally is a representation of certain
+responsibilities and capabilities, this lets us see how the set of
+responsibilities for one class may be implemented in different ways or
+extended by its subclasses.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/inheritance-uml.pdf}
+\caption{Inheritance diagram for AI::Categorizer}
+\label{inheritance-uml}
+\end{figure}
+
+Figure \ref{inheritance-uml} shows the inheritance relationships among
+classes in the AI::Categorizer framework.  Note that this diagram
+indicates the \emph{capabilities} of the framework more than it
+indicates its \emph{architecture}.  For instance, the framework
+currently understands several document types, including plain text
+documents and documents in the ``SMART'' format.  If the framework is
+extended by writing additional subclasses of existing classes, the
+capabilities increase without changing the basic architecture of the
+framework.
+
+Note that the inheritance diagram is not particularly enlightening
+about how various classes cooperate to perform text categorization
+tasks.  The inheritance relationships are set at compile-time and do
+not change while the framework is in use.\footnote{Perl allows the
+dynamic reassignment of inheritance, but this capability isn't used
+in the framework.}
+
+Another way to examine the framework is to examine the run-time
+relationships between its classes.  This often provides a much more
+enlightening analysis of a framework, since modern framework design
+often favors object composition over class inheritance for its
+important structural elements. \cite[p. 20]{gamma:95}
+
+The diagram in figure \ref{classes-uml} shows the
+most important run-time relationships between classes in the
+AI::Categorizer framework.  In this diagram, no inheritance
+relationships are shown--any inheritance hierarchies are represented
+only by their parent classes.  In general, a class and its subclass
+will share an interface and have identical relationships to other
+classes, but will differ in implementation.  Therefore, the
+relationships indicated in this diagram indicate stable aspects of the
+framework that do not change when the framework is extended by
+subclassing.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/classes-uml.pdf}
+\caption{Class composition diagram for AI::Categorizer}
+\label{classes-uml}
+\end{figure}
+
+Some examination of the basic relationships between classes and the
+responsibilities of each class is helpful before looking at the design
+in more detail.  The major classes in the AI::Categorizer framework
+are:
+
+\begin{description}
+
+\item[KnowledgeSet]
+
+The \class{KnowledgeSet} class represents a set of processed documents, a set
+of categories, and a many-to-many mapping between the two sets.
+Processing may involve tokenization, stopword removal, linguistic
+stemming, feature selection, and vector weighting.  Note that the term
+``knowledge set'' is somewhat unique to this project.
+
+A \class{KnowledgeSet} contains references to many \class{Document} objects and
+\class{Category} objects.  It uses \class{Collection} objects to instantiate \class{Document}
+and \class{Category} objects.  It uses a \class{FeatureSelector} object to perform
+feature selection.  It also contains a \class{FeatureVector} object
+representing the features present in all documents.
+
+\item[FeatureSelector]
+
+Feature selection is performed by subclasses of the \class{FeatureSelector}
+class.  Each \class{KnowledgeSet} object contains a \class{FeatureSelector}
+object--the \class{KnowledgeSet} provides the information necessary to do
+feature selection, and the \class{FeatureSelector} performs the desired
+feature selection algorithm.
+
+\item[Collection]
+
+Because data sets in text categorization may be very large, and
+because their documents may exist in several different underlying
+storage mechanisms (e.g. as files in a filesystem, sections of a
+larger XML file, or fields in a database), a \class{Collection} class provides
+an abstract interface to a set of stored documents, together with a
+way to iterate through the set and return \class{Document} objects.
+
+A \class{Collection} object may be used in several contexts within the
+framework.  For instance, a \class{KnowledgeSet} instantiates its Document and
+\class{Category} objects through a \class{Collection} object.  A \class{Learner} object may
+also mass-categorize the \class{Documents} in a \class{Collection} object.
+
+\item[Document]
+
+Each text document is represented by a \class{Document} object, or an object
+of one of its subclasses.  Each document class contains methods for
+turning a bunch of data into a \class{FeatureVector}.  Each document also has
+a method to report which categories it belongs to.
+
+\item[Category]
+
+Each category is represented by a \class{Category} object.  Its main purpose
+is to keep track of which documents belong to it, though it also
+contains methods for examining statistical properties of an entire
+category.
+
+\item[Learner]
+
+The abstract \class{Learner} class provides an interface to train on a
+set of pre-categorized documents and subsequently categorize
+previously unseen \class{Document} objects.  Its
+concrete subclasses implement specific categorization algorithms like
+Naive Bayes, SVM, Decision Tree, and so on.
+
+\item[FeatureVector]
+
+Most categorization algorithms don't deal directly with documents'
+data, they instead deal with a \emph{vector representation} of a
+document's features.  Most often, documents are represented using the
+``Bag of Words'' model \cite{XXX}, i.e. a non-ordered, weighted set of
+features.  The \class{FeatureVector} class provides an interface to the
+operations one may perform on these vector representations, such as
+querying features' presence or absence in a document, adding vectors
+to each other, and so on.
+
+\item[Hypothesis]
+
+The result of asking a \class{Learner} to categorize a previously unseen
+document is a \class{Hypothesis} object.  It may be queried for information
+about which categories were assigned, which category was the single
+most appropriate category, what scores were assigned to each category,
+and so on.
+
+\item[Experiment]
+
+The \class{Experiment} class can examine the results of many categorization
+decisions (i.e., many \class{Hypothesis} objects) and may be queried for
+aggregate information about the results.  This is often used in order
+to determine the quality (as measured by precision, recall, error,
+etc.) of a \class{Learner} on a collection of test documents.
+
+\item[AI::Categorizer]
+
+XXX need to write about the umbrella class
+
+\end{description}
+
+\section{Design Patterns in AI::Categorizer}
+
+In order to shed light on the design of the AI::Categorizer framework,
+XXX \ldots.
+
+
+\subsection{Iterator}
+
+The Iterator pattern provides ``a way to access the elements of an
+aggregate object sequentially without exposing its underlying
+representation.'' \cite[p. 257]{gamma:95} Its main purpose is to
+decouple the traversal process on an object's aggregate members from
+the object's internal data structure implementation.  In this way,
+clients can iterate through aggregate objects without knowing the
+objects' internal structure.
+
+In the AI::Categorizer framework, it is often necessary to iterate
+through collections of documents and perform some action on them.  For
+example, the documents may form a training set for a \class{Learner} to base a
+model on, or they may form a test set on which to evaluate the model.
+
+The \class{Collection} class implements the Iterator pattern
+\cite[p. 257]{gamma:95} over documents in the framework.  Figure
+\ref{Iterator-collection} shows the main relationships involved in
+this pattern.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Iterator.pdf}
+\caption{The Iterator pattern in the \class{Collection} class}
+\label{Iterator-collection}
+\end{figure}
+
+
+\cite[p. 259]{gamma:95} suggests that the most common reasons for
+using a formal custom iterator are:
+
+\begin{itemize}
+
+\item to access an aggregate object's contents without exposing its
+internal representation.
+
+\item to support multiple traversals of aggregate objects.
+
+\item to provide a uniform interface for traversing different
+aggregate structures.
+
+\end{itemize}
+
+The first and third reasons are most germane to the document iteration
+process.  As explained in section \ref{Document storage}, it is
+important that the framework can directly import documents from their
+various underlying storage mechanisms in order to prevent unnecessary
+duplication of data.  In order to hide the details of the storage
+mechanism from the rest of the framework, a \class{Collection} object
+retrieves documents from several storage mechanisms and returns them
+as \class{Document} objects.  It provides a unified interface to iteration
+over stored documents so that the various classes that need to perform
+this iteration (chiefly \class{Learner} and \class{KnowledgeSet}) don't need to be
+aware of storage issues.  In this sense, the ``internal
+representation'' of the aggregate structure is often external to the
+framework itself--it may be files in a filesystem, entries in a
+database, records in an XML document, or another mechanism.
+
+In addition to providing a generic interface to a stored collection of
+documents, the Iterator pattern allows clients of the \class{Collection} class
+to use memory efficiently.  A \class{Collection} object will typically defer
+creation of its \class{Document} objects until its client calls its
+\method{next} method.  In this way, the \class{Collection} doesn't store all
+the \class{Document} objects in memory simultanously--if the client needs to do so,
+it can, or it can merely query properties of each document and dispose
+of them in turn.
+
+Note that the \class{Collection} class defines a \method{next} method,
+but no \method{previous} method.  This is largely because common
+document storage mechanisms like filesystems or databases typically
+only have one-directional iterators.  Insisting that
+\class{Collection} classes needed to implement a \method{previous}
+method to support bi-directional iteration would impose an
+unreasonable burden on them.
+
+In order to decouple the storage mechanism from the internal format of
+documents (see section \ref{Document format}), \class{Collection}
+classes can cooperate with any subclass of the \class{Document} class.
+The client of the \class{Collection} class informs it that it should
+instantiate documents using a certain \class{Document} subclass.
+Since the \class{Document} subclasses share a common interface, \class{Collection}
+may remain ignorant of all internal document formatting issues,
+passing data to the proper constructors in order to instantiate
+\class{Document} objects.
+
+
+\subsection{Composite}
+
+The Composite pattern ``lets clients treat individual objects and
+compositions of objects uniformly.'' \cite[p. 163]{gamma:95} It is
+often used to represent trees or other data structures in which the
+form of a subset of the structure is not qualitiatively different from
+the form of the entire structure.  In simple terms, this means that
+the same kinds of operations--iteration over subnodes, inspection of
+the root node, and so on--can be performed on the entire tree, a
+subtree, or even a single node.
+
+In fact, the Composite pattern does not apply only to tree
+structures.  It applies whenever a self-similarity exists between the
+whole and the parts in a part-whole hierarchy.
+
+One instance of this kind of structure in Text Categorization is in
+so-called ``ensemble learners,'' also known as ``classifier
+committees.''  An ensemble learner is a categorizer that combines the
+results of a set of other categorizers in some way to arrive at a
+categorization result of its own. \cite[p. 30]{sebastiani:02} Often,
+an ensemble learner may outperform each of its constituent members on
+the general categorization task.  \cite{tumer:98}
+
+To implement ensemble learners within AI::Categorizer, the Composite
+pattern may be applied to the \class{Learner} class to create a
+\class{Learner::Ensemble} subclass.  Figure \ref{Composite-ensemble}
+shows the classes participating in this pattern.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Composite.pdf}
+\caption{The Composite pattern in the \class{Learner::Ensemble} class}
+\label{Composite-ensemble}
+\end{figure}
+
+
+
+
+\subsection{Adapter}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Adapter.pdf}
+\caption{The Adapter pattern in the Learner class}
+\label{Adapter-learner}
+\end{figure}
+
+\subsection{Strategy}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Strategy.pdf}
+\caption{The Strategy pattern in the Learner class}
+\label{Strategy-learner}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Strategy-feasel.pdf}
+\caption{The Strategy pattern in the FeatureSelector class}
+\label{Strategy-feasel}
+\end{figure}
+
+\subsection{Factory Method}
+

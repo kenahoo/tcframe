@@ -1,0 +1,55 @@
+\chapter{Introduction}
+
+\section{Preface}
+
+The field of Automatic Text Categorization is an extremely active area
+of current research and application.  It is a multi-disciplinary
+field, attracting attention from the Linguistics, Computer Science,
+Engineering, and Business communities.  Its applicability is broad,
+with many potential uses for large businesses as well as individuals.
+
+The goal of Automatic Text Categorization is to produce specialized
+algorithms that can process natural-language documents, assigning zero
+or more user-defined labels to them based on their content.  More
+formally, given a set of labels $L = \{L_1, \ldots, L_k\}$ and a set of
+previously unseen documents $D = \{D_1, D_2, \ldots \}$, a categorizer is a
+function $C$ that maps from $D$ to the set of all subsets of $L$.  In
+practice, many categorizers assign only a single label to each
+document, so a categorizer is often a function that maps directly from
+$D$ to $L$.  Often an intermediate function is useful for "soft" or 
+"rank-based" categorization, mapping from ordered pairs $(D_i, C_j)$ 
+to the set of real numbers $\mathbb{R}$ in order to assign a score 
+to each category $C_j$ for each document $D_i$.
+
+The standard modern approach to creating new categorizer functions is
+to build them using Machine Learning techniques from a set of training
+documents.  This is a set of user-provided, pre-labeled documents that
+follows a category
+distribution similar to the distribution of $D$, and whose contents
+provide information about what sorts of documents should be mapped to
+what sorts of categories.  Algorithms can then be developed that make
+generalizations about the relationship between document content and
+document category, encoding these generalizations in the algorithm $C$.
+
+\section{Automatic Text Categorization}
+
+\section{Object Frameworks}
+
+A framework is a large-scale unit of reusable code in object-oriented
+software development.  Frameworks were developed in response to
+situations requiring fine-grained control over the
+
+\subsection{Guidelines for designing frameworks}
+\subsection{Design patterns}
+
+
+\section{Overview of AI::Categorizer Framework}
+
+AI::Categorizer is a set of Perl modules that implements an
+object-oriented framework for text categorization.  It provides
+classes for managing documents, categories, machine learners,
+categorization hypotheses, and categorization results.
+
+\section{Contributions}
+
+\section{Organization of the Thesis}
