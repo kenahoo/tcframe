@@ -1,6 +1,10 @@
 \chapter{\aicat\ Framework Design}
 
-The \aicat\ framework is designed for maximum re-use in many
+AI::Categorizer is a set of Perl modules that implements an
+object-oriented framework for text categorization.  It provides
+classes for managing documents, categories, machine learners,
+categorization hypotheses, and categorization results.
+It is designed for maximum re-use in many
 kinds of situations \ldots XXX.
 
 For brevity, the \aicat\texttt{::} prefix will be omitted from class
@@ -8,7 +12,18 @@ names in this discussion.  It is to be understood that any class
 within the \aicat\ framework (except the top-level class
 \aicat\ itself) is prefixed by \aicat\texttt{::}.
 
+\section{Usage Scenarios (use cases)}
+\subsection{Research scenarios}
+\subsection{Application scenarios}
+\subsection{Commercial scenarios}
+
+\section{Application integration}
+\subsection{Client/server applications}
+\subsection{Embedded applications}
+\subsection{Database cooperation}
+
 \section{Overview of \aicat\ class hierarchy}
+\label{class-overview}
 
 In order to understand the structure of the \aicat\ framework,
 multiple kinds of analysis are helpful.  We can examine the
@@ -18,6 +33,20 @@ Since a class generally is a representation of certain
 responsibilities and capabilities, this lets us see how the set of
 responsibilities for one class may be implemented in different ways or
 extended by its subclasses.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{figures/diagram-key.pdf}
+\caption{Diagrammatic notation for object relationships}
+\label{diagram-key}
+\end{center}
+\end{figure}
+
+Figure \ref{diagram-key} explains the notational elements used in the
+diagrams in this section.  Because \cite{gamma:95} is heavily drawn
+upon throughout this chapter, a notation closely following its
+notation is used here, with some elements borrowed from common UML
+\cite{XXX-uml}.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/inheritance-uml.pdf}
@@ -46,7 +75,7 @@ Another way to examine the framework is to examine the run-time
 relationships between its classes.  This often provides a much more
 enlightening analysis of a framework, since modern framework design
 often favors object composition over class inheritance for its
-important structural elements. \cite[p. 20]{gamma:95}
+important structural relationships. \cite[p. 20]{gamma:95}
 
 The diagram in figure \ref{classes-uml} shows the
 most important run-time relationships between classes in the
@@ -335,4 +364,50 @@ performed.  For example, ...
 \end{figure}
 
 \subsection{Factory Method}
+
+\section{Specifying framework relationships}
+
+In object-oriented programming, the language itself usually provides
+first-class support for describing inheritance relationships between
+classes.  For instance, a C++ or Java \texttt{class} declaration lists
+its superclasses explicitly, and Perl specifies inheritance via each
+class's \texttt{@INC} array.  Because inheritance is directly
+implemented by the language, it is easy for framework users to
+understand inheritance relationships, and these relationships are
+expressed straightforwardly in the framework code.\footnote{Contrast
+this with object-oriented programming in languages like C that don't
+have inherent OO support, where understanding the inheritance
+structures can be much more challenging.\cite[p. 7]{fayad:99}}
+
+However, effective frameworks have many complicated interrelationships
+besides inheritance.  These need to be specified somehow in the
+implementation language of the framework so that the proper
+relationships are created, and they need to be specified in
+documentation so that users of the framework understand the structure
+of the software they're using.
+
+In addition, as explained in Section \ref{class-overview}, these
+relationships are typically much more important and enlightening to
+users of the framework than the inheritance relationships.  It is
+desirable to treat these relationships in a unified manner, so that
+all identical collaborations in the framework are specified in and
+will function in similar ways.\cite[p. 13]{fayad:99}
+
+Since Perl lacks first-class support for specifying patterns of
+collaboration (as is the case with most common OO languages), a
+language extension has been employed in the \aicat\ framework that
+unifies these issues.  Using this extension, each class explicitly
+declares any other objects it cooperates with in certain types of
+relationships.  Because these declarations are made explicitly and
+don't just emerge from usage patterns in the implementation code,
+certain types of functionality may be handled centrally and
+consistently, greatly easing the burden of implementing these
+relationships and aiding framework flexibility.
+
+\section{Limitations}
+
+XXX Here, write about basic assumptions \aicat\ makes about the
+general TC problem, and what happens when those assumptions aren't
+true.  For example, structured feature vectors instead of flat,
+non-bag-of-words, etc.
 
