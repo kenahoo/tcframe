@@ -1,12 +1,216 @@
-
 \chapter{Implementation}
 \label{Implementation}
 
-\section{Language}
+With the functionality requirements and class designs in Chapter
+\ref{design} as a guide, the \aicat\ framework has been implemented
+and released under an open source license\cite{XXX-open-source} as a
+part of this thesis and as a continuing project in Text
+Categorization.  This chapter describes some of the implementation
+decisions that have been made in \aicat\, and provides some of the
+reasoning behind them.
+
+\section{Implementation Language}
+
+In order to provide maximum support for the kinds of real-world
+scenarios described in Section \ref{use-cases}, it was determined that
+a broad-coverage, widely-used programming language should be used to
+implement the \aicat\ framework.  Three extremely common
+object-oriented languages fulfilling these criteria are \texttt{C} (or
+rather its object-oriented derivatives like \texttt{C++} and
+Objective-\texttt{C}), Java, and Perl.  Each of these languages has
+its advantages and disadvantages, and a full comparison between them
+is beyond the scope of this thesis.  Perl was ultimately chosen for
+the \aicat\ project, which provides the following benefits.
+
+\begin{itemize}
+\item Perl is widely known to be a powerful text processing tool
+   \cite{XXX-mastering-regular-expressions, etc}, hence it should be
+   relatively easy for users of the framework to customize its
+   processing capabilities.
+\item A large number of contributed Perl modules are freely available
+   for many different tasks on the CPAN \cite{cpan}, which extends the
+   domain of applicability of the framework.
+\item Perl is an expressive high-level language that allows for rapid
+   prototyping, so the framework developers and application developers
+   can experiment with several alternative designs fairly quickly.
+\item Perl is widely deployed and is part of all standard Unix
+   distributions.  It is available for most platforms that have a
+   \texttt{C} compiler, and because of common high-level interfaces,
+   Perl code written on one platform is often more portable to other
+   platforms than the equivalent \texttt{C} code would be.
+\item Perl can be embedded within applications written in other
+   languages, particularly in \texttt{C}/\texttt{C++} applications
+   using Perl's embedding interface, or in Java applications using the
+   Java/Perl Layer.  This allows for maximum reusability of the
+   framework as described in Section \ref{embedded-apps}.
+\item Code from other languages can be embedded within Perl
+   applications, using either the XS extension mechanism for
+   \texttt{C} code, or the Inline embedding mechanism for several
+   languages, including \texttt{C} and its derivatives, Java, Tcl,
+   Assembler, and Python, among others.  This allows the framework to
+   use efficient data structures and algorithms implemented in other
+   languages if necessary, while keeping the convenient high-level
+   interface in Perl.  It also allows integration with existing code
+   libraries from various sources without locking the developer into a
+   language choice.
+\item There is an active community of users interested in using a
+   Perl-native text categorization framework.  This community can
+   contribute back to the framework project.  Several community
+   members have already contributed feedback, bug fixes, and
+   application ideas for the \aicat\ project.
+\end{itemize}
+
+\section{Framework constructor methods}
+\label{constructor-methods}
+
+To implement the behavior discussed in Section \ref{factory-method},
+the \class{Class::Container} module from CPAN\footnote{The
+\class{Class::Container} module was written by Ken Williams for a
+previous project\cite{rolsky:02} and extended for the \aicat\
+project.} implements the abstract parent class \aclass{ObjectFactory}
+shown in Figure \ref{factory-constructors}.  It provides the generic
+specification of object constructor parameters, as well as generic
+mechanisms for creating subordinate objects within the framework.
+
+\begin{figure}
+\begin{verbatim}
+
+package AI::Categorizer::Learner;
+use base 'Class::Container';
+use Params::Validate qw(:types);
+
+__PACKAGE__->valid_params
+  (
+   knowledge_set  => { isa => 'AI::Categorizer::KnowledgeSet',
+                       optional => 1 },
+   verbose        => { type => SCALAR,
+                       default => 0 },
+  );
+
+__PACKAGE__->contained_objects
+  (
+   hypothesis => { class => 'AI::Categorizer::Hypothesis',
+                   delayed => 1 },
+   experiment => { class => 'AI::Categorizer::Experiment',
+                   delayed => 1 },
+  );
+
+\end{verbatim}
+\caption{An example of \class{Class::Container} usage from the \class{Learner} class}
+\label{class-container}
+\end{figure}
+
+Figure \ref{class-container} shows a simplified example of
+\class{Class::Container} usage in the \class{Learner} class from \aicat.  The
+\method{valid\_params} and \method{contained\_objects} class methods are
+inherited from the superclass \class{Class::Container}, and they
+provide the mechanism by which each class can declare its main
+constructor interface.  In this case, the \class{Learner} class
+declares that it accepts two constructor parameters, called
+\param{knowledge\_set} (a \class{KnowledgeSet} object which will form
+the training set for the learner) and \param{verbose} (an integer
+specifying the amount of status information to show the user during
+the training process).
+
+The \method{contained\_objects} method lets the \class{Learner} class
+declare its subordinate objects in the framework architecture.  In
+this case, each \class{Learner} will create \class{Hypothesis} and
+\class{Experiment} objects at runtime; \class{Hypothesis} objects are
+created in the \method{categorize} method when any document is
+categorized, and \class{Experiment} objects are created in the
+\method{categorize\_collection} method to organize and report the
+results of categorizing many documents.  The \class{Learner} will
+create these objects on demand using \method{create\_delayed\_object},
+also inherited from \class{Class::Container}, as a factory method.  In
+the object specification, the ``delayed'' flag indicates that the
+objects will be created on demand in this manner---if this flag were
+not specified, the objects would be automatically created during the
+\method{new} method in an aggregation\cite[XXX-section]{gamma:95}
+manner.
+
+
 \section{Data Structures}
+
+To a large extent, the data structures used in \aicat\ are
+unspecified, since the framework specification dictates only the
+framework interface methods and the relationships among classes.
+However, the concrete implementations of several classes must choose
+implementation details, and those details are described here.
+
 \subsection{Feature Vectors}
 \label{imp-featurevectors}
 
+Many parts of the framework code must manipulate feature vectors,
+which we define as a set of key-value pairs relating document features
+(which may be words, word stems, 2-word combinations [bigrams], or
+other derivatives of document data) to values (which may be frequency
+counts or other weighted measures of importance).  Some examples of
+this include the features of an individual document, the aggregated
+features of a knowledge set or of the documents belonging to a
+particular category, or a vector of features whose weights have been
+assigned by a particular \class{Learner} implementation.
 
-... the default representation uses a hash table to store vector
-information.  Other subclass implementations could use ...
+The \class{FeatureVector} class provides both a concrete
+implementation of a feature vector interface, and a base class from
+which other classes may inherit if they wish to use a different
+internal representation of the data or extend the capabilities of the
+base class.  Perl provides hash tables (sometimes called
+``dictionaries'' in some languages) as a language-level data
+structure, and the default implementation in \class{FeatureVector}
+uses these as its mapping between features and values.  This provides
+the following benefits:
+
+\begin{itemize}
+\item Insertions, deletions, and lookups are all $O[1]$
+  operations, so the size of the feature set can grow without any
+  penalty on the time to perform these operations.
+\item Hashes can store \emph{sparse} information efficiently, meaning
+  that only nonzero entries in a vector need to be stored.  This can
+  be important if the dimensionality of the ambient vector space is
+  very large, because memory savings of 1-3 orders of magnitude may be
+  realized.
+\item The hash data structure stores the key as a string.  This may be
+  the word or word stem from the document itself, avoiding the need to
+  use a separate lookup table to translate from the actual document
+  features to the keys of feature vectors.
+\end{itemize}
+
+However, there are certain liabilities with this approach as well:
+
+\begin{itemize}
+\item Perl's implementation of most data structures is fairly
+  memory-greedy in order to provide benefits like automatic memory
+  allocation and transparent casting.  This can cause low-level data
+  structures to consume much more memory than needed, and this is the
+  case for the base \class{FeatureVector} class.
+\item The hash key in the feature vector is always stored as a string,
+  but it would be more compact to store it as a single integer
+  representing an index into a global array of all features in the
+  knowledge set, and store the global array separately.
+\end{itemize}
+
+To address these liabilities, a developer might prefer a feature
+vector implementation that stores its data as integer/float arrays in
+\texttt{C}-level data structures in the manner of \cite{platt:99}.
+This would be most useful when working with a large corpus or when
+using a system with a relatively small amount of physical memory.  The
+drawbacks with using this approach would be that a separate structure
+mapping document features to integers would need to be maintained, and
+that searches through a feature vector for a specific feature would
+become an $O[\log(n)]$ operation, where $n$ is the number of nonzero
+entries in the feature vector.  In practice, the latter issue is
+usually not important, because each document vector is fairly small,
+and the difference between $O[1]$ and $O[\log(n)]$ may be
+insignificant compared to the constant overhead costs of the
+operations.
+
+A \class{FeatureVector} subclass implementing the structure described
+in the previous paragraph is currently underway by another researcher
+at the University of Sydney, though it is not yet a part of the
+\aicat\ framework.
+
+\subsection{Sets of Documents or Categories}
+
+The \class{KnowledgeSet} class needs to keep track of 
+
+\subsection{XXX-what else?}
