@@ -1,4 +1,5 @@
 Adaptee
+Adobe's
 ai
 API
 ApteMod
@@ -35,14 +36,17 @@ DF
 dmoz
 doc
 DocFrequency
-drmath
 DrMath
+drmath
+DT
 DTD
+DTs
 edu
 ee
 Eibe
 expert's
 FastDot
+feature's
 FeatureSelector
 FeatureVector
 filehandle
@@ -50,6 +54,7 @@ Gosia
 hardcopy
 html
 http
+HyperText
 Ian
 ics
 IDF
@@ -71,6 +76,7 @@ maF
 Mandrela
 maP
 maR
+Markup
 mathforum
 metadata
 miF
@@ -78,6 +84,8 @@ miP
 miR
 moniker
 morphemes
+MySQL
+na
 NaiveBayes
 NB
 ObjectFactory
@@ -99,6 +107,7 @@ pollination
 polymorphism
 PostgreSQL
 pre
+proofread
 rafa
 reusability
 reuters
@@ -126,9 +135,11 @@ SVM
 SVM's
 SVMs
 Sybase
+TC
 Tcl
 teragram
 Teragram's
+term's
 TF
 tfidf
 tmp
