@@ -25,7 +25,12 @@ Learning systems platforms and architectures
 
 Comments for authors:
 ----------------------
-I appreciate the idea of analyzing a corpus of questions submitted to Dr. Math. This is an original and powerful idea. The paper then enters a rather technical stage in which, to my taste, too much detail is given, sacrificing on more important question of application in real teaching systems. For the final version I would suggest elaborating a bit on this, while shortening the technical part.
+I appreciate the idea of analyzing a corpus of questions submitted to
+Dr. Math. This is an original and powerful idea. The paper then enters
+a rather technical stage in which, to my taste, too much detail is
+given, sacrificing on more important question of application in real
+teaching systems. For the final version I would suggest elaborating a
+bit on this, while shortening the technical part.
 
        
 -------------- End of Referee evaluation ------------------------
@@ -40,19 +45,23 @@ I appreciate the idea of analyzing a corpus of questions submitted to Dr. Math. 
 
 Comments for authors:
 ----------------------
-This is a solid paper; it is on an interesting and relevant topic, and has clear educational utility. The framework chosen makes it easy to try alternate classification algorithms, and there is good justification presented for the algorithms selected -- namely, the need to avoid retraining after each addition to the database.
+This is a solid paper; it is on an interesting and relevant topic, and
+has clear educational utility. The framework chosen makes it easy to
+try alternate classification algorithms, and there is good
+justification presented for the algorithms selected -- namely, the
+need to avoid retraining after each addition to the database.
 
-Perhaps one criticism is that the authors do not link the paper all that well to prior research either in linguistic analysis of student utterances or the educational role of questions -- but all in all, the paper makes a valuable and valid contribution.
+Perhaps one criticism is that the authors do not link the paper all
+that well to prior research either in linguistic analysis of student
+utterances or the educational role of questions -- but all in all, the
+paper makes a valuable and valid contribution.
 
-An important next step would be to see how well the categorizations produced by the system accord to the preferences of the quesion answerers. Will experts agree with its categorizations? Will it be accurate enough that they use it, and that they answer a greater number of questions?
+An important next step would be to see how well the categorizations
+produced by the system accord to the preferences of the quesion
+answerers. Will experts agree with its categorizations? Will it be
+accurate enough that they use it, and that they answer a greater
+number of questions?
 
        
 -------------- End of Referee evaluation ------------------------
 -----------------------------------------------------------------
-
-
-
-
-
-
-
