@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{ios}
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
@@ -11,28 +11,24 @@
 \newcommand{\param}[1]{\texttt{#1}}
 \newcommand{\aicat}{\texttt{AI::Cat\-e\-gor\-i\-zer}}
 
+\begin{document}
 
 \title{Automatic Categorization of Questions for a Mathematics Education Service}
 
-\author{
-{\em Ken Williams, Rafael A. Calvo, David Bell}\\[1ex]
+\author{Ken Williams \and Rafael A. Calvo \and David Bell}
+
+
+\address{
 Web Engineering Group\\
 The University of Sydney\\
 Bldg J03, Sydney NSW 2006\\[1ex]
-{\em {\{kenw,rafa\}}@ee.usyd.edu.au} and
+{\em {\{kenw,rafa\}}@ee.usyd.edu.au},
 {\em dave@student.usyd.edu.au}
 }
 
-\date{}
-
-\begin{document}
-
 \maketitle
-\thispagestyle{empty}
 
-\subsection*{\centering Abstract}
-\noindent
-{\it 
+\begin{abstract}
 This paper describes a new approach to managing a stream of questions about 
 mathematics by integrating a text categorization framework into a relational database 
 management system. The corpus studied is based on unstructured submissions to an 
@@ -40,11 +36,8 @@ ask-an-expert service in learning mathematics. The classification system has
 been tested using a \naive\ Bayes learner built into the framework. The 
 performance results of the classifier are also discussed. The framework was integrated 
 into a PostgreSQL database through the use of procedural trigger functions.
-}
+\end{abstract}
 
-\paragraph{Keywords} 
-Tutoring Systems, Learning Communities, Document Management, Automatic
-Text Categorization
 
 \section{Introduction}
 
