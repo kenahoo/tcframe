@@ -1,0 +1,10 @@
+--- #YAML:1.0
+data_root: corpora/drmath-1.00
+stopword_file: corpora/drmath-1.00/SMART.stoplist
+progress_file: "/tmp/drmath-DTree"
+outfile: "results/drmath-DTree.txt"
+learner_class: "::DecisionTree"
+tfidf_weighting: xfx
+stemming: porter
+features_kept: 0.2
+verbose: 1
