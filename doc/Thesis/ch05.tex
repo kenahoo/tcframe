@@ -42,7 +42,7 @@ they will only slow processing and add noise to the data.
 The ApteMod version of the Reuters-21578 corpus has become a
 standard benchmark corpus in evaluating Text Categorization
 systems.\cite{yang:99} It is a collection of 10,788 documents from the
-Reuters newswire service, partitioned into a training set with 7769
+Reuters financial newswire service, partitioned into a training set with 7769
 documents and a test set with 3019 documents.  The total size of the
 corpus is about 43 MB.  It is available for download from
 \url{http://kdd.ics.uci.edu/databases/reuters21578/reuters21578.html}.
@@ -60,11 +60,26 @@ categories.  There are 90 categories in the corpus.  The average
 number of categories per document is 1.235, and the average number of
 documents per category is about 148, or 1.37\% of the corpus.
 
+Figure \ref{Corpora-catdist} shows the category distribution for all
+four corpora discussed in this section.  The categories are plotted on
+the horizontal axis, and the number of documents per category are
+plotted on the vertical axis using a logarithmic scale.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\linewidth]{figures/Corpora-catdist.pdf}
+\caption{Category distribution for the four test corpora}
+\label{Corpora-catdist}
+\end{center}
+\end{figure}
+
+
 \subsection{DrMath}
 
 The DrMath corpus is a collection of 6,630 English-language messages
 sent to the ``Ask Dr. Math'' question-and-answer service for
-students.\cite{drmath} Each message belongs to one or more categories,
+students.\cite{drmath} Each message has been manually assigned by a
+domain expert to one or more categories,
 with category names indicating both math topic and grade level,
 e.g. ``High School Geometry.''  There are 95 categories in the
 category set.  The ontology is generally not
@@ -85,7 +100,7 @@ The corpus is not available for direct download, but interested
 parties may contact the author for details.
 
 
-\subsection{Signal G (sensitivity)}
+\subsection{Signal G (Sensitivity)}
 
 The Signal G corpus consists of 122,919 financial announcement
 documents from the Australian Stock Exchange\cite{asx:02} issued
@@ -104,7 +119,7 @@ test set of 41,105 documents.  The total size of the corpus is about
 342 MB.  Of the 122,919 corpus documents, about 34.0\% are marked as
 market sensitive.
 
-\subsection{Signal G (report type)}
+\subsection{Signal G (Report Type)}
 
 The same documents in the previous corpus can also be tagged with a
 ``report type'' category.  This category indicates the type of
