@@ -157,7 +157,7 @@ the application developer creates a dedicated categorization server
 which communicates over a data socket with clients.  The main
 application (such as the web server or database described above)
 communicates over a data socket with the categorization server.
-Recent standardizations in protocols such as SOAP or XML/RPC
+Recent standardizations in protocols such as SOAP or XML/RPC (XXX-need to define SOAP & XML/RPC)
 \cite{XXX-xmlrpc} have provided commonly-available, easy-to-use tools
 for creating these kinds of applications, and since a single
 categorization server can provide services to multiple application
@@ -214,7 +214,7 @@ classes in the \aicat\ framework.  Note that this diagram
 illustrates the \emph{capabilities} of the framework more than it
 illustrates its \emph{architecture}.  For instance, the framework
 currently understands several document types, including plain text
-documents and documents in the ``SMART'' format.  If the framework is
+documents and documents in the ``SMART'' format (XXX-need SMART reference).  If the framework is
 extended by writing additional subclasses of existing classes, the
 capabilities increase without changing the basic architecture of the
 framework.
@@ -257,6 +257,8 @@ Some examination of the basic relationships between classes and the
 responsibilities of each class is helpful before looking at the design
 in more detail.  The major classes in the \aicat\ framework
 are:
+
+XXX - the following descriptions need UML boxes with attributes/operations.
 
 \begin{description}
 
@@ -888,6 +890,11 @@ constructors directly.  Framework code doesn't create subordinate
 objects directly, but defers creation to factory methods inherited
 from superclasses.  In this way, subclassing is kept to a minimum, and
 the framework runtime structure can be highly parameterized.
+
+\section{Examples}
+
+XXX - Some example usage here (From Rafael: ``The slides you used in
+your last seminar would be great'')
 
 \section{Limitations}
 

@@ -15,6 +15,13 @@ being extensible using common framework extension techniques.
 \section{Automatic Text Categorization}
 \label{tc-intro}
 
+XXX - need to have more of a summary about why TC and IR are important
+(from Rafael: ``start with an overview of why TC and IR are important,
+in layman terms.  You need to sell the need for your work, you can not
+start with the description of vector models. You can mention
+information overload, the need for knowledge management, document and
+email filetering and routing, etc'')
+
 The field of automatic Text Categorization is an extremely active area
 of current research and application.  It is a multi-disciplinary
 field, attracting attention from the Linguistics, Computer Science,
@@ -28,7 +35,11 @@ algorithms that can process natural-language documents, assigning zero
 or more user-defined labels to them based on their content.  More
 formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
 previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
-function that maps from $\docs$ to the set of all subsets of $\cats$.  In
+function that maps from $\docs$ to the set of all subsets of $\cats$.
+
+XXX - create a diagram of a classifier's action on sets
+
+In
 some applications, categorizers assign only a single label to each
 document, so a categorizer is often a function that maps directly from
 $\docs$ to $\cats$.  Often an intermediate function is useful for ``soft'' or 
@@ -49,9 +60,11 @@ what sorts of categories.  Algorithms can then be developed that make
 generalizations about the relationship between document content and
 document category, encoding these generalizations in the learned algorithm.
 
-\section{Object Frameworks}
+\section{Object-Oriented Application Frameworks}
 
-A framework is a large-scale unit of reusable code in object-oriented
+An Object-Oriented Application Framework (hereafter referred to simply
+as a ``framework'') is a large-scale unit of reusable code in
+object-oriented
 software development.  Frameworks were developed in response to
 situations requiring fine-grained control over the \ldots XXX \ldots
 
@@ -140,7 +153,8 @@ Chapter \ref{background-tc} gives a detailed account of the technical
 issues in Text Categorization that a TC framework must take into
 account.  Chapter \ref{design} discusses design issues in creating the
 \aicat\ framework, motivating the design by consideration of the
-framework's audience and common usage scenarios.  Chapter
+framework's audience and common usage scenarios, and showing some of
+the limitations of the framework's design.  Chapter
 \ref{Implementation} is a short discussion of implementation issues.
 Chapter \ref{Evaluation} evaluates the framework from several
 different perspectives, and Chapter \ref{Conclusion} concludes.

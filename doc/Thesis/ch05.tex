@@ -14,6 +14,23 @@ the framework performs on these data sets, and Section
 framework.  Section \ref{Applications} discusses the ease of use of
 the framework in different contexts.
 
+\begin{comment}
+XXX - Rafael says:
+I think the structure/headings should be changed to 
+emphasize each application
+5.1 Aptemod
+    why Aptemod, imprtance, references, etc.
+      5.1.1 Description of data
+      5.1.2 Experiment results
+
+      5.2 Dr, Math
+        why
+	5.2.1 Sta description
+	5.2.2 Reulst
+
+	etc.
+\end{comment}
+
 
 \section{Corpora}
 \label{Corpora}
@@ -48,10 +65,15 @@ they will only slow processing and add noise to the data.
 \subsection{ApteMod}
 
 
-The ApteMod version of the Reuters-21578 corpus has become a
-standard benchmark corpus in evaluating Text Categorization
-systems.\cite{yang:99} It is a collection of 10,788 documents from the
-Reuters financial newswire service, partitioned into a training set with 7769
+The ApteMod version of the Reuters-21578 corpus has become a standard
+benchmark corpus in evaluating Text Categorization
+systems.\cite{yang:99,joachims:98} In terms of evaluating the \aicat\
+framework, it provides an opportunity to compare the performance of
+\aicat\ with other implementations of the same TC algorithms so that
+the correctness of the present implementation can be verified.
+
+ApteMod is a collection of 10,788 documents from the Reuters financial
+newswire service, partitioned into a training set with 7769
 documents and a test set with 3019 documents.  The total size of the
 corpus is about 43 MB.  It is available for download from
 \url{http://kdd.ics.uci.edu/databases/reuters21578/reuters21578.html}.
@@ -84,6 +106,9 @@ plotted on the vertical axis using a logarithmic scale.
 
 
 \subsection{Dr. Math}
+
+XXX - provide more information about what this data set means for
+\aicat\ - Rafael says ``real world e-learning application''
 
 The Dr. Math corpus is a collection of 6,630 English-language messages
 sent to the ``Ask Dr. Math'' question-and-answer service for
