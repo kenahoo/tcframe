@@ -8,5 +8,6 @@ training_set:  '/home/rafa/share/corpus/SignalG/training'
 test_set:      '/home/rafa/share/corpus/SignalG/test'
 stopword_file: '/home/rafa/share/corpus/SignalG/SMART.stoplist'
 progress_file: '/home/rafa/share/corpus/SignalG/tmp/signalg-sens-NB'
+outfile: "results/signalg-sens-NB.txt"
 category_file: '/home/rafa/share/corpus/SignalG/cats-sensitivity.txt'
 verbose: 1
