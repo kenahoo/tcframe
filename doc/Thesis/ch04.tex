@@ -64,7 +64,7 @@ the \aicat\ project, which provides the following benefits.
 \label{constructor-methods}
 
 To implement the behavior discussed in Sections \ref{ml-config} and \ref{factory-method},
-the \class{Class::Container} module from CPAN\footnote{The
+the \class{Class::Con\-tain\-er} module from CPAN\footnote{The
 \class{Class::Container} module was written by Ken Williams for a
 previous project\cite{rolsky:02} and greatly extended for the \aicat\
 project.} implements the abstract parent class \aclass{ObjectFactory}
@@ -211,12 +211,53 @@ the \aicat\ framework.  Another \class{FeatureVector} subclass
 (\class{FeatureVector::FastDot}) which uses a greatly simplified
 version of the same structure, optimized for repeated dot-product
 calculations but otherwise identical to the standard
-\class{FeatureVector} class, has been completed.  However, because it
+\class{Fea\-ture\-Vec\-tor} class, has been completed.  However, because it
 will be rendered largely obsolete by the other project underway, it
-will probably not become a part of the framework.
+will probably not become a part of the framework distribution.
 
 \subsection{Sets of Documents or Categories}
 
-The \class{KnowledgeSet} class needs to keep track of 
+In several places in the \aicat\ code, sets of Document or Category
+objects need to be created and manipulated.  This needs to be done in
+such a way that insertion, deletion, iteration, and retrieval are all
+very fast operations, because these operations will be fundamental to
+most \class{Learner}s' training methods.
 
-\subsection{XXX-what else?}
+To fulfull the above requirements, a Perl hash structure is used to
+store sets of objects, and this structure is encapsulated in the
+\class{ObjectSet} class.  This class imposes two restrictions on its
+usage.  First, because the keys in Perl hashes must be strings, each
+object stored in an \class{ObjectSet} must be identified by a string,
+which must be given by the value of the object's \method{name}
+method.  Second, because hashes store their elements in an order that
+makes each of the four above-mentioned operations \texttt{O[1]}
+operations, any inherent ordering of the Document or Category objects
+is lost.
+
+\subsection{Saving state}
+\label{saving-state}
+
+In order to store the state of a trained categorizer, of a
+\class{KnowledgeSet} containing a training corpus, or of any other
+important object in the \aicat\ framework, a generic interface has
+been created for the serializing of objects to disk and the subsequent
+restoring of the serialized structure back into an object in memory.
+Two object methods, \method{save\_state} and \method{restore\_state},
+are defined in the \class{Storable} class\footnote{This discussion
+  refers to the \class{AI::Categorizer::Storable} module, not the
+  \class{Storable} module available on CPAN.  In fact, the
+  \class{Storable} CPAN module is used internally by
+  \class{AI::Categorizer::Storable} to perform the data serialization,
+  but this is not visible to the developer.}, from which the other
+framework classes inherit.
+
+The default implementation of \method{save\_state} merely traverses
+the given object's internal data structure, storing the object's
+Perl-level structure as a file in a directory.  The directory path is
+specified by the caller.
+
+Classes that use non-Perl data structures (for instance, classes like
+\class{Learn\-er::SVM} or \class{Learner::DecisionTree} that use
+structures implemented in external \texttt{C} code) may override the
+default \method{save\_state} method in order to invoke alternative
+serialization mechanisms.
