@@ -141,7 +141,7 @@ also mass-categorize the \class{Documents} in a \class{Collection} object.
 
 Each text document is represented by a \class{Document} object, or an object
 of one of its subclasses.  Each document class contains methods for
-turning a bunch of data into a \class{FeatureVector}.  Each document also has
+turning document data into a \class{FeatureVector}.  Each document also has
 a method to report which categories it belongs to.
 
 \item[Category]
@@ -188,15 +188,50 @@ etc.) of a \class{Learner} on a collection of test documents.
 
 \item[AI::Categorizer]
 
-XXX need to write about the umbrella class
+An umbrella class \aicat\ sits above the rest of the classes,
+providing a convenient interface to a complete system for text
+categorization.  Most applications built using the framework will
+instantiate an object of this class.  Note that the term \aicat\ can
+refer either to the framework as a whole, or to the umbrella class.
+The distinction will be made clear in the text where it is necessary
+to do so.
 
 \end{description}
 
 \section{Design Patterns in \aicat}
 
-In order to shed light on the design of the \aicat\ framework,
-XXX \ldots.
+The real power and intellectual content of any framework lies not in
+the design of its individual classes, but in the interfaces between
+the classes and the way objects collaborate to solve problems in the
+framework's application domain. \cite[p. 31]{fayad:99} These
+relationships can be quite complicated and difficult to explain, yet
+understanding them is essential to understanding the framework.
 
+In order to shed light on the design of complex object-oriented
+systems, many researchers and software developers have tried to
+standardize language and notation for class and object relationships.
+There is as yet no universally accepted terminology for describing
+these relationships, but one common practice is to use so-called
+``design patterns'' to provide a baseline grammar for discussing
+commonly seen patterns of cooperation in object-oriented
+design. \cite[p. 3]{gamma:95} The design patterns do not provide
+prescriptions for software design, but rather descriptions of best
+practices in common situations.  Most design patterns in
+\cite{gamma:95} include discussions of various trade-offs in their
+application, indicating that a design pattern is actually a family of
+similar solutions to a problem, not one rigid solution.
+
+In this section, certain important local structures in the \aicat\
+framework design will be discussed using the language of design
+patterns.  The ``Iterator,'' ``Composite,'' ``Adapter,'' ``Strategy,''
+and ``Factory Method'' patterns are discussed, and specific examples
+from \aicat\ show how they are applied within the framework.  These
+are not by any means the only instances of common design patterns in
+the framework, nor do they give complete coverage of all
+design-related issues involved in \aicat.  But the patterns provide a
+starting point for design discussion, and their use has been found
+beneficial in many arenas \cite{granlund:99}, so they are used here in
+the hope that they clarify the issues involved.
 
 \subsection{Iterator}
 
