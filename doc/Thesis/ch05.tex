@@ -380,7 +380,7 @@ exactly, and in some cases the \aicat\ framework lacks certain
 features mentioned in \cite{yang:99}.  These differences will be
 discussed below.
 
-\begin{table} \label{aptemod-results}
+\begin{table}
 \begin{center}
 \begin{tabular}{|r c c c c c c c|}
 \hline
@@ -395,9 +395,10 @@ Baseline  &   .0135  &  .0142  &  .0137  &  .1645     &  .1664    &  .1654    & 
 \end{tabular}
 \end{center}
 \caption{Results of \aicat\ on ApteMod corpus}
+\label{aptemod-results}
 \end{table}
 
-\begin{table} \label{aptemod-yang}
+\begin{table}
 \begin{center}
 \begin{tabular}{|r c c c c c c c|}
 \hline
@@ -410,6 +411,7 @@ kNN & ? & ? & .5242 & .8339 & .8807 & .8567 & .00385 \\
 \end{tabular}
 \end{center}
 \caption{Results from \cite{yang:99} on ApteMod corpus}
+\label{aptemod-yang}
 \end{table}
 
 In the case of the \naive\ Bayes categorizer (NB), the results match
@@ -478,6 +480,33 @@ this corpus. \cite{yang:97}
 
 
 \subsubsection{Dr. Math}
+
+Table \ref{drmath-results} shows the categorization performance of
+\aicat\ on the Dr. Math corpus.  Note that the baseline micro-averaged
+scores are much lower than on the ApteMod corpus (see Table
+\ref{aptemod-results}), indicating that this may be a more difficult
+categorization task simply because the category distribution is a bit
+more flat than in ApteMod.
+
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|r c c c c c c c|}
+\hline
+%              maR       maP       maF1      miR          miP         miF1
+method    & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ &   error \\
+\hline
+NB        &   .2338  &  .2677  &  .2358  &  .3766     &  .3542    &  .3651    &  .0215  \\
+SVM       \\
+kNN       &   .2343  &  .2692  &  .2128  &  .3602     &  .3501    &  .3551    &  .0215  \\
+Baseline  &   .0156  &  .0176  &  .0161  &  .0406     &  .0421    &  .0413    &  .0310  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Results of \aicat\ on Dr. Math corpus}
+\label{drmath-results}
+\end{table}
+
 \subsubsection{Signal G (Sensitivity)}
 \subsubsection{Signal G (Report Type)}
 
