@@ -5,4 +5,6 @@ progress_file: "/tmp/drmath-KNN"
 learner_class: "::KNN"
 tfidf_weighting: xfx
 stemming: porter
+threshold: 0.12
+k_value: 15
 verbose: 1
