@@ -5,3 +5,5 @@ Thesis.toc
 *.bbl
 *.blg
 *.aux
+*.lof
+*.lot
