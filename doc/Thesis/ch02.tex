@@ -345,7 +345,41 @@ XXX - need to write
 
 \subsection{k-Nearest-Neighbor}
 
-XXX - need to write
+The k-Nearest-Neighbor algorithm (kNN) is one of the most conceptually
+simple TC algorithms in the literature.  All documents in $\train$ are
+considered as vectors in a space with a similarity measure $m: \docs
+\times \docs \to \mathbb{R}$.  To determine whether an unseen document
+$d_i$ is assigned to a category $c_j$, the $k$ most similar documents
+to $d_i$ using the measure $m$ are determined, where $k$ is a
+user-adjustable parameter.  If the number of these $k$ documents that
+belong to $c_j$ (possibly weighted by the similarity measure $m$ for
+each similar document) is greater than some pre-defined threshold,
+then $d_i$ is assigned to $c_j$, and otherwise not.  This technique
+has been described in \cite[p. 28]{sebastiani:02}, \cite{yang:99}, and
+\cite{yang:97}, among others.
+
+The choices for the $k$ parameter, the category-membership threshold,
+the similarity function $m$, and how to map from the similarity scores
+$m$ to the overall score for $c_j$ provide for many variations on the
+standard algorithm.  For instance, a single membership threshold may
+be used for all categories, or a different threshold may be used for
+each category, possibly learned by optimizing performance on a
+validation set.  In addition, if more than one document is being
+categorized in a batch operation, several differing strategies for
+thresholding may be employed that take advantage of the overall
+proportions of documents that belong to each category.\cite{yang:01}
+
+Although the k-Nearest-Neighbor algorithm is conceptually simple, it
+is computationally intensive.  Unless thresholds are learned from a
+validation set, there is no actual training stage when building a
+categorizer---all decisions are made by computations performed during
+categorization.  The time to train a kNN categorizer is therefore
+minimal or null, but the time to categorize a single unseen document
+scales linearly with $|\train|$ and must be performed in full for each
+categorization.  In addition, the entire training corpus $\train$ must
+be preserved in the categorizer's model, so memory or storage
+requirements may be prohibitively high in some environments.
+
 
 \section{Related products}
 
