@@ -57,7 +57,7 @@ training set $\train$ and a test set $\test$.
 Unless otherwise noted below, a list of common English words from
 \cite{salton:89} was used as a ``stoplist,'' or a set of terms to
 completely ignore when processing documents.  This is a common technique from
-Information Retrieval,\cite{XXX-manning} as it is assumed that these words
+Information Retrieval,\cite[ch. XXX]{manning:99} as it is assumed that these words
 possess little or no information about the target categories, and that
 they will only slow processing and add noise to the data.
 
@@ -449,7 +449,7 @@ Baseline  &   .0452  &  .0286  &  .0286  &  .0356     &  .0354    &  .0355    & 
 
 In order to assess the efficiency of the implementations in \aicat,
 the running times and memory usage of the framework on the tasks in
-Section \ref{results} are reported here.  All tests were performed on
+Section \ref{Quality} are reported here.  All tests were performed on
 a Sun Ultra-Enterprise server running Solaris 7, with a processor
 speed of 400 Mhz, and with 2040 Megabytes of RAM.  The software used
 was a pre-release version of \aicat\ version 0.05, running under perl
@@ -502,7 +502,7 @@ Signal G   & SVM &   &   &  &  \\
 Signal G   & SVM &   &   &  &  \\
   (RT)     & kNN &   &   &   & \\ \hline
 \end{tabular}
-\caption{Resource usage for the experiments in Section \ref{results}.
+\caption{Resource usage for the experiments in Section \ref{Quality}.
   Measurements are given as \emph{time}/\emph{memory}.}
 \label{efficiency-drmath}
 \end{table}
