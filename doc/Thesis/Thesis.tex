@@ -19,7 +19,7 @@
 
 % Some custom commands I use
 \newcommand{\naive}{Na\"\i ve}
-\newcommand{\aicat}{\class{AI::Cat\-e\-gor\-i\-zer}}
+\newcommand{\aicat}{\class{AI::\-Cat\-e\-gor\-i\-zer}}
 
 \newcommand{\cats}{\mathcal{C}}
 \newcommand{\docs}{\mathcal{D}}
@@ -83,6 +83,11 @@
 \include{ch05}
 \include{ch06}
 
+\backmatter
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{plain}
+\bibliography{TC-references}
+
 \appendix
 \addcontentsline{toc}{chapter}{Appendix A: A Framework for Text Categorization}
 \includepdf[pages=-]{ap01.pdf}
@@ -91,14 +96,7 @@
 \includepdf[pages=-]{ap02.pdf}
 \addcontentsline{toc}{chapter}{Appendix C: Automatic Categorization of Questions \\
                                for a Mathematics Education Service}
-% XXX - need to indicate where/when appendix C was published.
 \includepdf[pages=-]{ap03.pdf}
 
-
-% XXX - need to move \cite stuff before periods
-\backmatter
-\addcontentsline{toc}{chapter}{Bibliography}
-\bibliographystyle{plain}
-\bibliography{TC-references}
 
 \end{document}
