@@ -12,7 +12,7 @@
 
 % \linespread{1.6}
 
-% \includeonly{ch05}
+% \includeonly{ch03}
 
 \title{A Framework for Text Categorization}
 \author{Ken Williams}
@@ -35,6 +35,24 @@
 \newenvironment{code}%
  {\rule{\textwidth}{1pt}\verbatim}%
  {\endverbatim\rule{\textwidth}{1pt}}
+
+\newenvironment{classbox}[1]%
+ {\begin{tabular}{|l|}
+  \hline \multicolumn{1}{|c|}{#1}}%
+ {\\ \hline
+  \end{tabular}}
+
+\newcommand{\attributes}{\\ \hline}
+\newcommand{\methods}{\\ \hline}
+
+\newenvironment{abstractclass}[1]%
+ {\begin{classbox}{\textit{#1}}}%
+ {\end{classbox}}
+
+\newenvironment{concreteclass}[1]%
+ {\begin{classbox}{\textbf{#1}}}%
+ {\end{classbox}}
+
 
 \begin{document}
 
