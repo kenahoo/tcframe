@@ -893,8 +893,86 @@ the framework runtime structure can be highly parameterized.
 
 \section{Examples}
 
-XXX - Some example usage here (From Rafael: ``The slides you used in
-your last seminar would be great'')
+Some simple example code may illustrate the basic usage of the \aicat\
+framework.  Figure \ref{high-level-interface} shows the highest-level
+interface usage, in which an entire experiment---training on a
+training corpus, testing on a test set, and showing results on the
+terminal screen---is performed by setting appropriate parameters in
+the constructor of the highest-level \aicat\ object.  These parameters
+may include \param{learner\_class} for specifying the class of machine
+learner that should be used, \param{stopword\_file} for specifying a
+file containing a list of stop words, or \param{stemming} to indicate
+what type of linguistic stemming, if any, should be performed on the
+document data.  The generic Factory Method mechanism described in
+Section \ref{factory-method} ensures that each parameter becomes an
+argument to the appropriate object constructor method.
+
+\begin{figure}
+\rule{\textwidth}{1pt}
+\begin{verbatim}
+use AI::Categorizer;
+my $c = new AI::Categorizer(...parameters...);
+$c->run_experiment;
+\end{verbatim}
+\rule{\textwidth}{1pt}
+\caption{Highest-level interface to \aicat}
+\label{high-level-interface}
+\end{figure}
+
+Figure \ref{medium-level-interface} shows a slightly lower-level
+interface to the framework.  Here, the individual stages of the
+\method{run\_experiment} method from Figure \ref{high-level-interface}
+are run separately, and may in fact be run in separate programs on
+different machines if the \param{progress\_file} parameter is used in
+order to save state between the stages.
+
+\begin{figure}
+\rule{\textwidth}{1pt}
+\begin{verbatim}
+use AI::Categorizer;
+my $c = new AI::Categorizer(...parameters...);
+
+# Run the separate parts of $c->run_experiment
+$c->scan_features;
+$c->read_training_set;
+$c->train;
+$c->evaluate_test_set;
+print $c->stats_table;
+\end{verbatim}
+\rule{\textwidth}{1pt}
+\caption{Separate invocations of experimental phases}
+\label{medium-level-interface}
+\end{figure}
+
+In an applied setting, the application developer may need much finer
+control over the object behavior.  For instance, the developer may not
+be very interested in the overall performance on a test set, but
+rather in the specific decisions of the trained categorizer on
+documents presented to it by users.  Figure
+\ref{application-interface} demonstrates one simple such application,
+in which the trained categorizer is loaded into memory using the
+\method{restore\_state} method, then repeatedly asked to categorize
+documents using the \method{categorize} method.  Here the application
+uses the \method{best\_category} method to select only the single
+category with the best score, but another application may require
+different information from the \class{Hypothesis} object \texttt{\$h}.
+
+\begin{figure}
+\rule{\textwidth}{1pt}
+\begin{verbatim}
+my $l = AI::Categorizer::Learner->restore_state(...);
+while (...) {
+  my $d = ...create a document...
+  my $h = $l->categorize($d);
+  print "Best category: ", $h->best_category, "\n";
+}
+\end{verbatim}
+\rule{\textwidth}{1pt}
+\caption{Using \aicat\ for direct categorization of documents}
+\label{application-interface}
+\end{figure}
+
+
 
 \section{Limitations}
 
