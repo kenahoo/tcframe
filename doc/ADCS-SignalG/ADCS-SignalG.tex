@@ -40,11 +40,6 @@ In this paper we assess performance on two tasks: ``report type'' and ``market s
 
 The Signal G documents are created as follows: the ASX's Company Announcement Platform (CAP) receives the announcements produced by organizations (by fax, email or other means), processing and centralizing all the information that is then delivered through the Signal G feed. The processing may include several filtering steps -- for instance, the announcement may be summarized if it is beyond a certain length.  After such processing, each announcement is manually assigned to one of 144 report types, and is classified as either market sensitive or not. From the total 136,630 documents used, 46,530 are marked as sensitive and 90,100 as not sensitive. For this last assignment one or more human classifiers (based on experience) state whether or not the document may have an effect on the value of the share, volume of trading, or other market measurements.  Table \ref{signalg-sensitivity} shows the distribution of documents with respect to the sensitivity category, as well as our split between training and testing documents.
 
-The report type labels are highly skewed across categories.  The most common category, ``XXX,'' contains XXX documents, while the least common category, ``XXX,'' contains only XXX documents.  In order to quantify this skew more precisely, we use a dimensionless statistical measure defined as the standard deviation of a set divided by its mean. For our report type task, the average number of documents per category is XXX and the standard deviation is XXX, giving a skew of XXX.  This quantity allows for comparison with other well-known corpora such as the Reuters-21578 Mod Apté benchmark corpus, which contains 90 categories, an average of 148.09 documents per category with a standard deviation of 491.84, and thus a skew of 3.32.  A more complete picture of the report type category distribution can be seen in Figure \ref{signalg-reptype}.
-
-Signal G is available to the public, member organizations, and information vendors.  Our data set was supplied by the Capital Markets Collaborative Research Centre.  For future groups who receive permission from the CMCRC to work with this data, we have converted it into an XML format.
-
-
 \begin{table}
 \begin{tabular}{|r|r|r|r|}
 \hline
@@ -61,11 +56,18 @@ Total    & 46530     & 90100        & 136630\\
 \label{signalg-sensitivity}
 \end{table}
 
+The report type labels are highly skewed across categories.  The most common category, ``XXX,'' contains 10,064 documents, while ten categories have fewer than five documents each.  In order to quantify this condition more precisely, we use a statistical measure we call the "skew," defined as the standard deviation of the number of documents per category divided by the total number of documents: $skew$ $=$ $\frac{\textrm{stddev}(x_i)}{n}$ $=$ $\textrm{stddev}(\frac{x_i}{n})$, where $x_i$ is the number of documents belonging to category $i$, and $n$ is the total number of documents in the corpus.  Since the skew numbers are typically small, we express them as percentages.
+
+For our report type task, the standard deviation in the number of documents per category is 1998.6 and the number of documents is 136,630, giving a skew of 0.0146 or 1.46\%.  This quantity allows for comparison with other well-known corpora such as the Reuters-21578 Mod Apt\'e benchmark corpus, which contains 10,788 documents with a category membership standard deviation of 491.84, and thus a skew of 4.56\%.  Therefore, our Signal G data, while highly skewed, is not as skewed as the Reuters-21578 set.  A more complete picture of the report type category distribution can be seen in Figure \ref{signalg-reptype}.
+
 \begin{figure}
 XXX need figure here
-\caption{Distribution of report type category by number of documents}
+\caption{Report type category distribution in Signal G}
 \label{signalg-reptype}
 \end{figure}
+
+Signal G is available to the public, member organizations, and information vendors.  Our data set was supplied by the Capital Markets Collaborative Research Centre.  For future groups who receive permission from the CMCRC to work with this data, we have converted it into an XML format.
+
 
 
 \section{Methods}
