@@ -284,9 +284,6 @@ to the member attributes).  For a complete reference, please see the
 \subsection{Framework classes}
 \label{framework-classes}
 
-\begin{description}
-
-\item
 \begin{concreteclass}{KnowledgeSet}
  \attributes
   \attr[Document\s]{documents} \\
@@ -313,7 +310,7 @@ and \class{Category} objects.  It uses a \class{FeatureSelector} object to perfo
 feature selection.  It also contains a \class{FeatureVector} object
 representing the features present in all documents.
 
-\item
+
 \begin{abstractclass}{FeatureSelector}
  \attributes
   \attr[number]{features\_kept}
@@ -347,7 +344,7 @@ A concrete \class{FeatureSelector::DocFrequency} subclass implements
 these methods, and may therefore be used in a blackbox manner for
 feature selection.
 
-\item
+
 \begin{abstractclass}{Collection}
  \attributes
   \attr[hash]{category\_hash}
@@ -396,7 +393,7 @@ framework.  For instance, a \class{KnowledgeSet} instantiates its Document and
 \class{Category} objects through a \class{Collection} object.  A \class{Learner} object may
 also mass-categorize the \class{Documents} in a \class{Collection} object.
 
-\item
+
 \begin{concreteclass}{Document}
  \attributes
   \attr[string]{name} \\
@@ -430,7 +427,7 @@ method is not a problem in this case.  This can make subclassing
 unnecessary for special-purpose types of ``documents'' like images or
 sequences of biological data.
 
-\item
+
 \begin{concreteclass}{Category}
  \attributes
   \attr[string]{name} \\
@@ -458,7 +455,7 @@ different kind of aggregate representation of a \class{Category} than
 a simple vector sum, then the \method{documents} method should be used
 to construct it manually.
 
-\item
+
 \begin{abstractclass}{Learner}
  \attributes
  \methods
@@ -483,7 +480,7 @@ information in terms of per-category scores and a membership
 threshold, and \method{categorize} translates this data into a
 \class{Hypothesis} object representing the categorization.
 
-\item
+
 \begin{concreteclass}{FeatureVector}
  \attributes
   \attr[hash]{features}
@@ -507,7 +504,7 @@ The default implementation of the \class{FeatureVector} class stores
 its data in a Perl hash.  See Section \ref{imp-featurevectors} for
 discussion of an alternate approach.
 
-\item
+
 \begin{concreteclass}{Hypothesis}
  \attributes
   \attr[Category\s]{all\_categories} \\
@@ -531,7 +528,7 @@ appropriateness score for each category and a threshold for category
 membership.  Any category whose score is above the threshold is
 considered assigned by the system to the given document.
 
-\item
+
 \begin{concreteclass}{Experiment}
  \attributes
   \attr[Category\s]{categories}
@@ -563,7 +560,7 @@ and implements a \method{stats\_table} method for showing the a
 summary of the data in table format with a specified number of
 significant figures.
 
-\item
+
 \begin{concreteclass}{AI::Categorizer}
  \attributes
   \attr[KnowledgeSet]{knowledge\_set} \\
@@ -611,7 +608,6 @@ and the \method{evaluate\_test\_set} method invokes the
 collection.  A \method{run\_experiment} method automates the running
 of these four methods and shows the user a summary of the results.
 
-\end{description}
 
 \section{Design Patterns in \aicat}
 
