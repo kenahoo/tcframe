@@ -3,6 +3,7 @@
 use strict;
 use AI::Categorizer;
 use AI::Categorizer::Learner::NaiveBayes;
+use AI::Categorizer::Learner::Guesser;
 use AI::Categorizer::Collection::Files;
 use Statistics::Contingency;
 
