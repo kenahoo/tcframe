@@ -108,13 +108,17 @@ Second, a mechanism that can deal with iterating through the native
 storage medium of the documents without reading all document data into
 memory is probably necessary in a TC system.
 
+XXX - discuss David's work with RDBMS
+
 \subsection{Document format}
 \label{Document format}
 
 Although most of the academic TC literature considers a document to be
 a simple plain text string of data, this may rarely be the case in an
 application environment.  Documents may be stored in many different
-formats, including plain text, HTML, PDF, XML, Microsoft Word .doc
+formats, including plain text, HyperText Markup Language (HTML),
+Adobe's Portable Document format, (PDF), Extensible Markup Language
+(XML), Microsoft Word .doc
 format, MIME-encoded email messages, and so on.  The internal data in
 each document may also be considered part of its format when
 nontrivial amounts of information extraction or other transformations
@@ -148,6 +152,8 @@ documents progresses, this may be an fruitful area to consider in
 building TC systems.
 
 \subsection{Tokenizing of data}
+
+XXX - clarify relationship between word, token, and feature
 
 The segmenting of text data into chunks representing individual words
 may seem like a straightforward task, but in fact there are many
@@ -187,10 +193,11 @@ dimensionality of the space in which the Machine Learning algorithm
 operates can be as large as the total number of distinct terms in
 $\train$.
 
-High dimensionality may present two problems.  First, the Machine Learning
-algorithm may scale poorly with increased dimensionality, so that
-the training or categorization phases of the system's operation may
-require more time or memory than is practical. \cite{chakrabarti:98} Second, the
+High dimensionality may present two problems.  First, some Machine
+Learning algorithms may be efficient on low-dimensional data, but they
+may require more time or memory than is practical when the
+dimensionality of the data set is too high. \cite{chakrabarti:98}
+Second, the
 $\train$ data in a high-dimensional space may be too sparse, with
 not enough nonzero data points to make any useful inductive leap
 during training.  This is particularly true in some highly
@@ -227,6 +234,9 @@ number of documents of $\train$ in which the feature $f_k$ occurs.
 $\chi^2$ is defined in Equation \ref{eqn-x2-def}. $A$, $B$, $C$, and $D$ are
 defined as the terms in the contingency table shown in Table
 \ref{termcat-contingency}.
+
+XXX - explain what a chi^2 score of 1 means, and what 0 means, about
+term/category correlation.
 
 \begin{align} \label{eqn-x2-def}
 \chi^2(f_k,c_j) & = \frac{|\train|(AD-CB)^2}{(A+C)(B+D)(A+B)(C+D)}
@@ -272,8 +282,12 @@ Information Theory. \cite[ch. 2]{manning:99}
 	          - P(\overline{f_k}) \Entr(\cats_{\overline{f_k}})
 \end{equation}
 
+XXX - indicate whether IG has been found to be good, and what good/bad
+IG scores might be.
 
 \subsection{Vector space modeling}
+
+XXX - move this section to before dim-reduction.
 
 The discussion in the previous section suggests that each document may
 be viewed as a vector in a global vector space whose dimensions
@@ -389,6 +403,10 @@ them.  The way in which this is achieved is discussed in Section
 This section describes three Machine Learning techniques that are
 common for Text Categorization: \naive\ Bayes categorizers, Support
 Vector Machines, and k-Nearest-Neighbor categorizers.
+These three techniques were chosen for inclusion here because they
+currently have implementations in the \aicat\ framework and because
+they are included in the well-known study \cite{yang:99}.  Their
+performance is revisited in Chapter \ref{Evaluation}.
 
 \subsection{\naive\ Bayes}
 
@@ -531,6 +549,18 @@ disadvantage of many SVM training algorithms is that they scale poorly
 with $|\train|$, in some cases requiring as much as $O(|\train|^3)$ or
 $O(|\train|^4)$.  This may make their use with large numbers of
 documents prohibitive unless the standard algorithms are modified.
+
+\subsection{Decision Trees}
+
+XXX need to write.
+
+XXX mention scrutability.
+
+Because of time considerations, a need to limit the scope in which
+testing was performed, and the fact that \cite{yang:99} does not
+evaluate Decision Tree categorizers, the discussion in Chapter
+\ref{Evaluation} does not include the Decision Tree categorizer in
+\aicat.
 
 
 \section{Performance Measures}

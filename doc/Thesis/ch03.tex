@@ -180,7 +180,7 @@ data is sensitive or proprietary.
 \subsection{Database cooperation}
 \label{database}
 
-Since organizations may wish to store important data in a relational
+Since organizations often store important data in a relational
 database, a TC framework can provide important services by cooperating
 directly with the database.  This cooperation may involve retrieving
 documents from the database, retrieving document-category membership
@@ -212,7 +212,12 @@ Figure \ref{diagram-key} explains the notational elements used in the
 diagrams in this section.  Because \cite{gamma:95} is heavily drawn
 upon throughout this chapter, a notation closely following its
 notation is used here, with some elements borrowed from common UML
-\cite[ch. 4-5]{booch:98}.
+\cite[ch. 4-5]{booch:98}.  Abstract classes (classes in which key
+functionality is left undefined, and which must be subclassed before
+being used in an application) are represented using italic font faces,
+and concrete (non-abstract) classes are represented using bold font
+face.
+
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/inheritance-uml.pdf}
@@ -338,6 +343,9 @@ the feature selection criterion.  The \method{scan\_features} method
 has the same result, but operates on a \class{Collection} object so
 that the most relevant features can be determined without first having
 to read the entire collection into memory.
+A concrete \class{FeatureSelector::DocFrequency} subclass implements
+these methods, and may therefore be used in a blackbox manner for
+feature selection.
 
 \item
 \begin{abstractclass}{Collection}
