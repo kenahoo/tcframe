@@ -1,5 +1,7 @@
 \documentclass[a4paper,twocolumn]{article}
+\usepackage{verbatim}
 \usepackage{graphicx}
+\usepackage{tabularx}
 
 \title{A Framework for Text Categorization}
 \author{Ken Williams \and Rafael A. Calvo}
@@ -18,9 +20,9 @@ Bldg J03, Sydney NSW 2006\\
 
 In this paper we discuss the architecture of an object-oriented
 application framework (OOAF) for text categorization. We describe the
-system requirements and the software engineering strategies that have
-gone into the design and implementation of the framework.  We show how
-by designing a highly reusable OOAF architecture we can facilitate the
+system requirements and the software engineering strategies that
+form the basis of the design and implementation of the framework.  We show how
+designing a highly reusable OOAF architecture facilitates the
 development of new applications.  We also highlight the key text
 categorization features of the framework, as well as practical
 considerations for application developers.
@@ -29,25 +31,25 @@ considerations for application developers.
 \section{Introduction}
 
 Automatic Text Categorization (TC) has been an active research area
-for over a decade and is increasingly used in the development of
-commercial applications.  These commercial applications usually belong
+for over a decade and is increasingly being used in the development of
+commercial applications.  These commercial applications usually belong to
 one of two system types: in-house systems implemented in order to
-solve a company's specific problems, and generic systems marketed to
+solve a particular company's specific problems, and generic systems marketed to
 corporations as ready-made categorization solutions.  The former tend
 to be ad-hoc solutions not suitable for use by others, and not made
-available for fear of giving one's advantages to the competition.  The
+publicly available.  The
 latter tend to be proprietary, closed-source, expensive solutions
 inaccessible to individuals, small companies, and researchers.
 
-One unfortunate result of this situation is that many techniques or
-design strategies are underdeveloped or not well-known in research or
+One result of this situation is that many techniques and
+design strategies are underdeveloped as they are not well-known to research or
 application communities.  Systems such as Weka \cite{weka:99} or
-Libbow \cite{bow:96} enjoy wide use by the research community, but
+Libbow \cite{bow:96} are widely used by the research community, but
 tend not to focus on integration into real-world applications.  By
 contrast, the commercial systems are often useless for research
 because they are closed-source, generalize poorly to new problems, or
 cost more than most researchers can afford.  Therefore, researchers do
-not get the benefit of leveraging industry's interesting TC
+not get the benefit of leveraging industry's TC
 applications, and industry doesn't get the benefit of the latest
 developments and knowledge from the research community.
 
@@ -57,8 +59,8 @@ research.  Our tools should also be accessible to the casual or
 small-time developer interested in TC.  To accomplish this, we have
 implemented a framework for Text Categorization.
 
-Before discussing the details of our framework, some general
-background on frameworks is in order.  Different software engineering
+Before discussing the details of the framework, we will briefly look at some general
+background on frameworks.  Different software engineering
 architectures are used for different sets of requirements.  The most
 common kinds of software architectures include:
 
@@ -68,7 +70,7 @@ common kinds of software architectures include:
 reusability and interfacing with users.  Developer or user
 extensibility need not be considered--the application is considered
 complete as delivered.  A popular example of a classification
-application is the Weka Machine Learning system.  \cite{weka:99}
+application is the Weka Machine Learning system \cite{weka:99}.
 
 \item[Toolkits and libraries] Library developers focus on generic
 reusability for multiple applications.  Examples include the
@@ -92,8 +94,8 @@ categorization algorithms through subclassing.
 
 
 Before deciding on one of these approaches it is important to define
-Text Categorization's main user audience and discern requirements for
-a useful TC system.  We see typical TC users in terms of the following
+the main user audience for text categorization systems in order to determine
+ requirements for a useful TC system.  We see typical TC users in terms of the following
 roles:
 
 \begin{description}
@@ -116,9 +118,7 @@ be effective in the given domain, and needs to exert fine control over
 the TC process.
 \end{description}
 
-Of course, one person may play several of these roles simultaneously,
-but it is helpful to isolate them for discussion to focus on
-fulfilling the user-level requirements for TC applications.
+Of course, one person may play several of these roles simultaneously.
 
 A researcher will most often want to use a TC system as a framework,
 because they need to integrate custom code into the system at a low
@@ -130,7 +130,14 @@ providing no custom code of his or her own.
 
 Given these requirements, we decided to implement our software as a framework rather than as an application or set of libraries.  One reason for this is that a framework can easily be turned into an application by providing a simple wrapper application, and it can be turned into a library by providing concrete implementation classes.  However, libraries and applications can not typically be turned into frameworks very easily.  Therefore, a framework provides the best coverage for the perceived needs of the TC community.
 
-The framework described in this paper includes classes for managing documents, collections of documents, categorization algorithms, and so on.  The core framework includes both concrete classes like ``Na\"\i ve Bayes Learner'' which may be used without custom development, as well as abstract classes  like ``Boolean Learner'' which require the user to implement certain behaviours before using.  Abstract classes provide a starting point and an interface for new development and reduce repeated work.
+The framework described in this paper includes classes for managing
+documents, collections of documents, categorization algorithms, and so
+on.  The core framework includes both concrete classes like ``Na\"\i
+ve Bayes Learner'' which may be used without custom development, as
+well as abstract classes like ``Boolean Learner'' which require the
+user to implement certain behaviours before using them.  Abstract
+classes provide a starting point and an interface for new development
+and reduce repeated work.
 
 
 \section{Design Requirements}
@@ -139,27 +146,28 @@ A framework must be able to accommodate functionality in a number of essential a
 
 \begin{description}
 \item[Framework reusability] The main reason for building a framework rather than a single text categorization application is to increase reusability of design and implementation.  Framework research literature provides guidelines on building application frameworks \cite{fayad:99}.
-\item[Modularity] The components of the framework should be able to change their internal implementations without affecting the other components.
+\item[Modularity] The components' internal implementations should be able to change  without affecting the other components.
 \item[Integration] The framework should be able to interface easily with existing categorization solutions (e.g. Weka, libbow, various Neural Net libraries, and feature selection packages), uniting many solutions under a common interface.
 \item[Rapid Application Development] Prototyping new applications should be very quick, with a minimum of custom code in each case.  Custom code should generally implement new behaviors rather than new structures within the framework.
 \item[Rapid Research Cycle] Researchers should be able to quickly investigate new questions, using the framework as a starting point.
 \item[Model Flexibility] The framework structure should be flexible enough to accommodate the needs of many different categorization algorithms that may operate on different representations of the underlying data.
-\item[Computational Efficiency] The data sets involved can be quite large so it is important to have a design and implementation that is efficient in memory, CPU time, and other practical measures such as how long it takes to load a categorizer from disk and generate a hypothesis.
+\item[Computational Efficiency] The data sets involved can be quite
+large so it is important to have a design and implementation that is
+efficient in memory, CPU time, and other practical measures such as
+the time it takes to load a categorizer from disk and generate a
+hypothesis.
 \item[Separability] Pieces of the framework should be usable in isolation for users that only need a feature selection package, a vector categorizer, etc.  The most separable pieces of the framework should in many cases be completely separated and available under separate distribution, and used as a software dependency in our framework.
 \end{description}
 
-One of the first decisions that must be made is the language in which the framework will be implemented in.  With the above issues in mind, we have chosen to implement using the Perl programming language. \cite{Wall:00}  The main reasons for this include:
-
-\begin{itemize}
-\item A vast number of Perl modules are freely available for many different tasks, which extends the domain of applicability for the framework.
-\item Perl is a powerful language for text processing, hence it is relatively easy for users of the framework to tune its processing capabilities.
-\item Perl is widely deployed and is part of all standard Unix distributions, as well as available on almost any platform that has a C compiler.
-\item Perl is an expressive high-level language that allows for rapid prototyping, so we can experiment with several different framework designs and processing algorithms.
-\item Other languages can be embedded within Perl.  This allows the framework to use efficient data structures and algorithms provided by other languages if necessary, while keeping the convenient high-level interface in Perl.
-\item Perl can be embedded within applications written in other languages (C, C++, Java), as well as the Apache web server.  This allows for maximum reusability of the framework.
-\item There is an active community of users interested in using a Perl-native text categorization framework.  This community can contribute feedback, code, and momentum to the framework project.
-\item Perl is natively object-oriented, with a very flexible object model. \cite{conway:99}
-\end{itemize}
+With the above issues in mind, we have chosen to implement the
+framework using the Perl programming language. \cite{Wall:00} A vast
+number of Perl modules are freely available for many different tasks,
+which extends the domain of applicability for the framework. Many of
+these modules are tools for processing text, and can be used by the
+framework. Perl is widely used, multi-platform and integrates well
+with other languages, so it enables fast prototyping. Perl is also
+natively object-oriented, with a very flexible object
+model. \cite{conway:99}
 
 In Perl, the basic unit of reusable code is called a \emph{module};
 our framework is implemented as the \texttt{AI::Categorizer} module.
@@ -168,20 +176,29 @@ our framework is implemented as the \texttt{AI::Categorizer} module.
 
 The framework supports several functional areas of Text
 Categorization. We describe them here together with the tradeoffs and
-design decisions that are useful to other researchers developing TC
-systems.  A diagram of the main classes and their relationships is 
-found in Figure \ref{classes}.
+design decisions that may be useful to other researchers developing TC
+systems.
+
+Figure \ref{classes-uml} shows the architecture of the
+framework. Attributes and methods of each class have been removed for
+the sake of brevity. Each of the classes will be discussed in the
+context of their Text Categorization function. \texttt{Categorizer} is
+the top level class, which manages the data-related classes
+(\texttt{KnowledgeSet}, \texttt{Collection}, \texttt{Document} and
+\texttt{Category}), as well as the machine learning classes
+texttt{Learner} and \texttt{Hypothesis}, and a class for reporting the
+results.
+
 
 \begin{figure}
-\includegraphics[width=\linewidth]{classes-uml}
-\caption{The main classes in \texttt{AI::Categorizer}}
-\label{classes}
+\includegraphics[width=\linewidth]{classes-uml.pdf}
+\caption{Simplified UML class diagram for the framework}
+\label{classes-uml}
 \end{figure}
 
-
-\subsection{Data format}
-Documents come in a wide variety of formats such as XML, plain text,
-or PDF documents.  To be useful the framework should support the
+\subsection*{Data format}
+Since documents come in a wide variety of formats such as XML, plain text,
+or PDF, the framework should support the
 importing of knowledge in several formats and have a mechanism by
 which the user may extend these capabilities for a particular
 environment.  The base class \texttt{Document} allows the user to
@@ -209,7 +226,7 @@ rest of the system will throw away the \texttt{Document} object,
 keeping only its \texttt{FeatureVector} object and the list of
 \texttt{Categories} associated with the \texttt{Document}.
 
-\subsection{Structured documents}
+\subsection*{Structured documents}
 Each document may have several sections of content, such as ``body'',
 ``subject'', ``signature'', and so on.  In \texttt{AI::Categorizer},
 the user specifies the content by providing a hash of key-value pairs,
@@ -217,11 +234,11 @@ where the key indicates the name of the section, and the value is a
 string containing the content data.  The user may also specify
 ``weights'' to assign to the features found in each section.  In the
 future, other treatments for the different sections of a document may
-be supported as the research community develops effective ways to use
+be supported as we develop effective ways to use
 this structure.
 
 
-\subsection{Tokenizing of data}
+\subsection*{Tokenizing of data}
 The default implementation tokenizes document data by extracting 
 all non-whitespace byte sequences between word-character 
 boundaries.  This is usually sufficient in English,
@@ -232,7 +249,7 @@ user may subclass the \texttt{Document} class and override its
 may also add other tokenizing options to the default implementation,
 controlled by parameters, if other common tokenizing needs are found.
 
-\subsection{Linguistic stemming}
+\subsection*{Linguistic stemming}
 The default implementation provides support for the Porter stemming
 algorithm, a standard algorithm for removing morphemes from English
 words to obtain their ``stems,'' or root forms.  By default no
@@ -242,7 +259,7 @@ override the \texttt{stem\_words()} method of the \texttt{Document}
 class for custom stemming.  This may be extremely important in highly
 morphological languages or in certain application domains.
 
-\subsection{Feature selection}
+\subsection*{Feature selection}
 Feature selection is handled by the \texttt{KnowledgeSet} class's
 \texttt{scan\_features()} and \texttt{select\_features()} methods.
 The \texttt{select\_features()} method works on an entire
@@ -261,15 +278,15 @@ This is very efficient, and has been shown in \cite{yang:97} to be
 competitive with more elaborate criteria in many common situations.
 We will add more criteria as the project develops.
 
-\subsection{Vector space modeling}
+\subsection*{Vector space modeling}
 The full range of TF/IDF weighting from \cite{salton:88} are
 supported, controlled by a \texttt{tfidf\_weighting} parameter.  If
 the user wants to employ a different weighting scheme, the
 \texttt{weigh\_features()} method in the \texttt{KnowledgeSet} class
 may be overridden.
 
-\subsection{Machine Learning algorithm}
-The choice of which machine learning algorithm should be used is made
+\subsection*{Machine Learning algorithm}
+Choosing machine learning algorithms is done
 by choosing a subclass of the \texttt{Learner} class.  Several
 algorithms have already been implemented including Na\"\i ve Bayes
 \cite{lewis:98}, Support Vector Machines \cite{scholkopf:99}
@@ -298,7 +315,7 @@ correctness) is similar to the performance reported for other
 implementations in \cite{yang:99}.  We believe any discrepancies are
 due to differences in feature selection and/or document tokenizing.
 
-\subsection{Machine Learning parameters}
+\subsection*{Machine Learning parameters}
 Because each ML algorithm may have several implementation parameters
 to control behavior, each \texttt{Learner} subclass accepts different
 parameters.  To facilitate the wide variety of parameters that
@@ -320,7 +337,7 @@ structural classes in the framework.  This goes a long way toward
 reducing the number of classes necessary to implement varying
 behavior.
 
-\subsection{Hypothesis behavior}
+\subsection*{Hypothesis behavior}
 Certain applications (e.g. newswire categorizers) may need to find
 ``all categories that apply'' for each document, whereas other
 applications (e.g. automatic email routers) may only be interested in
@@ -332,7 +349,7 @@ to the scoring decisions of the categorizers.  Methods like
 categorization decisions based on the scores assigned by the
 \texttt{Learner} class.
 
-\subsection{On-line learning}
+\subsection*{On-line training}
 Some machine learning algorithms can easily integrate new knowledge
 into the knowledge base without going through the potentially
 expensive process of re-training the categorizer from scratch.  For
@@ -408,7 +425,7 @@ framework and related existing and new TC software.
 
 \section{Conclusions}
 
-We have created a new framework for Text Categorization which is
+We have developed a new framework for Text Categorization which is
 publicly available and leverages existing work as much as possible.
 We have primary goals of providing usable TC software for application
 developers, researchers, and domain experts, as well as providing
@@ -416,7 +433,7 @@ bridges between existing and new TC software.  Our framework design
 endeavors to embody the key requirements which are common to most work
 in TC, and thus should improve reusability of design and
 implementation in applications that use text categorization.  The
-analysis of its architecture is useful to those embarked in building
+analysis of its architecture may be useful to those embarked in building
 their own TC systems, so we have discussed the design decisions of the
 different functionalities supported by the framework.
 
