@@ -45,21 +45,22 @@ Bldg J03, Sydney NSW 2006\\[1ex]
 {\it 
 This paper describes a new approach to managing a stream of questions about 
 mathematics by integrating a text categorization framework into a relational database 
-management system. The corpus studied is based on unstructured submissions to a 
-question-and-answer service in learning mathematics. The classification system has 
+management system. The corpus studied is based on unstructured submissions to an 
+ask-an-expert service in learning mathematics. The classification system has 
 been tested using a \naive\ Bayes learner built into the framework. The 
 performance results of the classifier are also discussed. The framework was integrated 
 into a PostgreSQL database through the use of procedural trigger functions.
 }
 
 \paragraph{Keywords} 
-XXX Need to write...
+Tutoring Systems, Learning Communities, Document Management, Automatic
+Text Categorization
 
 
 
 \section{Introduction}
 
-Questions and answers services are becoming more common, spanning from standard 
+Ask-an-expert services are becoming more common, spanning from standard 
 customer relationship management to discussion forums in a particular discipline. In 
 general, these online services are supported by domain experts who attempt to answer 
 questions posted via email or web forms. Since these experts often have a single subdomain of expertise it is 
@@ -70,7 +71,7 @@ often the user will either ignore the organization scheme or not know to which a
 question belongs. 
 
 These problems are common within a number of domains. Our test was performed on 
-messages sent to a mathematics question and answer
+messages sent to a mathematics ask-an-expert
 service for students and teachers.\cite{drmath} The issues 
 discussed also apply to other similar systems such as customer relationship 
 management (CRM) and e-learning systems in general. These systems can use an 
@@ -314,7 +315,29 @@ categorizer for comparison.  We give results for the level task, the
 topic task, and a task that uses the separate topic and level
 categorizers to assign a combined category.
 
-Comparing the ``Both'' task to the NB
+Comparing the combined task to the NB results in Table
+\ref{results-main}, we see that separating the categorization task
+into two subtasks hurt overall performance on the combined task.  The
+level task looks promising, but comparing it with the baseline
+categorizer shows that it may not be significantly better than random
+guessing.  However, the performance on the topic task is noteworthy,
+because it is so far above both the baseline categorizer and the
+original NB categorizer.  In addition, the topic assignment may be
+more valuable than the level assignment, because while most students
+will be able to indicate their own age or grade level when asking a
+question, they may not be able to place their own question in an
+appropriate category.
+
+Because the math topics used in this experiment were generated from
+the category names, we ended up with some duplication that may have
+hurt performance.  For example, there are categories called
+``probability.high,'' ``statistics.high,'' and ``prob.stats.middle.''
+This means that the combined list of extracted math topics includes
+``probability,'' ``statistics,'' and ``prob.stats.''  The exact effect
+of this on the categorizers is unknown, but we might expect these
+overlapping categories to confuse the categorizer.  A service such as
+this one may therefore benefit from using more consistent category
+names.
 
 
 \begin{table}
@@ -323,9 +346,9 @@ Comparing the ``Both'' task to the NB
 Task     & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
 Level    & 0.524   & 0.626   & 0.570   & 0.671   & 0.223 \\ \hline
 Topic    & 0.339   & 0.314   & 0.313   & 0.440   & 0.026 \\ \hline
-Both     &    &    &    &    &  \\ \hline
+Both     & 0.187   & 0.181   & 0.166   & 0.223   & 0.035 \\ \hline
 \end{tabular}
-\caption{Performance of \naive\ Bayes classifier on various subtasks.}
+\caption{Performance of \naive\ Bayes classifier on subtasks.}
 \label{results-NB}
 \end{table}
 
@@ -335,21 +358,14 @@ Both     &    &    &    &    &  \\ \hline
 Task     & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
 Level    & 0.326   & 0.319   & 0.322   & 0.468   & 0.328 \\ \hline
 Topic    & 0.029   & 0.027   & 0.027   & 0.067   & 0.041 \\ \hline
-Both     &    &    &    &    &  \\ \hline
+Both     & 0.015   & 0.010   & 0.011   & 0.035   & 0.027 \\ \hline
 \end{tabular}
-\caption{Performance of baseline classifier on various subtasks.}
+\caption{Performance of baseline classifier on subtasks.}
 \label{results-baseline}
 \end{table}
 
 
  
-\begin{figure}
-XXX Insert macro performance graph here...
-% \includegraphics[width=\linewidth]{macro-perf-graph}
-\caption{Macro performance averages}
-\end{figure}
- 
-
 \section{Conclusion}
 
 We have described a system that integrates a categorization framework into a 
@@ -357,18 +373,17 @@ relational database. The results show it is possible to integrate categorization
 techniques into the relational databases used by learning and content management 
 systems.
 
-A kNN classifier was built for the task of classifying postings in a discussion forum. 
-The results show that a high precision can be reached even on  noisy data. The macro 
-precision reached around 75%, however the recall was generally poor and this could be 
-due to lack of training data and short, noisy and incoherent documents. The result 
-achieved in this test however demonstrates that a KNN categorizer implemented 
-within a database could have a high enough performance to be useful at classifying 
-unstructured and informal data sets. 
+Two categorization algorithms were applied to the task of classifying
+messages sent to an educational ask-an-expert service.  A \naive\
+Bayes classifier was fairly successful at categorizing the messages.
+The highest success rate was found in classifying messages by math
+topic, a task that coule be useful on the unstructured data sent to
+services such as the one we discussed.
 
 \section*{Acknowledgements}
 
 The authors gratefully acknowledge financial support from the Capital Markets 
-Collaborative Research Centre and the University Of Sydney. The authors also 
+Collaborative Research Centre and the University of Sydney. The authors also 
 acknowledge The Math Forum for giving permission to use and discuss their data. 
 
 \bibliographystyle{plain}
