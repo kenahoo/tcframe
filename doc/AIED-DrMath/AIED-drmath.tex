@@ -12,6 +12,7 @@
 \newcommand{\aicat}{\texttt{AI::Cat\-e\-gor\-i\-zer}}
 
 \begin{document}
+\pagestyle{empty}
 
 \title{Automatic Categorization of Questions \\ for a Mathematics Education Service}
 
@@ -53,7 +54,7 @@ question belongs.
 
 These problems are common within a number of domains. Our test was performed on 
 messages sent to a mathematics ask-an-expert
-service for students and teachers.\cite{drmath} The issues 
+service for students and teachers \cite{drmath}. The issues 
 discussed also apply to other similar systems such as customer relationship 
 management (CRM) and e-learning systems in general. These systems can use an 
 automatic text categorization framework to categorize the questions into the experts' 
@@ -64,7 +65,7 @@ functionality into existing systems can be very complex, and often involves an i
 depth understanding of text categorization techniques.  Also, the content is normally 
 stored in systems with a relational database in the backend, as is the case for most 
 content and learning management systems. By building the categorizer into the 
-database, the categorization framework\cite{williams:02} can be made invisible to the 
+database, the categorization framework \cite{williams:02} can be made invisible to the 
 users and is thus more attractive to the average system administrator or application 
 developer. Also, application developers, do not have to re-implement the 
 classification software. They only need a machine learning professional to assist in 
@@ -87,7 +88,7 @@ results of the testing process and Section 5 concludes.
 
 For the evaluation of our system we have tested the performance of the
 categorization system over a set of unstructured, informal documents
-from the Ask Dr. Math service.\cite{drmath} These documents are mostly
+from the Ask Dr. Math service \cite{drmath}. These documents are mostly
 written by students between the ages of 6 and 18, though question
 submissions can come from any member of the general public.  The documents vary
 in length from a single sentence to several paragraphs. In addition to
@@ -171,7 +172,7 @@ that improve reusability of design and implementation \cite{fayad:97, fayad:99}.
 
 The framework used in this project was designed to provide a
 consistent way to build document categorization
-systems.\cite{williams:02} It allows the developer to focus on the
+systems \cite{williams:02}. It allows the developer to focus on the
 quality of the more critical and complex modules by allowing reuse of
 common, simple base modules.  The framework has
 implementations of 
@@ -288,7 +289,7 @@ The results in Table \ref{results-main} show the performance of the
 categorization algorithms.  The precision, recall, and $F_1$ scores
 can be computed using macro-averaging, which gives equal weight to
 each category, or micro-averaging, which gives equal weight to each
-document. \cite{yang:99, sebastiani:02} For the kNN algorithm, we used
+document \cite{yang:99, sebastiani:02}. For the kNN algorithm, we used
 a $k$ value of 15 and a categorization threshold of 0.12, which seemed
 to perform the best in our investigations.  We also include in Table
 \ref{results-main} the results of a baseline classifier, which assigns categories at
@@ -402,7 +403,7 @@ D. Bell gratefully acknowledges support from the Capital Markets
 Collaborative Research Centre and the University of Sydney. The authors also 
 thank The Math Forum for giving permission to use and discuss their data. 
 
-\bibliographystyle{plain}
+\bibliographystyle{unsrt}
 \bibliography{TC-References}
 
 \end{document}
