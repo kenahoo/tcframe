@@ -246,7 +246,7 @@ these modules are tools for processing text, and can be used by the
 framework. Perl is widely used, multi-platform and integrates well
 with other languages, so it enables fast prototyping. Perl is also
 natively object-oriented, with a very flexible object
-model. \cite{conway:99}
+model.\cite{conway:99}
 
 In Perl, the basic unit of reusable code is called a \emph{module};
 our framework is implemented as the \aicat\ module.
@@ -485,7 +485,9 @@ corpus when loading the data.  The first pass scans the documents in
 order to perform feature selection, while the second pass actually
 loads the data into memory.  This allows memory to be used more
 effectively than if we only made one pass over the data, because we
-avoid loading extraneous features.  On the Reuters corpus, the first
+avoid loading extraneous features.  On the Reuters corpus, using
+Porter stemming \cite{porter:80} and a standard list of stopwords
+\cite{salton:89}, the first
 pass over the 7769 training files may take roughly 59 CPU seconds and
 consume 11 MB of memory, while the second pass takes about 57 CPU
 seconds and consumes 32 MB\@.  The memory figures reflect the total
