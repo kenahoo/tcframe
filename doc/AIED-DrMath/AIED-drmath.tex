@@ -47,7 +47,7 @@ This paper describes a new approach to managing a stream of questions about
 mathematics by integrating a text categorization framework into a relational database 
 management system. The corpus studied is based on unstructured submissions to a 
 question-and-answer service in learning mathematics. The classification system has 
-been tested using a K-Nearest Neighbour learner built into the framework. The 
+been tested using a \naive\ Bayes learner built into the framework. The 
 performance results of the classifier are also discussed. The framework was integrated 
 into a PostgreSQL database through the use of procedural trigger functions.
 }
@@ -62,15 +62,16 @@ XXX Need to write...
 Questions and answers services are becoming more common, spanning from standard 
 customer relationship management to discussion forums in a particular discipline. In 
 general, these online services are supported by domain experts who attempt to answer 
-the questions posted. Since these experts often have a single domain of expertise it is 
-very helpful if they have only to read questions that relate to this domain. This can be 
+questions posted via email or web forms. Since these experts often have a single subdomain of expertise it is 
+very helpful if they have only to read questions that relate to this subdomain. This can be 
 done by organizing the service in such a way that users are encouraged to post their 
-question in the appropriate area. However this approach is not always successful as 
-often the user will either ignore the organization or not know to which area their 
+question in the appropriate area. However, this approach is not always successful as 
+often the user will either ignore the organization scheme or not know to which area their 
 question belongs. 
 
 These problems are common within a number of domains. Our test was performed on 
-the Dr. Math questions and answers service for students and teachers. The issues 
+messages sent to a mathematics question and answer
+service for students and teachers.\cite{drmath} The issues 
 discussed also apply to other similar systems such as customer relationship 
 management (CRM) and e-learning systems in general. These systems can use an 
 automatic text categorization framework to categorize the questions into the experts' 
@@ -103,19 +104,30 @@ the testing process and Section 5 concludes.
 
 For the evaluation of our system we have tested the performance of the
 categorization system over a set of unstructured, informal documents
-from the Ask Dr. Math
-service.\footnote{\url{http://www.mathforum.org/dr.math/}} These
-documents are mostly written by students as questions to a Mathematics
-questions and answers service.  The documents vary greatly in length
-from a single sentence to several paragraphs,
-but all of them are relatively short. In addition to this most examples contain symbols 
-and diagrams making linguistic analysis very difficult as well. The Dr. Math service 
-has about 300 volunteers answering hundreds of questions a day. The volunteers have 
-expertise in different areas of math and the site has won a number of awards for its 
-useful service. 
+from the Ask Dr. Math service.\cite{drmath} These documents are mostly
+written by students between the ages of 6 and 18, though question
+submissions can come from any member of the general public.  The documents vary
+in length from a single sentence to several paragraphs. In addition to
+this, many examples contain symbols and diagrams, making linguistic
+analysis very difficult. The Ask Dr. Math service has about 300
+volunteers (about 30-40 of which may be active in any given month),
+dealing with hundreds of questions a day. The volunteers have
+expertise in different areas of math, and the site has won a number of
+awards for its useful service.
 
-The Dr. Math corpus we used contains 6632 documents and was split into a testing 
-set of 1327 documents and a training set of 5305 documents.  There are 95 categories 
+The filtering of questions is a major element of the Ask Dr. Math
+question answering process.  The service may receive about 7000
+questions a month, about half of which are eventually answered.  The
+unanswered questions may be duplicate submissions, messages of thanks,
+inappropriate questions, or other messages that don't require a
+response.  There also may be some legitimate mathematics questions
+that go unanswered, simply because the service is not fee-based for
+either the students or the experts, and thus can make no guarantee
+that any particular question will be answered.  The experts are
+currently responsible for choosing their own questions to answer.
+
+The Dr. Math corpus we used contains 6632 documents and was split into a training
+set of 5305 documents and a testing set of 1327 documents.  There are 95 categories 
 in the corpus. The average number of documents in each category is
 107.15.  The most popular category, high school-level geometry,
 contains 877 documents, and the least popular category,
@@ -123,7 +135,8 @@ elementary-level golden ratio, contains only 3 documents.  Each
 document may be a member of more than one category, and the average
 number of categories per document is 1.53.  Figure
 \ref{cat-distribution} shows the distribution of categories throughout
-the corpus.
+the corpus.  Category names indicate both level and topic, such as
+``geometry.elem'' or ``calculus.college.''
 
 \begin{figure}
 \begin{verbatim}
@@ -141,8 +154,18 @@ Scott
 \caption{An example document from the Dr. Math corpus}
 \end{figure}
 
-Category names indicate an existing hierarchical ontology that was not used in our 
-tests due to the relatively small number of documents available.
+It may be important to note that our corpus was drawn from the public
+archive of answered questions, not directly from the stream of
+incoming questions.  Because the archiving process is fairly intensive
+and not all questions are chosen for archiving, our corpus may
+therefore differ significantly from the incoming question stream.  For
+example, none of the kinds of unanswered questions mentioned earlier
+are represented in the archive.  Because of this difference, it is
+difficult to extrapolate our experiments to performance on the
+incoming question stream.  However, because the incoming question
+stream is uncategorized, obtaining a large enough number of
+categorized questions for our investigation necessitated drawing them
+from the archived questions.
 
 \begin{figure}
 \includegraphics[angle=90,width=\linewidth]{cat-distribution}
