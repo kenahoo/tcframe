@@ -1,4 +1,4 @@
-\documentclass[a4paper]{report}
+\documentclass[a4paper,oneside]{book}
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
@@ -16,7 +16,6 @@
 
 \title{A Framework for Text Categorization}
 \author{Ken Williams}
-\begin{document}
 
 % Some custom commands I use
 \newcommand{\method}[1]{\texttt{#1()}}
@@ -35,6 +34,8 @@
  {\rule{\textwidth}{1pt}\verbatim}%
  {\endverbatim\rule{\textwidth}{1pt}}
 
+\begin{document}
+\frontmatter
 
 % Front matter
 \maketitle
@@ -57,15 +58,16 @@ corpus.
 
 On a more personal level, I would like Sheri Schechinger for sticking
 with me across ten thousand miles of ocean, and the city of Sydney for
-being such a great place to spend some time.
+being such a great place to spend time.
 
+\include{ch00}
 
 \chapter*{Statement of Originality}
 XXX, don't know what goes here
 \tableofcontents
 
 % Main matter
-\include{ch00}
+\mainmatter
 \include{ch01}
 \include{ch02}
 \include{ch03}
@@ -74,6 +76,7 @@ XXX, don't know what goes here
 \include{ch06}
 
 % Back matter
+\backmatter
 \bibliographystyle{plain}
 \bibliography{TC-references}
 
