@@ -18,12 +18,14 @@ with many potential uses for large businesses as well as individuals.
 A recent survey article from the Association of Computing Machinery
 provides a good introduction to the field.\cite{sebastiani:02}
 
+XXX - don't get technical here, move technical stuff to chapter 2
+
 The goal of automatic Text Categorization is to automatically produce specialized
-algorithms that can process natural-language documents, assigning zero
+functions that can process natural-language documents, assigning zero
 or more user-defined labels to them based on their content.  More
 formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
 previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
-function that maps from $\docs$ to the set of all subsets of $\cats$.
+function $\func$ that maps from $\docs$ to the set of all subsets of $\cats$.
 
 XXX - create a diagram of a classifier's action on sets
 
@@ -46,7 +48,7 @@ distribution similar to the distribution of $\docs$, and whose contents
 provide information about what sorts of documents should be mapped to
 what sorts of categories.  Algorithms can then be developed that make
 generalizations about the relationship between document content and
-document category, encoding these generalizations in the learned algorithm.
+document category, encoding these generalizations in the learned function $\func$.
 
 \section{Object-Oriented Application Frameworks}
 
