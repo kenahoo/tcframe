@@ -15,7 +15,17 @@ run_section('scan_features',     1, \%do_stage);
 run_section('read_training_set', 2, \%do_stage);
 run_section('train',             3, \%do_stage);
 run_section('evaluate_test_set', 4, \%do_stage);
-print $c->stats_table if $do_stage{5};
+if ($do_stage{5}) {
+  my $result = $c->stats_table;
+  print $result;
+  if ( my $file = $c->progress_file ) {
+    local *FH;
+    open FH, "> $file-results.txt" or die "$file-results.txt: $!";
+    # Should also dump parameters here
+    print FH $result;
+    close FH;
+  }
+}
 
 sub run_section {
   my ($section, $stage, $do_stage) = @_;
