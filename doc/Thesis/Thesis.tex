@@ -2,6 +2,7 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
+\usepackage{setspace}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage[htt]{hyphenat}
@@ -10,7 +11,7 @@
 \DeclareMathOperator*{\ArgMax}{ArgMax}
 \DeclareMathOperator{\Entr}{H}
 
-\linespread{1.6}
+\doublespace
 
 % \includeonly{ch03}
 
@@ -94,7 +95,11 @@ DO NOT DISTRIBUTE}
 
 \include{ch00}
 \tableofcontents
+\clearpage
+\addcontentsline{toc}{chapter}{List of Figures}
 \listoffigures
+\clearpage
+\addcontentsline{toc}{chapter}{List of Tables}
 \listoftables
 
 \mainmatter
@@ -104,6 +109,11 @@ DO NOT DISTRIBUTE}
 \include{ch04}
 \include{ch05}
 \include{ch06}
+
+\appendix
+\include{ap01}
+%\include{ap02}
+%\include{ap03}
 
 \backmatter
 \bibliographystyle{plain}
