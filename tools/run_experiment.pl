@@ -4,25 +4,23 @@ use strict;
 use AI::Categorizer;
 use YAML;
 
-my (%opt, %do_stage);
-parse_command_line(@ARGV);
+my ($opt, $do_stage, $outfile) = parse_command_line(@ARGV);
 @ARGV = grep !/^-\d$/, @ARGV;
 
-my $c = new AI::Categorizer(%opt);
+my $c = new AI::Categorizer(%$opt);
 
-%do_stage = map {$_, 1} 1..5 unless keys %do_stage;
+%$do_stage = map {$_, 1} 1..5 unless keys %$do_stage;
 
-run_section('scan_features',     1, \%do_stage);
-run_section('read_training_set', 2, \%do_stage);
-run_section('train',             3, \%do_stage);
-run_section('evaluate_test_set', 4, \%do_stage);
-if ($do_stage{5}) {
+run_section('scan_features',     1, $do_stage);
+run_section('read_training_set', 2, $do_stage);
+run_section('train',             3, $do_stage);
+run_section('evaluate_test_set', 4, $do_stage);
+if ($do_stage->{5}) {
   my $result = $c->stats_table;
   print $result;
-  if ( my $file = $c->progress_file ) {
-      print "results:\n";
+  if ( $outfile ) {
     local *FH;
-    open FH, "> $file-results.txt" or die "$file-results.txt: $!";
+    open  FH, "> $outfile" or die "$outfile: $!";
     print FH "# ", scalar(localtime), "\n";
     print FH YAML::Dump($c->dump_parameters);
     print FH $result;
@@ -43,6 +41,7 @@ sub run_section {
 }
 
 sub parse_command_line {
+  my (%opt, %do_stage);
 
   while (@_) {
     if ($_[0] =~ /^-(\d+)$/) {
@@ -73,4 +72,11 @@ sub parse_command_line {
       $opt{$k} = $v;
     }
   }
+
+  my $outfile;
+  unless ($outfile = delete $opt{outfile}) {
+    $outfile = $opt{progress_file} ? "$opt{progress_file}-results.txt" : "results.txt";
+  }
+
+  return (\%opt, \%do_stage, $outfile);
 }
