@@ -23,6 +23,8 @@ Bldg J03, Sydney NSW 2006\\[1ex]
 {\em dave@student.usyd.edu.au}
 }
 
+\date{}
+
 \begin{document}
 
 \maketitle
@@ -161,7 +163,7 @@ categorized questions for our investigation necessitated drawing them
 from the archived questions.
 
 \begin{figure}
-\includegraphics[angle=90,width=\linewidth]{cat-distribution}
+\includegraphics[angle=90,width=0.7\linewidth]{cat-distribution}
 \caption{Category distribution for the 95 Dr. Math categories}
 \label{cat-distribution}
 \end{figure}
@@ -266,10 +268,11 @@ categories. The testing set was then inserted into the database, one document at
 using a statement similar to that in Figure \ref{sql-insert}. A SELECT
 statement was then used to compare the assigned and actual categories
 of each document. Through this comparison the performance of the
-categorization in terms of recall  and performance  was measured. The precision and 
-recall\footnote{Recall is the proportion of the target items that the
-system selected, i.e. tp/(tp+fn).  Precision is the proportion of
-selected items the system got right, i.e. tp/(tp+fp).} were then used
+categorization in terms of precision and recall was
+measured.\footnote{Recall is the proportion of the target items that
+the system selected, i.e. tp/(tp+fn).  Precision is the proportion of
+selected items the system got right, i.e. tp/(tp+fp).} The precision
+and recall were then used
 to calculate the $F_1$ measure \cite{calvo:01,sebastiani:02}.
 
 \begin{table}
