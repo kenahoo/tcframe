@@ -1,0 +1,10 @@
+--- #YAML:1.0
+data_root: corpora/reuters-21578
+stopword_file: corpora/reuters-21578/SMART.stoplist
+progress_file: corpora/reuters
+learner_class: "::Weka"
+weka_path: "/Applications/Science/weka-3-2-3/weka.jar"
+java_args: "-Xmx130MB"
+stemming: porter
+features_kept: 2000
+verbose: 1
