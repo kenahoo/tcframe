@@ -3,3 +3,5 @@ Thesis.aux
 Thesis.log
 Thesis.pdf
 Thesis.toc
+*.bbl
+*.blg
