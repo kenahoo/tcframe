@@ -1,0 +1,15 @@
+--- #YAML:1.0
+collection_class: '::Files'
+document_class: '::Text'
+learner_class: '::KNN'
+stemming: porter
+tfidf_weighting: xfx
+features_kept: 5000
+max_instances: 8000
+training_set:  '/home/rafa/share/corpus/SignalG/training'
+test_set:      '/home/rafa/share/corpus/SignalG/test'
+stopword_file: '/home/rafa/share/corpus/SignalG/SMART.stoplist'
+progress_file: '/home/rafa/share/corpus/SignalG/tmp/signalg-sens-KNN'
+outfile: "results/signalg-sens-KNN.txt"
+category_file: '/home/rafa/share/corpus/SignalG/cats-sensitivity.txt'
+verbose: 1
