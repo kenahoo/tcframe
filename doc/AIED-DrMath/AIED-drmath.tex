@@ -12,7 +12,7 @@
 \newcommand{\aicat}{\texttt{AI::Cat\-e\-gor\-i\-zer}}
 
 
-\title{Streamlined Automatic Categorization of Mathematics Questions}
+\title{Automatic Categorization of Questions for a Mathematics Education Service}
 
 \author{
 {\em Ken Williams, Rafael A. Calvo, David Bell}\\[1ex]
@@ -43,8 +43,6 @@ into a PostgreSQL database through the use of procedural trigger functions.
 \paragraph{Keywords} 
 Tutoring Systems, Learning Communities, Document Management, Automatic
 Text Categorization
-
-
 
 \section{Introduction}
 
@@ -261,15 +259,13 @@ rumbaugh:91}, by integrating it in this way, the classification task
 \section{Method and Results}
 \label{results}
 
-% Ken: here you use a select but in the example you use an insert. This  options are 
-% very different because it puts the classification effort at different stages (when storing or when viewing). I think it needs to be explained better and the examples be of the same type as the explanation here
  
 The 5305 training documents in the Dr. Math corpus were loaded into a database 
 table named ``documents.'' This table consisted of 3 columns: name, content and 
 categories. The testing set was then inserted into the database, one document at a time 
-using a statement similar to that in Figure \ref{sql-insert}. After each insert a SELECT query was 
-run to extract the assigned categories. These categories were then compared to the 
-actual categories of that document. Through this comparison the performance of the 
+using a statement similar to that in Figure \ref{sql-insert}. A SELECT
+statement was then used to compare the assigned and actual categories
+of each document. Through this comparison the performance of the
 categorization in terms of recall  and performance  was measured. The precision and 
 recall\footnote{Recall is the proportion of the target items that the
 system selected, i.e. tp/(tp+fn).  Precision is the proportion of
@@ -295,8 +291,8 @@ each category, or micro-averaging, which gives equal weight to each
 document. \cite{yang:99, sebastiani:02} For the kNN algorithm, we used
 a $k$ value of 15 and a categorization threshold of 0.12, which seemed
 to perform the best in our investigations.  We also include in Table
-\ref{results-main} the results of a baseline classifier, which simply
-assigns categories randomly to each test document based on the
+\ref{results-main} the results of a baseline classifier, which assigns categories at
+random to each test document, weighting the random generator by the
 frequency of categories in the training set.
 
 Next, we turned our attention to ways of improving performance on the
@@ -391,7 +387,7 @@ to ask-an-expert services such as the one we discussed.
 
 \section*{Acknowledgements}
 
-The authors gratefully acknowledge financial support from the Capital Markets 
+D. Bell gratefully acknowledges support from the Capital Markets 
 Collaborative Research Centre and the University of Sydney. The authors also 
 acknowledge The Math Forum for giving permission to use and discuss their data. 
 
