@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{tabularx}
 
+\newcommand{\naive}{Na\"\i ve}
 
 \raggedbottom
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -61,7 +62,7 @@ considerations for application developers.
 }
 
 \paragraph{Keywords} 
-XXX A list of keywords based on those given in the Call for Papers should be included.
+Document Management, Text Categorization, Application Frameworks
 
 
 \section{Introduction}
@@ -168,8 +169,8 @@ Given these requirements, we decided to implement our software as a framework ra
 
 The framework described in this paper includes classes for managing
 documents, collections of documents, categorization algorithms, and so
-on.  The core framework includes both concrete classes like ``Na\"\i
-ve Bayes Learner'' which may be used without custom development, as
+on.  The core framework includes both concrete classes like ``\naive\
+Bayes Learner'' which may be used without custom development, as
 well as abstract classes like ``Boolean Learner'' which require the
 user to implement certain behaviours before using them.  Abstract
 classes provide a starting point and an interface for new development
@@ -324,7 +325,7 @@ may be overridden.
 \subsection*{Machine Learning algorithm}
 Choosing machine learning algorithms is done
 by choosing a subclass of the \texttt{Learner} class.  Several
-algorithms have already been implemented including Na\"\i ve Bayes
+algorithms have already been implemented including \naive\ Bayes
 \cite{lewis:98}, Support Vector Machines \cite{scholkopf:99}
 \cite{cortes:95}, Neural Networks \cite{calvo:01} \cite{yang:99},
 k-Nearest Neighbors \cite{yang:99}, and Decision Trees
@@ -345,11 +346,6 @@ categorizer.  No class distinction is made in the framework between a
 objects of the same class.  This allows for the possibility of on-line
 learning, in which a trained learner incrementally uses additional
 training examples to improve its current model.
-
-The performance of the four core categorizers (in terms of
-correctness) is similar to the performance reported for other
-implementations in \cite{yang:99}.  We believe any discrepancies are
-due to differences in feature selection and/or document tokenizing.
 
 \subsection*{Machine Learning parameters}
 Because each ML algorithm may have several implementation parameters
@@ -414,16 +410,52 @@ changes, letting developers drop their own subclasses into the
 framework with relative ease.
 
 
-\section{Evaluation and Integration}
+\section{Evaluation}
 
+Although the focus of this paper is the framework discussion and
+design, we present here some basic evaluation of its performance.
 We have evaluated our framework by building classifiers in several
-applications.  We have implemented Na\"\i ve Bayes, Support Vector
+applications.  We have implemented \naive\ Bayes, Support Vector
 Machine, k-Nearest-Neighbor, and Decision Tree classifiers in the
 framework.  We have trained classifiers using the standard Reuters
 ApteMod corpus, and obtained similar results to the ones described in
 \cite{yang:99}.  We have also trained and tested classifiers on other
 corpora in financial, educational, and discussion group domains.  Due
-to space constraints we will not describe our results here.
+to space constraints and the proprietary nature of some of our other
+corpora, we will only describe results on the Reuters ApteMod corpus
+here, using the \naive\ Bayes algorithm.
+
+In training categorizers, we typically use two passes through the
+corpus when loading the data.  The first pass scans the documents in
+order to perform feature selection, while the second pass actually
+loads the data into memory.  This allows memory to be used more
+effectively than if we only made one pass over the data, because we
+avoid loading extraneous features.  On the Reuters corpus, the first
+pass over the 7769 training files may take roughly 59 CPU seconds and
+consume 11 MB of memory, while the second pass takes about 57 CPU
+seconds and consumes 32 MB\@.  The memory figures reflect the total
+size of a running program, not just the size of the document data in
+memory.\footnote{Tests were performed on a machine with a Pentium III
+800Mhz chip, running Red Hat Linux release 7.0 and Perl 5.6.1.
+Results are not comparable across different architectures, but may be
+useful as a rough guide.}
+
+After the data is loaded, we pass it to a Learner object for training.
+Our \naive\ Bayes training process takes 8.1 CPU seconds and consumes
+40 MB of memory.  Categorizing the 3019 test documents takes about 95
+CPU seconds and consumes 14 MB.
+
+With experimental settings similar to the ones described in
+\cite{yang:99} (we used Document Frequency feature selection, since we
+have not yet implemented $\chi^2$ or Information Gain selection
+algorithms), we achieve recall, precision, and $F_1$ scores of 0.724,
+0.851, and 0.782 when micro-averaged, and 0.366, 0.497, and 0.396 when
+macro-averaged.  We believe any discrepancies with \cite{yang:99} are
+due to differences in feature selection and/or document tokenizing,
+but we have not tested this belief thoroughly.
+
+\section{Integration and Further Work}
+
 
 The framework has been used in a number of applications including an
 extension to the SQL language of the PostgreSQL relational
@@ -457,6 +489,31 @@ collaborated with, and this in turn is a wrapper around the C library
 
 It is our hope that this strategy will extend the reach of both our
 framework and related existing and new TC software.
+
+In designing the AI::Categorizer framework architecture, we have
+focused on aspects of Text Categorization that tend to remain common
+from one task to the next, allowing for growth in aspects that tend to
+change.  For instance, we have specified that document features are
+encapsulated in a FeatureVector object, but we have not specified that
+object's internal implementation.  Likewise, we have specified that
+the Machine Learning TC algorithms are encapsulated by the Learner
+class, but the specific algorithms will tend to vary from task to
+task.
+
+In the first public versions of the framework, we have tended to
+implement the simplest versions of each of these classes, with more
+elaborate or optimized implementations deferred to later work.  For
+instance, our FeatureVector class is currently implemented using Perl
+hashes, but other implementations (for instance, using C structs to
+implement sparse integer vectors) may be implemented in order to
+improve memory usage and/or speed.  Other Learner subclasses may also
+be added, and the existing subclasses may be improved to provide more
+feature-rich implementations or improve efficiency.  Because they are
+encapsulated in subclasses, these implementations may be traded at
+will, allowing experimentation with different implementations.  In
+particular, we expect the Learner and FeatureSelector areas of the
+framework to grow as new algorithms are added and existing algorithms
+are informed by current research.
 
 
 \section{Conclusions}
