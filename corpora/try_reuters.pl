@@ -74,6 +74,7 @@ if (1) {
   my $nb = new AI::Categorizer::Categorizer::NNetTC
     (
      verbose => 1,
+     nn_binary => '/home/halvards/bin/nntc',
     );
   $nb->train(knowledge => $k);
 
