@@ -45,7 +45,7 @@ both in terms of efficiency and accuracy. \cite{chakrabarti:98} Also,
 the specifics of the categorization problem in each corpus may be more
 amenable to one categorization technique or another.
 
-The main corpora used for evaluation are listed in this section.  Each
+The corpora used for evaluation are listed in this section.  Each
 corpus consists of a set of documents $\docs$, a set of categories $\cats$ that
 documents may be assigned to, and a domain-expert-made choice of
 category assignments for each document.  These category assignments
@@ -91,31 +91,24 @@ categories.  There are 90 categories in the corpus.  The average
 number of categories per document is 1.235, and the average number of
 documents per category is about 148, or 1.37\% of the corpus.
 
-Figure \ref{Corpora-catdist} shows the category distribution for all
-four corpora discussed in this section.  The categories are plotted on
-the horizontal axis, and the number of documents per category are
-plotted on the vertical axis using a logarithmic scale.
-
-XXX - change this so it prints well in black-and-white
-
 \begin{figure}
 \begin{center}
 \includegraphics[width=\linewidth]{figures/Corpora-catdist.pdf}
-\caption{Category distribution for the four test corpora}
+\caption{Category distributions for the test corpora}
 \label{Corpora-catdist}
 \end{center}
 \end{figure}
 
+Figure \ref{Corpora-catdist} shows the category distribution for
+the corpora discussed in this section.  The categories are plotted on
+the horizontal axis, and the number of documents per category are
+plotted on the vertical axis using a logarithmic scale.
+
 
 \subsection{Dr. Math}
 
-XXX - provide more information about what this data set means for
-\aicat\ - Rafael says ``real world e-learning application''.  and
-``use the intro and refernce to the AIED paper. mentioned that you
-have published in this data set''
-
 The Dr. Math corpus is a collection of 6,630 English-language messages
-sent to the ``Ask Dr. Math'' question-and-answer service for
+sent to the ``Ask Dr. Math'' ask-an-expert service for
 students. \cite{drmath} Each message has been manually assigned by a
 domain expert to one or more categories,
 with category names indicating both math topic and grade level,
@@ -134,15 +127,50 @@ common category.  The average number of categories per document is
 1.534, and the average number of documents per category is about 107,
 or 1.61\% of the corpus.
 
-The corpus is not available for direct download, but interested
+The Dr. Math corpus is an important data set for proving the
+effectiveness of the \aicat\ framework, because it represents a
+real-world application in the educational domain, one of the key
+target application areas of the Web Engineering Group at the
+University of Sydney. Work with the Dr. Math corpus has been
+previously published in \cite{williams:03}, and the introduction from
+that paper contains a description of an intended application:
+
+\begin{quote}
+Ask-an-expert services are becoming more common, spanning from
+standard customer relationship management to discussion forums in a
+particular discipline. In general, these online services are supported
+by domain experts who attempt to answer questions posted via email or
+web forms. Since these experts often have a single subdomain of
+expertise it is very helpful if they have only to read questions that
+relate to this subdomain. This can be done by organizing the service
+in such a way that users are encouraged to post their question in the
+appropriate area. However, this approach is not always successful as
+often the user will either ignore the organization scheme or not know
+to which area their question belongs.
+
+These problems are common within a number of domains. Our test was
+performed on messages sent to a mathematics ask-an-expert service for
+students and teachers.\cite{drmath} The issues discussed also apply to
+other similar systems such as customer relationship management (CRM)
+and e-learning systems in general. These systems can use an automatic
+text categorization framework to categorize the questions into the
+experts' areas of interest, or into the appropriate customer support
+mailbox.
+\end{quote}
+
+The Dr. Math corpus is not available for direct download, but interested
 parties may contact the author for details.
 
 
-\subsection{Signal G (Sensitivity)}
+\subsection{Signal G}
 
 The Signal G corpus consists of 136,630 financial announcement
 documents from the Australian Stock Exchange (ASX)\cite{asx:02} issued
-between January 4 and December 29, 2000.  Each documents has been
+between January 4 and December 29, 2000.  The documents are divided
+into a training set of 95,525 documents and a test set of 41,105
+documents.  The total size of the corpus is about 342 MB.
+
+Each document has been
 manually categorized by the ASX according to whether it indicates ``market
 sensitivity'' or not.  Market sensitivity is a subjective label indicating
 whether the given document has potential to affect the issuing
@@ -152,26 +180,21 @@ exchange.  Every document is a member of either the ``sensitive'' or
 partition the corpus, or as a single category that some documents
 belong to and others don't.  This discussion assumes the former.
 
-The documents are divided into a training set of 95,525 documents and a
-test set of 41,105 documents.  The total size of the corpus is about
-342 MB.  Of the 136,630 corpus documents, about 34.0\% are marked as
+Of the 136,630 corpus documents, about 34.0\% are marked as
 market sensitive, and the rest are marked as insensitive.
 
-\subsection{Signal G (Report Type)}
+Work with the Signal G corpus has previously been described in
+\cite{calvo:02}, which focused on the financial context of the
+application and the ability of TC methods to aid in the business
+processes of the financial organizations involved.
 
-The same documents in the previous corpus can also be tagged with a
-``report type'' category.  This category indicates the type of
-business announcement contained in the document, and may take values
-such as ``Notice of Annual General Meeting'' or ``Dividend Books
-Closing.''  There are 121 categories in the corpus, with 7.91\%
-(10,815 documents) belonging to the most common category, and ten
-categories that contain five documents or fewer.  Thus the corpus
-exhibits a high skew with respect to this category scheme, similar to
-the ApteMod and Dr. Math corpora.
-
-For this corpus with the Report Type labels, the same division between
-training and test documents was used as with the Sensitivity labels.
-
+Signal G is available to the public, member organizations, and
+information vendors.  Our data set was supplied by the Capital Markets
+Collaborative Research Centre.  For future groups who receive
+permission from the CMCRC to work with this data, we have converted it
+into an XML format with a DTD specification.  The data is not
+available for direct download, but interested parties may contact the
+Australian Stock Exchange for details.
 
 
 \section{Quality of Categorization}
@@ -382,9 +405,9 @@ best results for this experiment were found when using a feature set
 with 3000 features and $k=15$.
 
 
-\subsection{Signal G (Sensitivity)}
+\subsection{Signal G}
 
-The results of testing \aicat\ on the Signal G (Sensitivity) corpus
+The results of testing \aicat\ on the Signal G corpus
 have been previously described in detail in \cite{calvo:02}, but the
 important points will be discussed here.  Table
 \ref{signalg-sens-results} summarizes the findings.  Because there are
@@ -503,7 +526,8 @@ Signal G   & SVM &   &   &   & \\
   (Sens)   & kNN &   &   &   & \\ \hline
 \end{tabular}
 \end{center}
-\caption{Time required for the experiments in Section \ref{Quality}.
+\caption[Time required for the experiments in Section \ref{Quality}]
+ {Time required for the experiments in Section \ref{Quality}.
   Measurements are given in CPU seconds.}
 \label{eval-time}
 \end{table}
@@ -525,7 +549,8 @@ Signal G   & SVM &   &   &   & \\
   (Sens)   & kNN &   &   &   & \\ \hline
 \end{tabular}
 \end{center}
-\caption{Memory usage for the experiments in Section \ref{Quality}.
+\caption[Memory usage for the experiments in Section \ref{Quality}]
+ {Memory usage for the experiments in Section \ref{Quality}.
   Measurements are given in megabytes of virtual memory usage.}
 \label{eval-memory}
 \end{table}
