@@ -44,7 +44,7 @@ ROC curves
 
 \section{Related products}
 
-To establish the relevance of AI::Categorizer in the marketplace of
+To establish the relevance of \aicat\ in the marketplace of
 Text Categorization, I will examine three related products.  First I
 discuss Weka, a Java product that has been used successfully by many
 Text Categorization researchers.  Then I address two businesses that
@@ -67,17 +67,17 @@ community, and as such includes support for many cutting-edge
 categorization techniques, including advances in Support Vector
 Machines, k-Nearest-Neighbor, Naive Bayes, and other categorizers, as
 well as several variations of feature selection techniques.  It is
-therefore a standard against which the AI::Categorizer framework can
+therefore a standard against which the \aicat\ framework can
 be measured, as well as a resource which can be leveraged in its
 construction.
 
-Despite some similar properties, Weka and AI::Categorizer differ in
+Despite some similar properties, Weka and \aicat\ differ in
 their goals and in many important implementation decisions.  Whereas
 Weka specifically targets the academic research community,
-AI::Categorizer aims to support use cases under both
+\aicat\ aims to support use cases under both
 application-building and research-conducting situations.
 Consequently, Weka will typically keep up with research trends more
-closely, but AI::Categorizer will usually be easier for application
+closely, but \aicat\ will usually be easier for application
 developers to integrate into a real-world situation.
 
 In addition to these differences, another important difference arises
@@ -85,38 +85,38 @@ from the different goals in the two projects.  Much of the academic
 community is interested in evaluating the correctness and algorithmic
 complexity of categorization techniques, whereas most application
 developers must also consider resource usage in real-world terms like
-time and memory.  In testing, AI::Categorizer has greatly outperformed
+time and memory.  In testing, \aicat\ has greatly outperformed
 Weka in terms of speed and memory when equivalent algorithms are
 compared on identical data sets.  This doesn't reflect an inherent
 design flaw in Weka, rather a difference in the kinds of things Weka
 developers are likely to spend their time working on.
 
 In order to help facilitate cooperation between the Weka and
-AI::Categorizer communities, as well as leverage existing solutions
-inside AI::Categorizer, a machine learner class has been created
-within AI::Categorizer that simply passes data through to Weka's
+\aicat\ communities, as well as leverage existing solutions
+inside \aicat, a machine learner class has been created
+within \aicat\ that simply passes data through to Weka's
 categorizers.  In this way, application developers can easily
 experiment with Weka's cutting-edge categorization techniques while
-retaining AI::Categorizer's application integration advantages.  Any
+retaining \aicat's application integration advantages.  Any
 cross-pollination generated as a result will likely benefit both
 projects.
 
 Other facilities provided by Weka are not yet offered by
-AI::Categorizer.  These include visualization tools, several
+\aicat.  These include visualization tools, several
 sophisticated correctness evaluation tools, and XXX.  Most of these
-facilities would make useful additions to AI::Categorizer if
+facilities would make useful additions to \aicat\ if
 implemented
 
 \subsection{Autonomy.com}
 
 \subsection{Teragram Corporation}
 
-According to their web site (http://www.teragram.com/), Teragram
+According to their web site (\url{http://www.teragram.com/}), Teragram
 Corporation is a provider of ``fast and stable linguistic
 technologies, information search and extraction, knowledge management,
 and text processing technologies.''  One of their largest-scale
 products is the Teragram Categorizer, an automatic document
-categorizer that plays a similar technical role to AI::Categorizer.
+categorizer that plays a similar technical role to \aicat.
 It cooperates with the Teragram Taxonomy Manager, which provides a
 user interface to categories and the documents within each category.
 
@@ -128,8 +128,8 @@ gathered this way.
 
 The Taxonomy Manager is a browser of hierarchical categories, similar
 to several on-line directory services like Yahoo
-(http://www.yahoo.com/) or the Open Directory Project
-(http://www.dmoz.org/).  It might therefore be inferred that the
+(\url{http://www.yahoo.com/}) or the Open Directory Project
+(\url{http://www.dmoz.org/}).  It might therefore be inferred that the
 Categorizer is a native hierarchical categorizer, or perhaps that the
 categorizer actually flattens the tree structure of the category
 hierarchy into a flat list of its leaves, and imposes the tree
@@ -152,7 +152,7 @@ the two systems are complementary rather than antithetic.
 
 Teragram also offers separate licensing for many of the tools that
 make up its products.  In this sense, it has a strategy similar to one
-employed in AI::Categorizer's design, in which useful pieces of
-functionality created for AI::Categorizer should be split off into
+employed in \aicat's design, in which useful pieces of
+functionality created for \aicat\ should be split off into
 their own products whenever possible.
 
