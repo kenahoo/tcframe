@@ -259,9 +259,7 @@ kNN & ? & ? & .5242 & .8339 & .8807 & .8567 & .00385 \\
 
 In the case of the \naive\ Bayes categorizer (NB), the results match
 \cite{yang:99} closely, with a slightly greater $F_1^M$ and a slightly
-smaller $F_1^\mu$. (XXX - not sure whether I can say that the
-differences are statistically insignificant or not.  Need to
-understand Yang's stats tests better?)  To match the experimental
+smaller $F_1^\mu$.  To match the experimental
 settings in \cite{yang:99}, the size of the feature-set was set to
 2000.
 
@@ -486,7 +484,7 @@ system process:
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|c|r|c c c c|}
+\begin{tabular}{|c|r|r r r r|}
 \cline{3-6}
 \multicolumn{2}{c|}{}
                  &  Scan  &  Read   &  Learn  &  Test   \\ \hline
@@ -503,12 +501,12 @@ Signal G   & SVM &   &   &   & \\
 \end{center}
 \caption{Time required for the experiments in Section \ref{Quality}.
   Measurements are given in CPU seconds.}
-\label{efficiency-drmath}
+\label{eval-time}
 \end{table}
 
 \begin{table}
 \begin{center}
-\begin{tabular}{|c|r|c c c c|}
+\begin{tabular}{|c|r|r r r r|}
 \cline{3-6}
 \multicolumn{2}{c|}{}
                  &  Scan &  Read  & Learn  & Test  \\ \hline
@@ -525,15 +523,27 @@ Signal G   & SVM &   &   &   & \\
 \end{center}
 \caption{Memory usage for the experiments in Section \ref{Quality}.
   Measurements are given in megabytes of virtual memory usage.}
-\label{efficiency-drmath}
+\label{eval-memory}
 \end{table}
 
-Table \ref{efficiency-drmath} shows the resource measures on the
-Dr. Math corpus.  Running time is given in total CPU seconds consumed,
+Table \ref{eval-time} shows the running times for each phase of the
+experiments conducted in Section \ref{Quality}, and Table
+\ref{eval-memory} shows their memory usage.
+Running time is given in total CPU seconds consumed,
 and memory usage is measured by reporting the total size of the
-process in virtual memory.  Note that the running times include both
+process in virtual memory.\footnote{On Unix operating systems,
+  including the Solaris system on which these tests were performed,
+  the term ``virtual memory'' when describing the size of a process
+  means the total size of the running process, including any memory
+  segments in Random Access Memory and any cached to the disk.  It
+  does not refer just to the portion that may be resident on the disk
+  cache, as the term is sometimes used to mean on Windows or older
+  Macintosh systems.}
+Note that the running times include both
 the loading of any data structures from the previous stage and the
-saving of any data structures for the next stage.
+saving of any data structures for the next stage.  The memory usage
+includes any data structures used by the application as well as the
+perl interpreter itself.
 
 Of course, the running times and memory usage during the ``Scan'' and
 ``Read'' stages do not vary much when the Machine Learning algorithm
@@ -543,9 +553,121 @@ may compare the measurements on the different corpora, and any
 unexpected differences are likely due to the state of other concurrent
 processes on the machine, caching of disk data, and the like.
 
-XXX needs more discussion ...
+Among the most obvious characteristics of the results in Tables
+\ref{eval-time} and \ref{eval-memory} is that the \naive\ Bayes
+categorizer is very efficient in terms of both running time and
+memory.  The SVM categorizer is slower during the ``Learn'' phase by a
+factor of about 100, and the kNN categorizer is slower during the
+``Test'' phase by a factor of 10--20.  This is consistent with the
+theoretical properties of the algorithms discussed in Section
+\ref{machine-learning}.
+
+One other interesting property is that the SVM categorizer seems to
+take roughly twice as much time and memory as the NB categorizer
+during the ``Test'' phase.  This is not necessarily supported by the
+theoretical properties of the two algorithms, so this finding may be
+due to implementation issues in the SVM code or the Adapter to the SVM
+engine.
+
 
 \section{Applications}
 \label{Applications}
 
-XXX need to write
+Unfortunately, there are as yet no standard methods of objectively
+evaluating the quality of a framework's design.  Such a method is not
+likely to appear in the near future, because framework design is a
+highly subjective process requiring much expertise in the framework
+developer. \cite[sec. 1.5]{fayad:99} Some quality metrics have been
+proposed, but they tend to rely on comparing different releases of a
+framework as it evolves to meet application needs, interpreting any
+major changes as flaws in the original framework
+design. \cite[ch. 25]{fayad:99} Because \aicat\ is a newly released
+framework, this kind of comparison between releases is not possible.
+
+In order to provide evidence of the framework's usefulness, therefore,
+one option is simply to build different kinds of applications using
+the framework and judge whether the applications were successful or
+not, and whether the framework seemed well-suited for the application.
+Ideally, the applications will represent at least some of the use
+cases that the framework was designed to support.  This is what will
+be done here.  Three applications using \aicat\ that were developed
+during the course of the candidature on which this thesis is based
+will be discussed in the following sections.
+
+\subsection{Command-line categorizer}
+
+The first framework is a simple command-line script, distributed with
+the framework code, which provides a relatively simple way to
+instantiate a top-level \aicat\ object and invoke several of its
+methods.  Its main purpose is to support the kinds of scientific
+investigations described in Section \ref{scientific-inv}.
+
+Using this script, the user may specify the parameters for an
+experiment either directly on the command line, or in a file of
+key-value pairs indicating the parameter's name and value.  A sample
+file of this sort is shown in Figure \ref{parameter-file}.
+
+\begin{figure}
+\begin{code}
+--- #YAML:1.0
+data_root: corpora/drmath-1.00
+stopword_file: corpora/drmath-1.00/SMART.stoplist
+progress_file: "/tmp/drmath-NB"
+outfile: "results/drmath-NB.txt"
+learner_class: "::NaiveBayes"
+tfidf_weighting: xfx
+stemming: porter
+features_kept: 0.2
+verbose: 1
+\end{code}
+\caption{Parameter specification file for testing the \naive\ Bayes
+  categorizer on the Dr. Math corpus.}
+\label{parameter-file}
+\end{figure}
+
+This command-line application also provides support for storing the
+sets of parameters and the categorization results to disk.  In this
+way, the user keeps a historical record of which parameter settings
+improved performance and which had negative effects.
+
+This application contains only 110 lines of Perl code, most of which
+deals with benchmarking issues or parsing of the command-line
+options.  This shows that a data-driven application can be built on
+top of the framework fairly easily.
+
+\subsection{Database categorization}
+
+In order to support the categorization of documents inside a database
+as mentioned in Sections \ref{embedded-apps} and \ref{database}, David
+Bell of the Web Engineering Group at the University of Sydney
+developed an application which embeds \aicat\ directly in the
+PostgreSQL database engine.  Bell's work involved the kNN categorizer,
+but because the framework was used instead of a custom kNN
+implementation, any of the framework's categorizers could be used in
+the same manner.
+
+Using this application, categorization functionality was made
+available in database insertions and queries through the use of
+embedded functions like \method{categorize}.  This allows
+categorization of arbitrary text in the database, because the input to
+the categorization function is any string that can be built using the
+database query language.
+
+This application demonstrates the ability of the \aicat\ framework to
+provide functionality in embedded environments.
+
+\subsection{Client-server categorization}
+
+As part of a research project in the financial domain, Mark Aufflick
+of the Web Engineering Group at the University of Sydney created a
+categorization server like that described in Section
+\ref{client-server}.  In this application, the categorizer resides in
+a long-lived server daemon process that accepts XML/RPC requests for
+categorizing arbitrary documents.  The server responds with the
+categorization information as an XML/RPC response, which may contain
+the categories assigned or the single best category assigned.
+
+The application was built using standard Perl tools for constructing
+XML/RPC servers, available from the CPAN.  This demonstrates the
+ability of the \aicat\ framework to build custom categorization
+servers for diverse application needs.
