@@ -3,10 +3,14 @@
 \usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{amsfonts}
+\usepackage[htt]{hyphenat}
 
 \title{Thesis}
 \author{Ken Williams}
 \begin{document}
+
+\newcommand{\method}[1]{\texttt{#1()}}
+\newcommand{\class}[1]{\texttt{#1}}
 
 \maketitle
 
@@ -78,6 +82,9 @@ categorization hypotheses, and categorization results.
 \subsection{Research scenarios}
 
 \section{General Text Categorization Considerations}
+\subsection{Document storage}
+\label{Document storage}
+
 \subsection{Document format}
 \label{Document format}
 
@@ -289,7 +296,7 @@ enlightening analysis of a framework, since modern framework design
 often favors object composition over class inheritance for its
 important structural elements. \cite[p. 20]{gamma:95}
 
-The class composition diagram in figure \ref{classes-uml} shows the
+The diagram in figure \ref{classes-uml} shows the
 most important run-time relationships between classes in the
 AI::Categorizer framework.  In this diagram, no inheritance
 relationships are shown--any inheritance hierarchies are represented
@@ -315,24 +322,24 @@ are:
 
 \item[KnowledgeSet]
 
-The KnowledgeSet class represents a set of processed documents, a set
+The \class{KnowledgeSet} class represents a set of processed documents, a set
 of categories, and a many-to-many mapping between the two sets.
 Processing may involve tokenization, stopword removal, linguistic
 stemming, feature selection, and vector weighting.  Note that the term
 ``knowledge set'' is somewhat unique to this project.
 
-A KnowledgeSet contains references to many Document objects and
-Category objects.  It uses Collection objects to instantiate Document
-and Category objects.  It uses a FeatureSelector object to perform
-feature selection.  It also contains a FeatureVector object
+A \class{KnowledgeSet} contains references to many \class{Document} objects and
+\class{Category} objects.  It uses \class{Collection} objects to instantiate \class{Document}
+and \class{Category} objects.  It uses a \class{FeatureSelector} object to perform
+feature selection.  It also contains a \class{FeatureVector} object
 representing the features present in all documents.
 
 \item[FeatureSelector]
 
-Feature selection is performed by subclasses of the FeatureSelector
-class.  Each KnowledgeSet object contains a FeatureSelector
-object--the KnowledgeSet provides the information necessary to do
-feature selection, and the FeatureSelector performs the desired
+Feature selection is performed by subclasses of the \class{FeatureSelector}
+class.  Each \class{KnowledgeSet} object contains a \class{FeatureSelector}
+object--the \class{KnowledgeSet} provides the information necessary to do
+feature selection, and the \class{FeatureSelector} performs the desired
 feature selection algorithm.
 
 \item[Collection]
@@ -340,33 +347,33 @@ feature selection algorithm.
 Because data sets in text categorization may be very large, and
 because their documents may exist in several different underlying
 storage mechanisms (e.g. as files in a filesystem, sections of a
-larger XML file, or fields in a database), a Collection class provides
+larger XML file, or fields in a database), a \class{Collection} class provides
 an abstract interface to a set of stored documents, together with a
-way to iterate through the set and return Document objects.
+way to iterate through the set and return \class{Document} objects.
 
-A Collection object may be used in several contexts within the
-framework.  For instance, a KnowledgeSet instantiates its Document and
-Category objects through a Collection object.  A Learner object may
-also mass-categorize the Documents in a Collection object.
+A \class{Collection} object may be used in several contexts within the
+framework.  For instance, a \class{KnowledgeSet} instantiates its Document and
+\class{Category} objects through a \class{Collection} object.  A \class{Learner} object may
+also mass-categorize the \class{Documents} in a \class{Collection} object.
 
 \item[Document]
 
-Each text document is represented by a Document object, or an object
+Each text document is represented by a \class{Document} object, or an object
 of one of its subclasses.  Each document class contains methods for
-turning a bunch of data into a Feature Vector.  Each document also has
+turning a bunch of data into a \class{FeatureVector}.  Each document also has
 a method to report which categories it belongs to.
 
 \item[Category]
 
-Each category is represented by a Category object.  Its main purpose
+Each category is represented by a \class{Category} object.  Its main purpose
 is to keep track of which documents belong to it, though it also
 contains methods for examining statistical properties of an entire
 category.
 
 \item[Learner]
 
-The abstract Learner class can train on a set of pre-categorized
-documents and subsequently categorize unseen Document objects.  Its
+The abstract \class{Learner} class can train on a set of pre-categorized
+documents and subsequently categorize unseen \class{Document} objects.  Its
 concrete subclasses implement specific categorization algorithms like
 Naive Bayes, SVM, Decision Tree, and so on.
 
@@ -376,26 +383,26 @@ Most categorization algorithms don't deal directly with documents'
 data, they instead deal with a \emph{vector representation} of a
 document's features.  Most often, documents are represented using the
 ``Bag of Words'' model \cite{XXX}, i.e. a non-ordered, weighted set of
-features.  The FeatureVector class provides an interface to the
+features.  The \class{FeatureVector} class provides an interface to the
 operations one may perform on these vector representations, such as
 querying features' presence or absence in a document, adding vectors
 to each other, and so on.
 
 \item[Hypothesis]
 
-The result of asking a Learner to categorize a previously unseen
-document is a Hypothesis object.  It may be queried for information
+The result of asking a \class{Learner} to categorize a previously unseen
+document is a \class{Hypothesis} object.  It may be queried for information
 about which categories were assigned, which category was the single
 most appropriate category, what scores were assigned to each category,
 and so on.
 
 \item[Experiment]
 
-The Experiment class can examine the results of many categorization
-decisions (i.e., many Hypothesis objects) and may be queried for
+The \class{Experiment} class can examine the results of many categorization
+decisions (i.e., many \class{Hypothesis} objects) and may be queried for
 aggregate information about the results.  This is often used in order
 to determine the quality (as measured by precision, recall, error,
-etc.) of a Learner on a collection of test documents.
+etc.) of a \class{Learner} on a collection of test documents.
 
 \item[AI::Categorizer]
 
@@ -421,17 +428,17 @@ objects' internal structure.
 
 In the AI::Categorizer framework, it is often necessary to iterate
 through collections of documents and perform some action on them.  For
-example, the documents may form a training set for a Learner to base a
+example, the documents may form a training set for a \class{Learner} to base a
 model on, or they may form a test set on which to evaluate the model.
 
-The Collection class implements the Iterator pattern
+The \class{Collection} class implements the Iterator pattern
 \cite[p. 257]{gamma:95} over documents in the framework.  Figure
 \ref{Iterator-collection} shows the main relationships involved in
 this pattern.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Iterator.pdf}
-\caption{The Iterator pattern in the Collection class}
+\caption{The Iterator pattern in the \class{Collection} class}
 \label{Iterator-collection}
 \end{figure}
 
@@ -452,31 +459,46 @@ aggregate structures.
 \end{itemize}
 
 The first and third reasons are most germane to the document iteration
-process.  As explained in section \ref{Document format}, it is
+process.  As explained in section \ref{Document storage}, it is
 important that the framework can directly import documents from their
 various underlying storage mechanisms in order to prevent unnecessary
 duplication of data.  In order to hide the details of the storage
-mechanism from the rest of the framework, a Collection object
+mechanism from the rest of the framework, a \class{Collection} object
 retrieves documents from several storage mechanisms and returns them
-as Document objects.  It provides a unified interface to iteration
+as \class{Document} objects.  It provides a unified interface to iteration
 over stored documents so that the various classes that need to perform
-this iteration (chiefly Learner and KnowledgeSet) don't need to be
+this iteration (chiefly \class{Learner} and \class{KnowledgeSet}) don't need to be
 aware of storage issues.  In this sense, the ``internal
 representation'' of the aggregate structure is often external to the
-framework itself, and may be files in a filesystem, entries in a
-database, records in an XML document, among others.
+framework itself--it may be files in a filesystem, entries in a
+database, records in an XML document, or another mechanism.
 
 In addition to providing a generic interface to a stored collection of
-documents, the Iterator pattern allows clients of the Collection class
-to use memory efficiently.  A Collection object will typically defer
-creation of its Document objects until its client calls its
-\texttt{next()} method.  In this way, the Collection doesn't store all
-the Documents in memory simultanously--if the client needs to do so,
-it can, or it can merely query properties of the Documents and dispose
+documents, the Iterator pattern allows clients of the \class{Collection} class
+to use memory efficiently.  A \class{Collection} object will typically defer
+creation of its \class{Document} objects until its client calls its
+\method{next} method.  In this way, the \class{Collection} doesn't store all
+the \class{Document} objects in memory simultanously--if the client needs to do so,
+it can, or it can merely query properties of each document and dispose
 of them in turn.
 
+Note that the \class{Collection} class defines a \method{next} method,
+but no \method{previous} method.  This is largely because common
+document storage mechanisms like filesystems or databases typically
+only have one-directional iterators.  Insisting that
+\class{Collection} classes needed to implement a \method{previous}
+method to support bi-directional iteration would impose an
+unreasonable burden on them.
+
 In order to decouple the storage mechanism from the internal format of
-the document, a Collection class can return many ...
+documents (see section \ref{Document format}), \class{Collection}
+classes can cooperate with any subclass of the \class{Document} class.
+The client of the \class{Collection} class informs it that it should
+instantiate documents using a certain \class{Document} subclass.
+Since the subclasses share a common interface, the \class{Collection}
+may remain ignorant of all internal document formatting issues,
+passing data to the proper constructors in order to instantiate
+\class{Document} objects.
 
 
 \subsection{Composite}
