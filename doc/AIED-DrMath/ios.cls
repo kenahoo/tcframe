@@ -10,7 +10,7 @@
               [1997/06/16 v1.3v
  Standard LaTeX document class]
 
-\RequirePackage{times,mathtimy,epsfig,amsmath,amsfonts,amsthm}
+\RequirePackage{times,epsfig,amsmath,amsfonts,amsthm}
 
 \newcommand\@ptsize{}
 \newif\if@restonecol
