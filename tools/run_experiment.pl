@@ -2,6 +2,7 @@
 
 use strict;
 use AI::Categorizer;
+use YAML;
 
 my (%opt, %do_stage);
 parse_command_line(@ARGV);
@@ -19,11 +20,11 @@ if ($do_stage{5}) {
   my $result = $c->stats_table;
   print $result;
   if ( my $file = $c->progress_file ) {
+      print "results:\n";
     local *FH;
     open FH, "> $file-results.txt" or die "$file-results.txt: $!";
-    # Should also dump parameters here
-    print FH scalar(localtime), "\n";
-    print FH "$0 @ARGV\n\n";
+    print FH "# ", scalar(localtime), "\n";
+    print FH YAML::Dump($c->dump_parameters);
     print FH $result;
     close FH;
   }
@@ -51,8 +52,6 @@ sub parse_command_line {
     } elsif ( $_[0] eq '--config_file' ) {
       shift;
       my $file = shift;
-      eval {require YAML; 1}
-	or die "--config_file requires the YAML Perl module to be installed.\n";
       my $href = YAML::LoadFile($file);
       @opt{keys %$href} = values %$href;
       
