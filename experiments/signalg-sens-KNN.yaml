@@ -2,6 +2,7 @@
 collection_class: '::Files'
 document_class: '::Text'
 learner_class: '::KNN'
+features_class: "AI::Categorizer::FeatureVector::FastDot"
 stemming: porter
 tfidf_weighting: xfx
 features_kept: 1000
