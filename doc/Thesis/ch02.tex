@@ -1,32 +1,134 @@
-
 \chapter{Background: Text Categorization}
 \label{background-tc}
 
+This chapter gives an overview of the typical Text Categorization
+process, including all aspects of the task that a TC framework must
+consider.  It is not a design specification, but it describes both the
+conceptual environment and the vocabulary necessary to understand the
+design discussion in Chapter \ref{design}.
+
 \section{The Text Categorization Process}
+
+In order to train a categorizer as described in Section
+\ref{tc-intro}, the user must begin with a \emph{training corpus},
+hereafter referred to as $\train$.  This is a set of documents which
+are pre-labeled with categories that are considered to be fully
+correct---typically, they have been manually assigned by a
+\emph{domain expert}, i.e. a person who is familiar with the type of
+material contained in the documents and who knows how to assign a set
+of categories to each document based on the documents' content.
+
+The basic workflow for Text Categorization is relatively simple: the
+documents in $\train$ are presented to the TC system, the system
+process the documents' content, and a specific categorization
+algorithm is produced that may be used to categorize future documents
+from the set $\docs$.  In an application, however, many details of
+this process need to be managed in specific and often varying ways.
+Sections \ref{Document storage} through \ref{Hypothesis behavior}
+describe the stages of this process.
+
 \subsection{Document storage}
 \label{Document storage}
+
+In an organization that needs a TC application, documents may have
+many different origins.  They may originate from plain-text or
+formatted email messages, they may be raw or pre-processed web pages,
+they may be collections of data from a database, or they may not have
+a straightforward representation outside of the TC system at all.  It
+is therefore important to recognize that the notion of varying
+document storage media, and the process of converting from those media
+to a medium accessible to the TC system, is an important part of the
+TC process.
+
+In addition, many Text Categorization data sets are quite large.  In
+their raw format, they may commonly be larger than the amount of
+available memory on the machine processing them.  This has two
+important implications.  First, converting the documents to a special
+storage format (for instance, as a set of files on the local
+filesystem) so that the TC system can access them may be impossible or
+undesirable for reasons of time, space, and/or data redundancy.
+Second, a mechanism that can deal with iterating through the native
+storage medium of the documents without reading all document data into
+memory is probably necessary in a TC system.
 
 \subsection{Document format}
 \label{Document format}
 
-XXX... However, many Text Categorization data sets are quite large.  They may
-commonly be larger than the amount of available memory on the machine
-processing them.  This has two important implications.  First,
-converting the documents to a special format so that the framework can
-access them may be impossible or undesirable for reasons of time,
-space, and data redundancy.  Second, a mechanism 
+Although most of the academic TC literature considers a document to be
+a simple plain text string of data, this may rarely be the case in an
+application environment.  Documents may be stored in many different
+formats, including plain text, HTML, PDF, XML, Microsoft Word .doc
+format, MIME-encoded email messages, and so on.  The internal data in
+each document may also be considered part of its format when
+nontrivial amounts of information extraction or other transformations
+need to be applied to the document data in order to make it accessible
+to the TC system.  For example, digit-strings in some document
+collections may be useful as terms to consider when categorizing,
+whereas in other collections they may only add noise to the data.
 
-unnecessary copies of the data, 
+For reasons similar to those mentioned in the previous section, it may
+be desirable for a TC system to deal with these issues directly, or
+more likely, provide a mechanism for a developer to extend the system
+in this way, rather than forcing the developer to convert all data to
+a format recognized by the system.
 
 \subsection{Document structure}
+
+Separate from the issue of document \emph{format} is that of document
+\emph{structure}.  In an age when XML data is increasingly more common
+as a data exchange and storage format, the structure of a document,
+i.e. the way the constituent parts of a document interrelate and nest
+to create the entire document, may be important to understanding the
+document's meaning.
+
+In the TC literature, little is currently made of document structure,
+except that a TC system may assign importance weights to the terms in
+a document according to pre-set importance weights of the sections in
+which those terms were found.  For instance, a term found in the title
+of a document might be considered twice as important as a term found
+in the body.  However, as research into categorization of structured
+documents progresses, this may be an important area to consider in
+building TC systems.
+
 \subsection{Tokenizing of data}
+
+The segmenting of text data into chunks representing individual words
+may seem like a straightforward task, but in fact there are many
+variations on how this process, called \emph{tokenizing} in this
+context, can be performed.\cite[p. XXX]{manning:99} It is not
+sufficient to split the data by using whitespace (spaces, tabs
+returns, and the like) as delimiters, because this does not deal with
+punctuation characters.  It is also not obvious whether terms with
+punctuated suffixes like \emph{'s} or \emph{'t}, or hyphenated terms
+like \emph{ready-made} ought to be treated as one feature or multiple
+features---this decision will usually need to be made with some
+knowledge of the document set $\docs$.  In addition, many non-European
+written languages do not contain spaces indicating divisions between
+words, so a sophisticated tokenizer may be required when dealing with
+languages like these.
+
+In order to address these issues, a TC system needs to allow
+variations in the tokenizing process.  This may involve providing a
+set of parameters that the user can adjust in order to affect
+tokenizing, or in some cases the application developer may need to
+write custom code to handle domain-specific cases.
+
 \subsection{Linguistic stemming}
+
+
+
 \subsection{Feature selection}
+
 \subsection{Vector space modeling}
+
 \subsection{Machine learning algorithm choice}
+
 \subsection{Machine learning configuration}
+
 \subsection{Incremental or on-line learning}
+
 \subsection{Hypothesis behavior}
+\label{Hypothesis behavior}
 
 \section{Machine learning techniques}
 \subsection{Naive Bayes}
@@ -35,7 +137,7 @@ unnecessary copies of the data,
 
 \section{Evaluation}
 \subsection{Correctness}
-Precision, recall, FN2, error, accuracy
+Precision, recall, $F_1$, error, accuracy
 \subsection{Usefulness}
 ROC curves
 \subsection{Scalability}
@@ -45,18 +147,18 @@ ROC curves
 
 \section{Related products}
 
-To establish the relevance of \aicat\ in the marketplace of
-Text Categorization, I will examine three related products.  First I
-discuss Weka, a Java product that has been used successfully by many
-Text Categorization researchers.  Then I address two businesses that
-supply products and services related to Text Categorization,
-Autonomy.com and Teragram Corporation.
+To discuss the relevance of \aicat\ in the marketplace of Text
+Categorization, three related products will be examined.  These
+products are by no means the only available products similar to
+\aicat, but they provide a reasonable sample of well-known tools for
+comparison.
 
 \subsection{Weka}
 
 Weka is an open-source system for Machine Learning originally
-developed at the XXX University of Waikato, New Zealand.  Its primary
-audience is the international community of academic machine learning
+developed at the University of Waikato, New Zealand, by Ian H. Witten
+and Eibe Frank.\cite{weka} Its primary
+audience is the international community of academic Machine Learning
 researchers, most notably those working with Categorization or
 Clustering problems that arise from working with text.  Weka has
 undergone at least one major code rewrite; at present it is
@@ -76,7 +178,7 @@ Despite some similar properties, Weka and \aicat\ differ in
 their goals and in many important implementation decisions.  Whereas
 Weka specifically targets the academic research community,
 \aicat\ aims to support use cases under both
-application-building and research-conducting situations.
+application-building and research situations.
 Consequently, Weka will typically keep up with research trends more
 closely, but \aicat\ will usually be easier for application
 developers to integrate into a real-world situation.
@@ -100,13 +202,14 @@ categorizers.  In this way, application developers can easily
 experiment with Weka's cutting-edge categorization techniques while
 retaining \aicat's application integration advantages.  Any
 cross-pollination generated as a result will likely benefit both
-projects.
+projects.  See Section \ref{Adapter-learner} for more information on
+the existing bridge to Weka.
 
 Other facilities provided by Weka are not yet offered by
-\aicat.  These include visualization tools, several
-sophisticated correctness evaluation tools, and XXX.  Most of these
+\aicat.  These include visualization tools and several
+sophisticated correctness evaluation tools.  Most of these
 facilities would make useful additions to \aicat\ if
-implemented
+implemented.
 
 \subsection{Autonomy.com}
 
