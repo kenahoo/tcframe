@@ -21,3 +21,4 @@
 #  and value is a single-quote delimited value.
 # For example:
 #*.gif -k 'b'
+TC*References -f '/Developer/Tools/SetFile -t ENDB "%s"'
