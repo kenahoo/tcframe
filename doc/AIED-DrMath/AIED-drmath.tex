@@ -156,7 +156,9 @@ categorized questions for our investigation necessitated drawing them
 from the archived questions.
 
 \begin{figure}
+\begin{center}
 \includegraphics[angle=90,width=0.7\linewidth]{cat-distribution}
+\end{center}
 \caption{Category distribution for the 95 Dr. Math categories}
 \label{cat-distribution}
 \end{figure}
@@ -269,6 +271,7 @@ and recall were then used
 to calculate the $F_1$ measure \cite{calvo:01,sebastiani:02}.
 
 \begin{table}
+\begin{center}
 \begin{tabular}{|r|r|r|r|r|r|}
 \hline
          & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
@@ -276,6 +279,7 @@ NB       & 0.246   & 0.226   & 0.226   & 0.361   & 0.022 \\ \hline
 kNN      & 0.211   & 0.186   & 0.179   & 0.257   & 0.025 \\ \hline
 Baseline & 0.019   & 0.018   & 0.018   & 0.042   & 0.031 \\ \hline
 \end{tabular}
+\end{center}
 \caption{Macro- and Micro-averaged performance scores.}
 \label{results-main}
 \end{table}
@@ -337,6 +341,7 @@ names.
 
 
 \begin{table}
+\begin{center}
 \begin{tabular}{|r|r|r|r|r|r|}
 \hline
 Task     & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
@@ -344,11 +349,13 @@ Level    & 0.524   & 0.626   & 0.570   & 0.671   & 0.223 \\ \hline
 Topic    & 0.339   & 0.314   & 0.313   & 0.440   & 0.026 \\ \hline
 Both     & 0.187   & 0.181   & 0.166   & 0.223   & 0.035 \\ \hline
 \end{tabular}
+\end{center}
 \caption{Performance of \naive\ Bayes classifier on subtasks.}
 \label{results-NB}
 \end{table}
 
 \begin{table}
+\begin{center}
 \begin{tabular}{|r|r|r|r|r|r|}
 \hline
 Task     & $MaP$   & $MaR$   & $MaF_1$ & $MiF_1$ & Error \\ \hline
@@ -356,6 +363,7 @@ Level    & 0.326   & 0.319   & 0.322   & 0.468   & 0.328 \\ \hline
 Topic    & 0.029   & 0.027   & 0.027   & 0.067   & 0.041 \\ \hline
 Both     & 0.015   & 0.010   & 0.011   & 0.035   & 0.027 \\ \hline
 \end{tabular}
+\end{center}
 \caption{Performance of baseline classifier on subtasks.}
 \label{results-baseline}
 \end{table}
