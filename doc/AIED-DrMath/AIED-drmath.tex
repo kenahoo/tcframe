@@ -73,7 +73,7 @@ These problems are common within a number of domains. Our test was performed on
 the Dr. Math questions and answers service for students and teachers. The issues 
 discussed also apply to other similar systems such as customer relationship 
 management (CRM) and e-learning systems in general. These systems can use an 
-automatic text categorization framework to categorize the questions into the experts’ 
+automatic text categorization framework to categorize the questions into the experts' 
 area of interest, or into the appropriate customer support mailbox. 
 
 The downside of an automatic categorization approach is that integrating such 
@@ -81,14 +81,14 @@ functionality into existing systems can be very complex, and often involves an i
 depth understanding of text categorization techniques.  Also, the content is normally 
 stored in systems with a relational database in the backend, as is the case for most 
 content and learning management systems. By building the categorizer into the 
-database, the categorization framework [williams2002] can be made invisible to the 
+database, the categorization framework\cite{williams:02} can be made invisible to the 
 users and is thus more attractive to the average system administrator or application 
 developer. Also, application developers, do not have to re-implement the 
 classification software. They only need a machine learning professional to assist in 
 training the classifier, and once trained it can then be reused in different applications. 
 
 The applications of information retrieval have been well studied since the 1980s, as 
-discussed by Salton [Salton 1989,1991], and many of these methodologies have been 
+discussed by Salton \cite{salton:89,salton:91}, and many of these methodologies have been 
 integrated into commercial database management systems that have free text search 
 capabilities. However, this integration does not seem to have penetrated the text 
 categorization domain.
@@ -142,18 +142,18 @@ tests due to the relatively small number of documents available.
 \section{Categorization Framework}
 
 Object Oriented Application Frameworks (OOAF) are software engineering artifacts 
-that improve reusability of design and implementation [Fayad et. al. 1997, 1999].
+that improve reusability of design and implementation \cite{fayad:97, fayad:99}.
 
 The framework used in this project\footnote{\url{http://sourceforge.net/projects/ai-categorizer/}}
-[Williams, 2002] was designed to provide a 
-consistent way to build document categorization systems. It allows the developer to 
+was designed to provide a 
+consistent way to build document categorization systems.\cite{williams:02}  It allows the developer to 
 focus on the quality of the more critical and complex modules by allowing reuse of 
 common, simple base modules. In this project we extended the framework to fit our 
 particular needs by adding a K-nearest neighbour `Learner' module. 
 
 The framework already has implementations of support vector machines (SVM), 
-Naïve Bayes, and Decision Trees [Yang 1999, Sebastiani 2002]. Other methods such 
-as neural networks [Calvo 2000, 2001] are being developed.
+\naive\ Bayes, and Decision Trees \cite{yang:99, sebastiani:02}. Other methods such 
+as neural networks \cite{calvo:00, calvo:01} are being developed.
 
 Also, an alternative Collection class was built to allow for the data to be read from a 
 database instead of directly from file. These extensions are built by sub-classing two 
@@ -210,8 +210,8 @@ Since, the categorization performance is determined only by the classification
 framework, all these methods should behave as they do in standalone mode (outside 
 the database). What the integration into the RDBMS does is to make the 
 functionalities of the framework available as procedures in the SQL language.
-Since relational databases can be designed using an object oriented methodology [Blaha 
-et.al. 1988, Rumbaugh et. al 1991], by integrating it in this way, the classification task 
+Since relational databases can be designed using an object oriented methodology \cite{blaha:88,
+rumbaugh:91}, by integrating it in this way, the classification task 
 (and framework) can also be designed into larger OO systems.
 
 \section{Method and Results}
@@ -223,7 +223,10 @@ using a statement similar to that in Figure 1. After each insert a SELECT query 
 run to extract the assigned categories. These categories were then compared to the 
 actual categories of that document. Through this comparison the performance of the 
 categorization in terms of recall  and performance  was measured. The precision and 
-recall was then used to calculate the F1 measure [Calvo 2001, Sebastiani 2002].
+recall\footnote{Recall is the proportion of the target items that the
+system selected, i.e. tp/(tp+fn).  Precision is the proportion of
+selected items the system got right, i.e. tp/(tp+fp).} was then used
+to calculate the F1 measure \cite{calvo:01,sebastiani:02}.
 
 \begin{table}
 \begin{tabular}{|r|r|r|r|r|}
@@ -260,14 +263,20 @@ and a small data set. Larger k or thresholds reduce the recall performance The r
 was generally poor and this is probably due to the lack of training data and short, 
 noisy and sometimes incoherent documents.
  
-Figure 4: Macro Performance averages
+\begin{figure}
+XXX Insert macro performance graph here...
+% \includegraphics[width=\linewidth]{macro-perf-graph}
+\caption{Macro performance averages}
+\end{figure}
  
 
-5. Conclusion
+\section{Conclusion}
+
 We have described a system that integrates a categorization framework into a 
 relational database. The results show it is possible to integrate categorization 
 techniques into the relational databases used by learning and content management 
 systems.
+
 A kNN classifier was built for the task of classifying postings in a discussion forum. 
 The results show that a high precision can be reached even on  noisy data. The macro 
 precision reached around 75%, however the recall was generally poor and this could be 
@@ -275,40 +284,19 @@ due to lack of training data and short, noisy and incoherent documents. The resu
 achieved in this test however demonstrates that a KNN categorizer implemented 
 within a database could have a high enough performance to be useful at classifying 
 unstructured and informal data sets. 
-Acknowledgements
 
-References
 1. Blaha, M., Premerlani W. and Rumbaugh J., Relational Database design using an 
 object oriented methodology. Communications of the ACM 31,4 (April 1988), 414-
 427.
-2. Williams K. and R.A. Calvo A Framework for Text Categorization. 7th 
-Australasian Document Computing Symposium. December 2002. Sydney, 
-Australia.
-3. Calvo R. A. Classifying financial news with neural networks. In 6th Australasian 
-Document Symposium, page 6, December 2001.
-4. Calvo, R. A.  and H. A. Ceccatto. Intelligent Document Classification. Intelligent 
-Data Analysis, 4(5), 2000.
-5. Fayad, M., D. Schmidt, and Johnson, R Eds., Building Application Frameworks : 
-Object-oriented foundations of framework design, John Wiley and Sons 1999.
+
 6. Fayad, Mohamed E. and Schmidt, Douglas C. Object-Oriented Application 
 Frameworks, Commun. ACM 40, 10 (Oct. 1997), 32-38.
-7. Manning C.D. and Hinrich Schutze. Foundations of Statistical Natural Language 
-Processing. The MIT Press, 1999.
+
 8. Rumbaugh J., Blaha, M, Premerlani W., Eddy F. and Lorensen W. Object Oriented 
 Modeling and Design. Prentice Hall, 1991.
-9. Salton, G. (1989). Automatic text processing: The transformation, analysis and 
-retrieval of information by computer. Reading, MA: Addison-Wesley.
+
 10. Salton, G. (1991). Developments in automatic text retrieval. Science, 253, 974--
 979.
-11. Sebastiani F. Machine learning in automated text categorization. ACM Computing 
-Surveys, 34(1):1-47, 2002
-12. Williams, K. and Calvo R.A.  A framework for text Categorization. Submitted to 
-7th Australasian Document Symposium, 2002.
-13. Yang, Y. and X. Liu. A re-examination of text categorization methods. In 22nd 
-Annual International SIGIR, pages 42–49, Berkley, August 1999.
-
- Recall is the proportion of the target items that the system selected. i.e. tp/(tp+fn)
- Precision is the proportion of selected items the system got right i.e. tp/(tp+fp)
 
 \section*{Acknowledgements}
 
@@ -316,7 +304,7 @@ The authors gratefully acknowledge financial support from the Capital Markets
 Collaborative Research Centre and the University Of Sydney. The authors also 
 acknowledge The Math Forum for giving permission to use and discuss their data. 
 
-\bibliographystyle{sample}
+\bibliographystyle{plain}
 \bibliography{TC-references}
 
 \end{document}
