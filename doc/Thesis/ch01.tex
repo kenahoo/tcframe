@@ -13,6 +13,7 @@ generically useful for building real-world TC applications, and for
 being extensible using common framework extension techniques.
 
 \section{Automatic Text Categorization}
+\label{tc-intro}
 
 The field of automatic Text Categorization is an extremely active area
 of current research and application.  It is a multi-disciplinary
@@ -28,19 +29,20 @@ or more user-defined labels to them based on their content.  More
 formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
 previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
 function that maps from $\docs$ to the set of all subsets of $\cats$.  In
-practice, many categorizers assign only a single label to each
+some applications, categorizers assign only a single label to each
 document, so a categorizer is often a function that maps directly from
 $\docs$ to $\cats$.  Often an intermediate function is useful for ``soft'' or 
-``rank-based'' categorization, mapping from ordered pairs $(d_i, c_j)$ 
-to the set of real numbers $\mathbb{R}$ in order to assign a score 
-to each category $c_j$ for each document $d_i$.  The scored categories
+``rank-based'' categorization, mapping from $\docs \times \cats$ to
+the set of real numbers $\mathbb{R}$ in order to assign a score to
+each category $c_j$ for each document $d_i$.  The scored categories
 may then be presented to a human expert in decreasing order, and the
-human may then make the final decision on category membership.
+human may then make the final decision on the document's category
+membership.
 
 The standard modern approach to creating new categorizer functions is
 to build them using Machine Learning techniques from a set of training
-documents $\train$.  This is a set of user-provided, pre-labeled documents that
-follows a category
+documents $\train$.\cite[p. 2]{sebastiani:02} This is a set of
+user-provided, pre-labeled documents that follows a category
 distribution similar to the distribution of $\docs$, and whose contents
 provide information about what sorts of documents should be mapped to
 what sorts of categories.  Algorithms can then be developed that make
