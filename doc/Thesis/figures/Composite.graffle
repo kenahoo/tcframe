@@ -28,7 +28,7 @@
 			<key>Points</key>
 			<array>
 				<string>{448.36, 182}</string>
-				<string>{451.216, 217}</string>
+				<string>{451.215, 217}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -60,7 +60,7 @@
 			<integer>23</integer>
 			<key>Points</key>
 			<array>
-				<string>{411.002, 182}</string>
+				<string>{411.001, 182}</string>
 				<string>{343.983, 222}</string>
 			</array>
 			<key>Style</key>
@@ -196,7 +196,7 @@ m-&gt;train()}</string>
 				<key>stroke</key>
 				<dict>
 					<key>HeadArrow</key>
-					<string>FilledArrow</string>
+					<string>FilledDoubleArrow</string>
 					<key>LineType</key>
 					<integer>1</integer>
 					<key>TailArrow</key>
