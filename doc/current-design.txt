@@ -1,0 +1,94 @@
+  $ Id: $
+
+**************** Current design of AI::Categorize *******************
+
+Currently (verion 0.07) AI::Categorize has four class hierarchies.
+The four parent classes are:
+
+  AI::Categorize
+    - represents a categorizer, including parsing, training, and
+      categorizing functions
+
+  AI::Categorize::Map
+    - represents a mapping between documents and categories
+
+  AI::Categorize::Result
+    - represents the results of a single categorization query
+
+  AI::Categorize::Evaluate
+    - routines for running repeatable experiments
+
+Different categorization algorithms are represented as subclasses of
+AI::Categorize.  For instance, AI::Categorize::NaiveBayes implements
+the Naive Bayes algorithm, and AI::Categorize::kNN implements the
+k-Nearest-Neighbor algorithm.
+
+The following functionalities are currently implemented in
+the AI::Categorize base class:
+
+  * Document processing from plain text input
+
+  * Stopword processing
+
+  * Performance metrics (F1, error, accuracy, precision, recall)
+
+  * Saving a machine to disk for later use
+
+The various algorithm subclasses accept parameters to control their
+execution.  For instance, the AI::Categorize::kNN subclass accepts a
+'k' parameter to control how many nearest-neighbor documents will be
+considered during training and categorization.
+
+The AI::Categorize::Map class is used by AI::Categorize and its
+subclasses internally.  It's just an interface wrapper around some
+hashes.
+
+An AI::Categorize::Result object is returned by the AI::Categorize
+'categorize()' method.  Its methods can provide the ordered list of
+categories assigned, the score for any category, or a boolean value
+indicating whether a given category was assigned.
+
+The AI::Categorize::Evaluate class aids in automated training and
+testing of categorizers, and comparison of categorization tasks.  It
+sits on top of AI::Categorize and calls the proper methods for parsing
+input and categorizing test documents.  It shows progress indicators
+and presents the output in an easy-to-read format.
+
+
+******************** Suggestions for changes *************************
+
+In the current design it is very easy to make a single change to
+existing behavior.  The AI::Categorize functionality has been divided
+into relatively small methods, and any method can be overridden in a
+subclass.
+
+However, the AI::Categorize class plays many seperate roles, and these
+roles are not organized orthogonally.  For instance, if a user wanted
+to implement TFIDF vector input methods, she would do so by
+subclassing AI::Categorize::NaiveBayes and overriding its
+extract_words() method.  The main problem with this is that this work
+is now unavailable to classes like AI::Categorize::kNN.
+
+I suggest a few changes.  First, the computation of performance
+metrics (F1, error, etc) will be moved out of the AI::Categorize class
+and into a new AI::Categorize::Metrics class.  Second, the
+AI::Categorize class will be split into two classes:
+
+ AI::Categorize::Parser  (AI::Categorize::Document?)
+   - accepts raw document data and creates feature vectors
+
+ AI::Categorize::Machine
+   - accepts training feature vectors or sets of feature vectors and
+     creates categorization machine
+   - accepts categorization feature vectors and returns categorization
+     result (as AI::Categorize::Result object)
+
+Each of these classes can be subclassed independently.  The
+AI::Categorize class remains as a container class for these new
+classes.
+
+The separation of the classes means that AI::Categorize::Machine is
+more broadly useful in non-text situations.
+
+The AI::Categorize::Evaluate and AI::Categorize::Result classes will be
+unchanged.
