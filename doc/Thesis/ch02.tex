@@ -16,12 +16,12 @@ of a TC system.
 \section{Formal Definitions}
 \label{formal-defs}
 
-XXX - need more references to literature here.
-
-The goal of automatic Text Categorization is to automatically produce specialized
-functions that can process natural-language documents, assigning zero
-or more user-defined labels to them based on their content.  More
-formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
+The goal of automatic Text Categorization is to automatically produce
+specialized functions that can process natural-language documents,
+assigning zero or more user-defined labels to them based on their
+content. \cite[p. 3]{sebastiani:02} \cite[ch. 16]{manning:99}
+\cite[sec. 6.10]{mitchell:97} More formally, given a set of labels
+(i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
 previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
 function $\func$ that maps from $\docs$ to the set of all subsets of
 $\cats$.  Figure \ref{sets} shows a simple diagram of this action.
@@ -34,16 +34,22 @@ $\cats$.  Figure \ref{sets} shows a simple diagram of this action.
 \end{center}
 \end{figure}
 
-In
-some applications, categorizers assign only a single label to each
+In some applications, categorizers assign only a single label to each
 document, so a categorizer is often a function that maps directly from
-$\docs$ to $\cats$.  Often an intermediate function is useful for \term{soft} or 
-\term{rank-based} categorization, mapping from $\docs \times \cats$ to
-the set of real numbers $\mathbb{R}$ in order to assign a score to
-each category $c_j$ for each document $d_i$.  The scored categories
-may then be presented to a human expert in decreasing order, and the
-human may then make the final decision on the document's category
-membership.
+$\docs$ to $\cats$. \cite[p. 3]{sebastiani:02} Often an intermediate
+function is useful for \term{soft} or \term{rank-based}
+categorization, mapping from $\docs \times \cats$ to the set of real
+numbers $\mathbb{R}$ in order to assign a score to each category $c_j$
+for each document $d_i$. \cite[p. 4]{sebastiani:02} The scored
+categories may then be presented to a human expert in decreasing
+order, and the human may then make the final decision on the
+document's category membership.  Alternatively, the system may make a
+decision itself based on a threshold for category membership,
+transforming the problem back into the \term{hard} categorization
+shown in Figure \ref{sets}.\footnote{This is the internal approach
+  taken by the \aicat\ framework---see the description of the
+  \class{Hypothesis} class in Section \ref{framework-classes} for more
+  details.}
 
 The standard modern approach to creating new categorizer functions is
 to build them using Machine Learning techniques from a set of training
