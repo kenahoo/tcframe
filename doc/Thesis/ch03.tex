@@ -256,14 +256,28 @@ subclassing.
 
 Some examination of the basic relationships between classes and the
 responsibilities of each class is helpful before looking at the design
-in more detail.  The major classes in the \aicat\ framework
-are:
+in more detail.  The following classes form the main framework roles
+in \aicat.  For exposition purposes, the UML class specification boxes
+do not list every attribute and method of each class, rather only the
+most important ones for this discussion.  For a complete reference,
+please see the \aicat\ documentation.
 
 XXX - the following descriptions need UML boxes with attributes/operations.
 
 \begin{description}
 
-\item[KnowledgeSet]
+\item
+
+\begin{concreteclass}{KnowledgeSet}
+ \attributes
+  \class{Document}[] documents \\
+  \class{Category}[] categories \\
+  \class{FeatureSelector} feature\_selector
+ \methods
+  documents() \\
+  categories() \\
+  scan\_features(\class{Collection})
+\end{concreteclass}
 
 The \class{KnowledgeSet} class represents a set of processed documents, a set
 of categories, and a many-to-many mapping between the two sets.
@@ -280,7 +294,17 @@ and \class{Category} objects.  It uses a \class{FeatureSelector} object to perfo
 feature selection.  It also contains a \class{FeatureVector} object
 representing the features present in all documents.
 
-\item[FeatureSelector]
+\item
+
+\begin{abstractclass}{FeatureSelector}
+ \attributes
+  \class{number} features\_kept
+ \methods
+  reduce\_features(\class{FeatureVector}) \\
+  rank\_features() \\
+  scan\_features() \\
+  select\_features()
+\end{abstractclass}
 
 Feature selection is performed by subclasses of the \class{FeatureSelector}
 class.  Each \class{KnowledgeSet} object contains a \class{FeatureSelector}
