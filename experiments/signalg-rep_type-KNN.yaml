@@ -1,0 +1,14 @@
+--- #YAML:1.0
+collection_class: '::Files'
+document_class: '::Text'
+learner_class: '::KNN'
+stemming: porter
+tfidf_weighting: xfx
+features_kept: 5000
+max_instances: 8000
+data_root:     '/home/rafa/share/corpus/SignalG'
+stopword_file: '/home/rafa/share/corpus/SignalG/SMART.stoplist'
+progress_file: '/home/rafa/share/corpus/SignalG/tmp/signalg-rep_type-KNN'
+category_file: '/home/rafa/share/corpus/SignalG/cats-reptype.txt'
+outfile: "results/signalg-rep_type-KNN.txt"
+verbose: 1
