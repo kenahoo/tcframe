@@ -1,0 +1,8 @@
+--- #YAML:1.0
+collection_class: '::SingleFile'
+delimiter: "\n.I"
+document_class: '::SMART'
+stemming: porter
+test_set: '/home/halvards/work/signalg/signalg.test'
+training_set: '/home/halvards/work/signalg/signalg.train'
+verbose: 1
