@@ -1,0 +1,10 @@
+--- #YAML:1.0
+data_root: corpora/reuters-21578
+stopword_file: corpora/reuters-21578/SMART.stoplist
+progress_file: "/tmp/reuters-DTree"
+outfile: "results/reuters-DTree.txt"
+learner_class: "::DecisionTree"
+tfidf_weighting: xfx
+stemming: porter
+features_kept: 2000
+verbose: 1
