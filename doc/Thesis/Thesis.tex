@@ -227,20 +227,266 @@ their own products whenever possible.
 \subsection{Documentation}
 \subsection{Community involvement}
 
-\chapter{Design of the AI::Categorizer Framework}
+\chapter{AI::Categorizer Framework Design}
 
+The AI::Categorizer framework is designed for maximum re-use in many
+kinds of situations \ldots XXX.
 
-\section{Class relationships}
-\subsection{Document}
-\subsection{Category}
-\subsection{Collection}
-\subsection{FeatureVector}
+For brevity, we will omit the ``AI::Categorizer::'' prefix from class
+names in this discussion.  It is to be understood that any class
+within the AI::Categorizer framework (except the top-level class
+AI::Categorizer itself) is prefixed by the ``AI::Categorizer::''
+namespace.
+
+\section{Overview of AI::Categorizer class hierarchy}
+
+In order to understand the structure of the AI::Categorizer framework,
+multiple kinds of analysis are helpful.  We can examine the
+inheritance relationships of the classes that participate in
+AI::Categorizer, and indicate which classes inherit from each other.
+Since a class generally is a representation of certain
+responsibilities and capabilities, this lets us see how the set of
+responsibilities for one class may be implemented in different ways or
+extended by its subclasses.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/inheritance-uml.pdf}
+\caption{Inheritance diagram for AI::Categorizer}
+\label{inheritance-uml}
+\end{figure}
+
+Figure \ref{inheritance-uml} shows the inheritance relationships among
+classes in the AI::Categorizer framework.  Note that this diagram
+indicates the \emph{capabilities} of the framework more than it
+indicates its \emph{architecture}.  For instance, the framework
+currently understands several document types, including plain text
+documents and documents in the ``SMART'' format.  If the framework is
+extended by writing additional subclasses of existing classes, the
+capabilities increase without changing the basic architecture of the
+framework.
+
+Note that the inheritance diagram is not particularly enlightening
+about how various classes cooperate to perform text categorization
+tasks.  The inheritance relationships are set at compile-time and do
+not change while the framework is in use.\footnote{Perl allows the
+dynamic reassignment of inheritance, but this capability isn't used
+in the framework.}
+
+Another way to examine the framework is to examine the run-time
+relationships between its classes.  This often provides a much more
+enlightening analysis of a framework, since modern framework design
+often favors object composition over class inheritance for its
+important structural elements. \cite[p. 20]{gamma:95}
+
+The class composition diagram in figure \ref{classes-uml} shows the
+most important run-time relationships between classes in the
+AI::Categorizer framework.  In this diagram, no inheritance
+relationships are shown--any inheritance hierarchies are represented
+only by their parent classes.  In general, a class and its subclass
+will share an interface and have identical relationships to other
+classes, but will differ in implementation.  Therefore, the
+relationships indicated in this diagram indicate stable aspects of the
+framework that do not change when the framework is extended by
+subclassing.
+
+Some examination of the basic relationships between classes and the
+responsibilities of each class is helpful before looking at the design
+in more detail.
+
 \subsection{KnowledgeSet}
-\subsection{Learner}
-\subsection{Hypothesis}
-\subsection{Experiment}
-\subsection{Categorizer}
 
+The KnowledgeSet class represents a set of processed documents, a set
+of categories, and a many-to-many mapping between the two sets.
+Processing may involve tokenization, stopword removal, linguistic
+stemming, feature selection, and vector weighting.  Note that the term
+``knowledge set'' is somewhat unique to this project.
+
+A KnowledgeSet contains references to many Document objects and
+Category objects.  It uses Collection objects to instantiate Document
+and Category objects.  It uses a FeatureSelector object to perform
+feature selection.  It also contains a FeatureVector object
+representing the features present in all documents.
+
+\subsection{FeatureSelector}
+
+Feature selection is performed by subclasses of the FeatureSelector
+class.  Each KnowledgeSet object contains a FeatureSelector
+object--the KnowledgeSet provides the information necessary to do
+feature selection, and the FeatureSelector performs the desired
+feature selection algorithm.
+
+\subsection{Collection}
+
+Because data sets in text categorization may be very large, and
+because their documents may exist in several different underlying
+storage mechanisms (e.g. as files in a filesystem, sections of a
+larger XML file, or fields in a database), a Collection class provides
+an abstract interface to a set of stored documents, together with a
+way to iterate through the set and return Document objects.
+
+A Collection object may be used in several contexts within the
+framework.  For instance, a KnowledgeSet instantiates its Document and
+Category objects through a Collection object.  A Learner object may
+also mass-categorize the Documents in a Collection object.
+
+\subsection{Document}
+
+Each text document is represented by a Document object, or an object
+of one of its subclasses.  Each document class contains methods for
+turning a bunch of data into a Feature Vector.  Each document also has
+a method to report which categories it belongs to.
+
+=head2 Categories
+
+Each category is represented by an C<AI::Categorizer::Category>
+object.  Its main purpose is to keep track of which documents belong
+to it, though you can also examine statistical properties of an entire
+category, such as obtaining a Feature Vector representing an
+amalgamation of all the documents that belong to it.
+
+=head2 Machine Learning Algorithms
+
+There are lots of different ways to make the inductive leap from the
+training documents to unseen documents.  The Machine Learning
+community has studied many algorithms for this purpose.  To allow
+flexibility in choosing and configuring categorization algorithms,
+each such algorithm is a subclass of C<AI::Categorizer::Learner>.
+There are currently four categorizers included in the distribution:
+
+=over 4
+
+=item AI::Categorizer::Learner::NaiveBayes
+
+A pure-perl implementation of a Naive Bayes classifier.  No
+dependencies on external modules or other resources.  Naive Bayes is
+usually very fast to train and fast to make categorization decisions,
+but isn't always the most accurate categorizer.
+
+=item AI::Categorizer::Learner::SVM
+
+An interface to Corey Spencer's C<Algorithm::SVM>, which implements a
+Support Vector Machine classifier.  SVMs can take a while to train
+(though in certain conditions there are optimizations to make them
+quite fast), but are pretty quick to categorize.  They often have very
+good accuracy.
+
+=item AI::Categorizer::Learner::DecisionTree
+
+An interface to C<AI::DecisionTree>, which implements a Decision Tree
+classifier.  Decision Trees generally take longer to train than Naive
+Bayes or SVM classifiers, but they are also quite fast when
+categorizing.  Decision Trees have the advantage that you can
+scrutinize the structures of trained decision trees to see how
+decisions are being made.
+
+=item AI::Categorizer::Learner::Weka
+
+An interface to version 2 of the Weka Knowledge Analysis system that
+lets you use any of the machine learners it defines.  This gives you
+access to lots and lots of machine learning algorithms in use by
+machine learning researches.  The main drawback is that Weka tends to
+be quite slow and use a lot of memory, and the current interface
+between Weka and C<AI::Categorizer> is a bit clumsy.
+
+=back
+
+Other machine learning methods that may be implemented soonish include
+Neural Networks, k-Nearest-Neighbor, and/or a mixture-of-experts
+combiner for ensemble learning.  No timetable for their creation has
+yet been set.
+
+Please see the documentation of these individual modules for more
+details on their guts and quirks.  See the C<AI::Categorizer::Learner>
+documentation for a description of the general categorizer interface.
+If you wish to create your own classifier, you should inherit from
+C<AI::Categorizer::Learner> or C<AI::Categorizer::Learner::Boolean>,
+which are abstract classes that manage some of the work for you.
+
+=head2 Feature Vectors
+
+Most categorization algorithms don't deal directly with documents'
+data, they instead deal with a I<vector representation> of a
+document's I<features>.  The features may be any properties of the
+document that seem helpful for determining its category, but they are
+usually
+some version of the ``most important'' words in the document.  A list
+of
+features and their weights in each document is encapsulated by the
+C<AI::Categorizer::FeatureVector> class.  You may think of this class
+as roughly analogous to a Perl hash, where the keys are the names of
+features and the values are their weights.
+
+=head2 Hypotheses
+
+The result of asking a categorizer to categorize a previously unseen
+document is called a hypothesis, because it is some kind of
+``statistical guess'' of what categories this document should be
+assigned to.  Since you may be interested in any of several pieces of
+information about the hypothesis (for instance, which categories were
+assigned, which category was the single most likely category, the
+scores assigned to each category, etc.), the hypothesis is returned as
+an object of the C<AI::Categorizer::Hypothesis> class, and you can use
+its object methods to get information about the hypothesis.  See its
+class documentation for the details.
+
+=head2 Experiments
+
+The C<AI::Categorizer::Experiment> class helps you organize the
+results of categorization experiments.  As you get lots of
+categorization results (Hypotheses) back from the Learner, you can
+feed these results to the Experiment class, along with the correct
+answers.  When all results have been collected, you can get a report
+on accuracy, precision, recall, F1, and so on, with both
+micro-averaging and macro-averaging over categories.  We use the
+C<Statistics::Contingency> module from CPAN to manage the
+calculations. See the docs for C<AI::Categorizer::Experiment> for more
+details.
+
+
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/classes-uml.pdf}
+\caption{Class composition diagram for AI::Categorizer}
+\label{classes-uml}
+\end{figure}
+
+\section{Design Patterns in AI::Categorizer}
+
+\subsection{Iterator}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Iterator.pdf}
+\caption{The Iterator pattern in the Collection class}
+\label{Iterator-collection}
+\end{figure}
+
+\subsection{Composite}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Composite.pdf}
+\caption{The Composite pattern in the Learner::Ensemble class}
+\label{Composite-ensemble}
+\end{figure}
+
+\subsection{Adapter}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Adapter.pdf}
+\caption{The Adapter pattern in the Learner class}
+\label{Adapter-learner}
+\end{figure}
+
+\subsection{Strategy}
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Strategy.pdf}
+\caption{The Strategy pattern in the Learner class}
+\label{Strategy-learner}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/Strategy-feasel.pdf}
+\caption{The Strategy pattern in the FeatureSelector class}
+\label{Strategy-feasel}
+\end{figure}
+
+\subsection{Factory Method}
 
 \chapter{Implementation}
 
