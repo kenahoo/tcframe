@@ -5,6 +5,7 @@ progress_file: "/tmp/reuters-Weka"
 learner_class: "::Weka"
 weka_path: "/Applications/Science/weka-3-2-3/weka.jar"
 java_args: "-Xmx130MB"
+tfidf_weighting: xfx
 stemming: porter
 features_kept: 2000
 verbose: 1
