@@ -372,8 +372,9 @@ category.
 
 \item[Learner]
 
-The abstract \class{Learner} class can train on a set of pre-categorized
-documents and subsequently categorize unseen \class{Document} objects.  Its
+The abstract \class{Learner} class provides an interface to train on a
+set of pre-categorized documents and subsequently categorize
+previously unseen \class{Document} objects.  Its
 concrete subclasses implement specific categorization algorithms like
 Naive Bayes, SVM, Decision Tree, and so on.
 
@@ -413,7 +414,7 @@ XXX need to write about the umbrella class
 \section{Design Patterns in AI::Categorizer}
 
 In order to shed light on the design of the AI::Categorizer framework,
-analysis ...
+XXX \ldots.
 
 
 \subsection{Iterator}
@@ -495,18 +496,48 @@ documents (see section \ref{Document format}), \class{Collection}
 classes can cooperate with any subclass of the \class{Document} class.
 The client of the \class{Collection} class informs it that it should
 instantiate documents using a certain \class{Document} subclass.
-Since the subclasses share a common interface, the \class{Collection}
+Since the \class{Document} subclasses share a common interface, \class{Collection}
 may remain ignorant of all internal document formatting issues,
 passing data to the proper constructors in order to instantiate
 \class{Document} objects.
 
 
 \subsection{Composite}
+
+The Composite pattern ``lets clients treat individual objects and
+compositions of objects uniformly.'' \cite[p. 163]{gamma:95} It is
+often used to represent trees or other data structures in which the
+form of a subset of the structure is not qualitiatively different from
+the form of the entire structure.  In simple terms, this means that
+the same kinds of operations--iteration over subnodes, inspection of
+the root node, and so on--can be performed on the entire tree, a
+subtree, or even a single node.
+
+In fact, the Composite pattern does not apply only to tree
+structures.  It applies whenever a self-similarity exists between the
+whole and the parts in a part-whole hierarchy.
+
+One instance of this kind of structure in Text Categorization is in
+so-called ``ensemble learners,'' also known as ``classifier
+committees.''  An ensemble learner is a categorizer that combines the
+results of a set of other categorizers in some way to arrive at a
+categorization result of its own. \cite[p. 30]{sebastiani:02} Often,
+an ensemble learner may outperform each of its constituent members on
+the general categorization task.  \cite{tumer:98}
+
+To implement ensemble learners within AI::Categorizer, the Composite
+pattern may be applied to the \class{Learner} class to create a
+\class{Learner::Ensemble} subclass.  Figure \ref{Composite-ensemble}
+shows the classes participating in this pattern.
+
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Composite.pdf}
-\caption{The Composite pattern in the Learner::Ensemble class}
+\caption{The Composite pattern in the \class{Learner::Ensemble} class}
 \label{Composite-ensemble}
 \end{figure}
+
+
+
 
 \subsection{Adapter}
 \begin{figure}
