@@ -281,8 +281,13 @@ specifications, that accept various parameters (usually corresponding
 to the member attributes).  For a complete reference, please see the
 \aicat\ documentation.
 
-\subsection{Framework classes}
+\section{Framework classes}
 \label{framework-classes}
+
+This section introduces each of the major \aicat\ classes as shown in
+Figure \ref{classes-uml}.  For each class a partial UML class
+specification rectangle is shown, indicating the attributes and
+methods most important to this discussion.
 
 \begin{concreteclass}{KnowledgeSet}
  \attributes
@@ -358,7 +363,7 @@ Because data sets in text categorization may be very large, and
 because their documents may exist in several different underlying
 storage mechanisms (e.g. as files in a filesystem, sections of a
 larger XML file, or fields in a database), a \class{Collection} class provides
-an abstract interface to a set of stored documents, together with a
+an abstract interface to a set of stored documents together with a
 way to iterate through the set and return \class{Document} objects.
 
 A concrete subclass of \class{Collection} must implement the
@@ -477,7 +482,7 @@ need to be implemented in concrete \class{Learner} subclasses.  They
 are called internally by \method{train} and \method{categorize},
 respectively.  The \method{get\_scores} method returns categorization
 information in terms of per-category scores and a membership
-threshold, and \method{categorize} translates this data into a
+threshold.  \method{categorize} translates this data into a
 \class{Hypothesis} object representing the categorization.
 
 
@@ -491,7 +496,8 @@ threshold, and \method{categorize} translates this data into a
   \meth[float]{dot}{FeatureVector}
 \end{concreteclass}
 
-Most categorization algorithms don't deal directly with documents'
+As discussed in Section \ref{vector-space}, most categorization
+algorithms don't deal directly with a document's
 data, they instead deal with a \emph{vector representation} of a
 document's features.  Most often, documents are represented using the
 ``Bag of Words'' model \cite[p. 10]{sebastiani:02}, i.e. a non-ordered, weighted set of
@@ -554,9 +560,9 @@ framework's \class{Experiment} class is therefore quite small,
 inheriting most of its functionality from the more general-purpose
 module.
 
-\class{Experiment} contains a \method{add\_hypothesis} method for
+\class{Experiment} contains an \method{add\_hypothesis} method for
 adding \class{Hypothesis} objects to the set of data to be summarized,
-and implements a \method{stats\_table} method for showing the a
+and implements a \method{stats\_table} method for showing a
 summary of the data in table format with a specified number of
 significant figures.
 
@@ -570,11 +576,11 @@ significant figures.
   \meth{scan\_features}{} \\
   \meth{read\_training\_set}{} \\
   \meth{train}{} \\
-  \meth{evaluate\_test\_set}{}
-  \meth{run\_experiment}{} \\
+  \meth{evaluate\_test\_set}{} \\
+  \meth{run\_experiment}{}
 \end{concreteclass}
 
-An umbrella class \aicat\ sits above the rest of the classes,
+An umbrella class \aicat\ sits above the rest of the classes
 providing a convenient interface to a complete system for text
 categorization.  Most applications built using the framework will
 instantiate an object of this class.  Note that the term \aicat\ can
@@ -600,7 +606,7 @@ by the particular application.
 The \method{scan\_features} method invokes feature selection using the
 \class{KnowledgeSet}'s \class{FeatureSelector}.  The resultant list of
 desired features can be used by the \method{read\_training\_set}
-method, which populates the \class{KnowledgeSet} with data from the
+method which populates the \class{KnowledgeSet} with data from the
 training corpus.  The \method{train} method invokes the
 \class{Learner}'s \method{train} method on the \class{KnowledgeSet},
 and the \method{evaluate\_test\_set} method invokes the
@@ -828,8 +834,8 @@ exhibits a very straightforward Adapter usage as presented in
 \cite{gamma:95}---an existing stand-alone class exists that implements the
 needed functionality, and its interface is adapted to the framework
 requirements by a simple wrapping subclass.  The \class{Learner::SVM}
-wrapper is also fairly straightforward.  However, the other two
-wrappers exhibit well the highly heterogeneous nature of the text
+wrapper is also fairly straightforward.  The other two wrappers,
+however, reflect the highly heterogeneous nature of the text
 categorization domain.  The main reason for the adaptation in the
 \class{Algorithm::SVM} class is to provide a Perl interface to a C
 library.  The \class{Learner::Weka} adapter combines language
@@ -850,18 +856,18 @@ be merely historical, or they may reflect different needs in different
 domains.  The Adapter must conform to the interface of its abstract
 superclass, which is typically designed to be independent of subclass
 abilities and implementations.  The Adaptee may be designed for use in
-a different arena, with extra functionality, or an interface that
+a different arena, with extra functionality or an interface that
 takes full advantage of its capabilities.
 
 Using Adapters may bring major benefits in the area of reusability.
 Obviously, classes won't have to be re-implemented if the
 functionality can be adapted from an existing implementation.  Second,
 and perhaps more importantly, classes initially implemented for a
-framework may be converted into Adaptee classes, usable in isolation.
+framework may be converted into Adaptee classes that are usable in isolation.
 This can bring them better exposure in other projects and thus more
 feedback, maturing them quickly.  This can be a major win, because
 iteration is considered a limiting factor in framework development
-\cite[p. 75]{fayad:99}, and any process that speeds up maturity in
+\cite[p. 75]{fayad:99}, so any process that speeds up maturity in
 framework components can have a large impact.  Adapters can also force
 a more robust encapsulation of design in the Adaptee, bringing
 benefits in the conceptual and technical segmentation of the
@@ -898,7 +904,7 @@ be easy to vary in a categorization framework.  In the language of
 
 The most obvious Strategy application in \aicat\ is the
 \class{Learner} class and its subclasses.  These classes all have a
-common task to perform, that of training a categorizer and
+common task to perform: that of training a categorizer and
 categorizing unseen documents.  The various subclasses represent very
 different ways to accomplish that task.  Importantly, the results of
 the task, and not just the internal mechanism that performs it, may be
@@ -915,17 +921,17 @@ in the \class{Learner} class and its subclasses.  Three concrete
 subclasses are shown that implement specific Machine Learning
 algorithms (see Figure \ref{inheritance-uml} for other \class{Learner}
 subclasses currently implemented).  From the point of view of the
-client \aicat\ object, all \class{Learner}s have the same interface,
+client \aicat\ object, all \class{Learner}s have the same interface
 and may therefore be treated uniformly.  The framework user or
 application designer, however, may choose judiciously among subclasses
 depending on the particular needs of the application.  Customizability
 of the Machine Learning algorithm is of paramount importance to the
-framework, since it would be useless to most researchers if this were
+framework since it would be useless to most researchers if this were
 not the case.  Many researchers may wish to write their own
-\class{Learner} subclasses, using this portion of the framework in the
+\class{Learner} subclasses using this portion of the framework in the
 ``whitebox'' paradigm.  Other researchers, and most application
 developers, will want to use existing framework classes in a
-``blackbox'' framework usage style \cite[p. 10]{fayad:99}. Either
+``blackbox'' framework usage style \cite[p. 10]{fayad:99}.  Either
 method is supported.
 
 Each \class{Learner} subclass must implement the abstract
@@ -975,7 +981,7 @@ must be paid to the issue of how specific classes are chosen for the
 various framework roles, how these classes are instantiated, and how
 the instantiated objects are connected to each other.  In the simplest
 possible case for the framework developer, the framework client code must create all objects and
-manually connect them to each other---for instance, in \aicat, the
+manually connect them to each other.  For instance, in \aicat, the
 client code might create a \class{KnowledgeSet} object, a
 \class{Learner} object, an \aicat\ object, a \class{Collection}
 object, then populate the \aicat\ object with \class{KnowledgeSet} and
@@ -995,7 +1001,7 @@ This approach works, but it is error-prone and cumbersome.  It forces
 every client to specify the framework relationships explicitly, when
 in fact these are fundamental relationships of the \emph{framework},
 not of the client code.  It makes little sense for this structural
-code to be outside the framework, and even less sense for it to be
+code to be outside the framework and even less sense for it to be
 duplicated in every application that uses the framework.  Note too
 that Figure \ref{naive-constructors} only shows a small part of the
 framework being used---in reality, the client code would have to
@@ -1007,9 +1013,9 @@ support for object creation and enforcement of the framework
 relationships.  An example of this situation is pictured in Figure
 \ref{better-constructors}.  Here, the patterns of object creation more
 closely follow the class relationships that will be used at runtime.
-This design is moving closer toward a factory-style pattern, in which
+This design is moving closer toward a factory-style pattern in which
 object creation is delegated to another object \cite{gamma:95}.
-defines two specific kinds of factory patterns, ``Factory Methods''
+defines two specific kinds of factory patterns: ``Factory Methods''
 and ``Abstract Factories.''  Figure \ref{better-constructors} does not
 fit either of these patterns exactly, but it does fall under the
 general category of factory object creation.
@@ -1026,7 +1032,7 @@ advantages and disadvantages compared with that in Figure
 code is greatly simplified, because it needn't create any framework
 objects except the top-level object, and because it doesn't have to
 link the objects to each other.  This eliminates redundancy in
-multiple client code bases, and allows the framework designer greater
+multiple client code bases and allows the framework designer greater
 flexibility in redesigning the framework hierarchy.  Another advantage
 is that the framework objects are created by the objects that use
 them, so class code can accept responsibility for its subordinate
@@ -1036,7 +1042,7 @@ However, these properties can also be seen as disadvantages.  If each
 framework object assumes all responsibility for creating its
 subordinate objects, then the client may not be able to control the
 creation process effectively.  This is a problem for at least two
-important reasons: first, the client may wish to change some
+important reasons.  First, the client may wish to change some
 properties of the objects it creates.  If it passes all constructor
 parameters to the top-level class constructor, then this constructor
 must have knowledge of all of its subordinate classes' parameters in
@@ -1046,8 +1052,8 @@ will) change which classes are participating in the framework
 hierarchy.  If the \class{KnowledgeSet} class always creates a certain
 class of \class{Collection} object, then in order to substitute a
 different \class{Collection} class, the \class{KnowledgeSet} class
-would need to be subclassed---and the top-level \aicat\ class would
-need to be subclassed too, in order to create the new type of
+would need to be subclassed---this means the top-level \aicat\ class would
+also need to be subclassed in order to create the new type of
 \class{KnowledgeSet}, leading to a proliferation of subclasses just to
 manage object creation.  Clearly a better solution is needed.
 
@@ -1064,9 +1070,9 @@ Because inheritance is directly implemented by the language, it is
 easy for framework users to understand inheritance relationships, and
 these relationships are expressed straightforwardly in the framework
 code.  For support of this point, consider object-oriented programming
-in languages like C that don't have inherent OO support, where
-understanding the inheritance structures can be much more
-challenging \cite[p. 7]{fayad:99}.
+in languages like C that don't have inherent OO support.
+Understanding the inheritance structures can be much more
+challenging in this situation \cite[p. 7]{fayad:99}.
 
 With this perspective in mind, one solution is to create a way for
 each class to explicitly declare its constructor parameters and its
@@ -1074,11 +1080,11 @@ relationships to other classes, and then let the framework manage
 object creation in a consistent, centralized manner based on these
 declarations.  In a sense, this approach extends the implementation
 language to be able to express the important framework relationships
-directly, rather than letting them emerge implicitly from patterns of
+directly rather than letting them emerge implicitly from patterns of
 usage in the code.  Client code then supplies parameters that inform
 the top-level object about which classes should be instantiated and
 what parameters should be passed to each class's constructors, and the
-framework itself directs object the creation process.
+framework itself directs the object creation process.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/factory-constructors.pdf}
@@ -1114,7 +1120,7 @@ separate subclasses to create the concrete subclasses.  A closer
 variation is the ``Parameterized Factory Method''
 \cite[p. 110]{gamma:95}, which lets the specific subordinate class
 be determined by switching among several known classes.  This is
-closer to the data-driven approach employed in \aicat, but doesn't
+closer to the data-driven approach employed in \aicat, but it doesn't
 address the issue of how the subordinate classes must actually be
 created at runtime.  The Abstract Factory pattern is also similar in
 that the creation of multiple objects is centralized, but in \aicat\ a
@@ -1125,7 +1131,7 @@ approaches considered here.  The client code is freed from having to
 create multiple framework objects, and the framework relationships are
 expressed explicitly in the framework code, not in the client code or
 implicitly in the framework implementation.  Clients are also able to
-easily change which classes participate in the framework hierarchy,
+easily change which classes participate in the framework hierarchy
 and can specify constructor parameters without invoking the
 constructors directly.  Framework code doesn't create subordinate
 objects directly, but defers creation to factory methods inherited
@@ -1136,11 +1142,11 @@ the framework runtime structure can be highly parameterized.
 
 Effective documentation is essential for the use and dissemination of
 any framework \cite[ch. 21]{fayad:99}. The \aicat\ distribution
-contains complete documentation of the user-visible classes, and that
+contains complete documentation of the user-visible classes.  That
 documentation will not be reproduced here.  Of use to the present
 discussion, however, are some simple examples of using the framework.
 Example code often forms one of the most important kinds of framework
-documentation, since it shows concrete examples of framework
+documentation since it shows concrete examples of framework
 usage \cite[p. 498]{fayad:99}.
 
 Figure \ref{high-level-interface} shows the highest-level
@@ -1221,9 +1227,9 @@ while (...) {
 
 In any software design process, choices must be made that determine
 the scope and direction of the project.  In designing \aicat, these
-choices have been made in a way that tries to maximize usefulness for
-the intended audience, reuse of framework components, framework
-efficiency and flexibility, and rapid application development.  In
+choices have been made in a way that tries to maximize the usefulness for
+the intended audience, the reuse of framework components, the framework's
+efficiency and flexibility, and the rapid development of applications.  In
 some cases, these decisions may limit the capabilities of the
 framework.  This section describes some of these limitations, explains
 the reasons for them, and proposes alternative ways to deal with the
@@ -1240,7 +1246,7 @@ all document vectors in the training set.  Each document vector is
 structure, where $n$ is the total number of features in all the
 training documents.  This representation has been shown to be very
 effective for Text Categorization applications
-\cite[p. 10]{sebastiani:02}, and is crucial for such common TC
+\cite[p. 10]{sebastiani:02} and is crucial for such common TC
 algorithms as k-Nearest-Neighbor and Support Vector Machines.
 
 However, many environments routinely use richer data models for
@@ -1264,7 +1270,7 @@ Section \ref{imp-featurevectors} for more on this topic).
 In an application using structured documents, two options exist for
 taking advantage of this structure using \aicat.  One option is to
 ``flatten'' the structure of the document into a traditional feature
-vector representation.  However, it is not always clear to the
+vector representation.  Unfortunately, it is not always clear to the
 developer how this flattening should be done, and the flattening
 process may lose valuable information about document structure, making
 categorization results sub-optimal.
@@ -1298,7 +1304,7 @@ the research literature \cite[p. 7]{sebastiani:02}.
 In the \aicat\ framework, hierarchical categorization has not
 explicitly been supported in the architecture.  The set of categories
 in any framework categorization task is assumed to be a simple list of
-named sets of documents, with no hierarchical structure.  However,
+named sets of documents with no hierarchical structure.  However,
 there are at least two ways of dealing with hierarchical
 categorization tasks using the framework.
 
@@ -1320,12 +1326,12 @@ to manually break the categorization task into several smaller tasks,
 building a separate machine learner for each splitting node in the
 category hierarchy.  This is a common approach to hierarchical
 categorization in the literature
-\cite{dumais:00,koller:97,chakrabarti:98}, and seems a natural mapping
-of the hierarchical problem into a hierarchical solution.  The main
+\cite{dumais:00,koller:97,chakrabarti:98}, and it seems to naturally map
+the hierarchical problem into a hierarchical solution.  The main
 disadvantage with this method is that the framework provides no direct
-support for creating a hierarchy of categorizers and using them for
-categorization, so the client must create and maintain code for the
+support for creating a hierarchy of categorizers, so the client
+must create and maintain code for the
 hierarchical aspect of the task.  This is another possible area of
-future work, and another student in the Web Engineering Group at
+future work, and a fellow student in the Web Engineering Group at
 Sydney University is currently working toward a solution for using
 \aicat\ in hierarchical categorization.
