@@ -36,16 +36,19 @@ sub parse_command_line {
     } elsif ( $_[0] =~ /^--/ ) {
       my ($k, $v) = (shift, shift);
       $k =~ s/^--//;
-      
-      # Allow abbreviations
-      if ($k =~ /^(\w+)_class$/) {
-	my $name = $1;
-	$v =~ s/^::/AI::Categorizer::\u${name}::/;
-      }
       $opt{$k} = $v;
       
     } else {
       die "Unknown option format '$_[0]'.  Do you mean '--$_[0]'?\n";
+    }
+  }
+
+  while (my ($k, $v) = each %opt) {
+    # Allow abbreviations
+    if ($k =~ /^(\w+)_class$/) {
+      my $name = $1;
+      $v =~ s/^::/AI::Categorizer::\u${name}::/;
+      $opt{$k} = $v;
     }
   }
 }
