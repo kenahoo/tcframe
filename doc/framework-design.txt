@@ -1,0 +1,76 @@
+Design Doc for TCFRame;
+TCFRame is an application framework for classification (mostly docs)
+
+
+package TCFrame
+# The class should provide methods that describe a complete experiment: collection, method, oarameters used in the training...
+
+Methods:
+	clean;
+	backup;
+	describe;
+
+
+package TCFrame::Classifier
+# Type of learning classifier
+
+
+package TCFrame::Classifier::NNet
+# Neural Nets, at this it just a wraper to previous work
+
+Attributes:
+	MONEMTUM = 0.5;
+	EPOCHS =	5;
+	N = 		500;
+	HIDDEN=	50;
+	SAVE = 	0;
+	COR = 		"signalg";
+	WT= 		"ntc";
+	K=		50;
+	THRES= 	500;
+	CV = 		200;
+	CVEXP = 	3;
+	EXP 	=	$COR;
+	ALPHA 	= 	0.9;
+
+methods:
+create_vec;
+create_trn_nnt;
+sub create_tst_nnt;
+create_net;
+train;
+test;
+
+package TCFrame::Classifier::NaiveBayes
+# Naive Bayes
+
+
+package TCFrame::Collection
+#The class provides collection wide utilities and data structures.
+
+Atributes:
+	Description;
+	DTD;
+	Language;
+
+Methods:
+	parse(from,to);    # e.g. smart2xml, reuters2smart,...
+	tfidf(tfidf-args); # use smart package, then replace
+	feasel (fselargs); # feature selection method
+
+package TCFrame::Collection::Document
+# Document class
+
+Methods:
+	stopwords;
+	stemming;
+	
+
+
+package TCFrame::Collection::Map
+# Manages a mapping between categories & documents.  Can look up
+# either by category or by document, so we use a double hash.
+
+
+
+
