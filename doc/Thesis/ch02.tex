@@ -153,26 +153,32 @@ building TC systems.
 
 \subsection{Tokenizing of data}
 
-XXX - clarify relationship between word, token, and feature
+In order to convert the text of a document into data that may be
+analyzed by a Machine Learning algorithm, it is necessary to break the
+text into discrete units, each usually corresponding to a word in the
+text.  This is called \term{tokenization}.  In this discussion, the
+term \term{word} refers to a linguistic entity exactly as it appears
+in the original text, and \term{token} refers to a string extracted by
+the TC system.
 
 The segmenting of text data into chunks representing individual words
 may seem like a straightforward task, but in fact there are many
-variations on how this process, called \emph{tokenizing} in this
-context, can be performed. \cite[sec. 4.2.2]{manning:99} It is not
-sufficient to split the data by using whitespace (spaces, tabs
+variations on how this process
+can be performed. \cite[sec. 4.2.2]{manning:99} It is not
+sufficient to split the data into tokens by using whitespace (spaces, tabs
 returns, and the like) as delimiters, because this does not deal with
-punctuation characters.  It is also not obvious whether terms with
-punctuated suffixes like \emph{boy's} or \emph{doesn't}, or hyphenated terms
-like \emph{ready-made} ought to be treated as one feature or multiple
-features---this decision will usually need to be made with some
+punctuation characters.  It is also not obvious whether words with
+punctuated suffixes like \emph{boy's} or \emph{doesn't}, or hyphenated words
+like \emph{ready-made} ought to be treated as one token or multiple
+tokens---this decision will usually need to be made with some
 knowledge of the document set $\docs$.  In addition, many non-European
 written languages such as Japanese or Korean do not contain spaces indicating divisions between
 words, so a sophisticated tokenizer may be required when dealing with
 languages like these.
 
-In addition, the tokenization process 
-may remove from the data any term in a
-pre-defined list of ``stop words,'' which are words that occur very
+The tokenization process 
+may remove from the data any token in a
+pre-defined ``stop list,'' which contains tokens that occur very
 commonly in the domain (such as ``the'' or ``and'' in most English
 texts) and are assumed to contain little or no relevance to the
 categorization problem at hand. \cite[p. 15]{sebastiani:02}
@@ -229,14 +235,19 @@ order to create a new, lower-dimensional space of features.
 
 Three of the most commonly used feature selection criteria are the
 \term{document frequency} (DF), \term{$\chi^2$}, and \term{information
-gain} (IG) metrics. \cite{yang:97} $\text{DF}(f_k)$ is simply the
-number of documents of $\train$ in which the feature $f_k$ occurs.
-$\chi^2$ is defined in Equation \ref{eqn-x2-def}. $A$, $B$, $C$, and $D$ are
-defined as the terms in the contingency table shown in Table
-\ref{termcat-contingency}.
+gain} (IG) metrics. \cite{yang:97}
 
-XXX - explain what a chi^2 score of 1 means, and what 0 means, about
-term/category correlation.
+$\text{DF}(f_k)$ is simply the number of documents of $\train$ in
+which the feature $f_k$ occurs.  It is fairly effective as a feature
+selection criterion, and it has been found by \cite{yang:97} that
+other well-performing criteria have a bias favoring terms with high
+DF.
+
+$\chi^2$ is defined in Equation \ref{eqn-x2-def}. $A$, $B$, $C$, and
+$D$ are defined as the terms in the contingency table shown in Table
+\ref{termcat-contingency}.  $\chi^2(f_k,c_j)$ has a value of zero when
+$f_k$ and $c_j$ are independent, and of 1 when they are perfectly
+correlated.
 
 \begin{align} \label{eqn-x2-def}
 \chi^2(f_k,c_j) & = \frac{|\train|(AD-CB)^2}{(A+C)(B+D)(A+B)(C+D)}
@@ -282,12 +293,12 @@ Information Theory. \cite[ch. 2]{manning:99}
 	          - P(\overline{f_k}) \Entr(\cats_{\overline{f_k}})
 \end{equation}
 
-XXX - indicate whether IG has been found to be good, and what good/bad
-IG scores might be.
+Information Gain has a natural value of zero for noninformative
+features, and values increase for features that correlate more
+strongly with certain categories.  It has been found in \ref{yang:97}
+to be a very effective feature selection criterion.
 
 \subsection{Vector space modeling}
-
-XXX - move this section to before dim-reduction.
 
 The discussion in the previous section suggests that each document may
 be viewed as a vector in a global vector space whose dimensions
@@ -400,12 +411,12 @@ them.  The way in which this is achieved is discussed in Section
 \section{Machine Learning techniques}
 \label{machine-learning}
 
-This section describes three Machine Learning techniques that are
+This section describes four Machine Learning techniques that are
 common for Text Categorization: \naive\ Bayes categorizers, Support
-Vector Machines, and k-Nearest-Neighbor categorizers.
-These three techniques were chosen for inclusion here because they
+Vector Machines, k-Nearest-Neighbor categorizers, and Decision Trees.
+These techniques were chosen for inclusion here because they
 currently have implementations in the \aicat\ framework and because
-they are included in the well-known study \cite{yang:99}.  Their
+the first three are included in the well-known study \cite{yang:99}.  Their
 performance is revisited in Chapter \ref{Evaluation}.
 
 \subsection{\naive\ Bayes}
@@ -552,12 +563,26 @@ documents prohibitive unless the standard algorithms are modified.
 
 \subsection{Decision Trees}
 
-XXX need to write.
+Decision Trees (DT), developed during the 1960s and applied to Text
+Categorization by \cite{quinlan:89}, are a popular Machine Learning
+technique in the TC literature \cite[ch. 3]{mitchell:97}
+\cite[p. 22]{sebastiani:02} \cite[sec. 16.1]{manning:99}.  DT
+algorithms involve the construction of a tree structure to be used in
+categorizing documents.  Each node in the tree refers to a feature
+from the training corpus, each branch entails a test on the feature's
+weight in the given document, and each leaf indicates a category to
+assign to the document \cite[p. 22]{sebastiani:02}.
 
-XXX mention scrutability.
+The automatic construction of Decision Trees can be a difficult and
+time-consuming task.  The main benefit provided by DTs is that the
+tree structure is easily interpretable by humans, making the
+categorizer's decision-making process transparent to the user.  The
+tree may also be converted into a set of boolean rules
+\cite[sec. 3.7.1.2]{mitchell:97}, which may help a user further
+understand the process.
 
-Because of time considerations, a need to limit the scope in which
-testing was performed, and the fact that \cite{yang:99} does not
+Because of a need to limit the scope in which
+testing was performed, and because \cite{yang:99} does not
 evaluate Decision Tree categorizers, the discussion in Chapter
 \ref{Evaluation} does not include the Decision Tree categorizer in
 \aicat.
