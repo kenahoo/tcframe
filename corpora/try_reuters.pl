@@ -4,12 +4,14 @@ use strict;
 
 use lib '/Users/ken/src/tcframe/src/AI-Categorizer/lib';
 use AI::Categorizer::KnowledgeSet;
-use AI::Categorizer::Categorizer::NaiveBayes;
+use AI::Categorizer::Categorizer::NNetTC;
 
+# Useful for debugging
 use Carp; $SIG{__DIE__} = \&Carp::confess;
 
 my $name = "reuters-21578";
 
+# Scan features
 if (0) {
   ### Read stopwords
   my @stopwords = `cat $name/SMART.stoplist`;
@@ -20,7 +22,7 @@ if (0) {
     (
      name => $name,
      stopwords => { map {($_ => 1)} @stopwords },
-     features_kept => 0.1,
+     features_kept => 500,
      verbose => 1,
     );
   
@@ -30,10 +32,17 @@ if (0) {
   $k->save_state("$name-save") or die $!;
 }
 
+# Read training corpus
 if (0) {
   ### Use new features
   warn "restoring from $name-save";
   my $k = AI::Categorizer::KnowledgeSet->restore_state("$name-save");
+
+  my $k = new AI::Categorizer::KnowledgeSet
+    (
+     name => $name,
+     verbose => 1,
+    );
 
   ### Read categories
   my $cats = read_cats("$name/cats.txt");
@@ -43,14 +52,17 @@ if (0) {
   while (my $file = readdir TRAIN_DIR) {
     next if $file =~ /^\./;
     
+    #print "$file\n";
     print "$file: @{$cats->{$file}}\n";
     my $body = do {open my $fh, "$name/training/$file" or die $!; local $/; <$fh>};  
     $k->make_document( name => $file,
-		       categories => $cats->{$file},
+		       categories => $cats->{$file} || [],
 		       content => $body );
-#last if $::i++ > 500;
   }
   closedir TRAIN_DIR;
+
+  #my $v = $k->features->as_hash;
+  #printf "Features: %d\nUnique tokens: %d\n", scalar(keys %$v), $k->features->sum;
 
   #warn "categories are ", map {" ".$_->name." "} $k->categories;
   #warn "documents are ", map {" ".$_->name." "} $k->documents;
@@ -58,15 +70,15 @@ if (0) {
   $k->save_state("$name-save2") or die $!;
 }
 
-if (0) {
-  ### Train the categorizer
+# Train the categorizer
+if (1) {
   warn "restoring from $name-save2";
   my $k = AI::Categorizer::KnowledgeSet->restore_state("$name-save2");
 
   warn "training categorizer";
-  my $nb = new AI::Categorizer::Categorizer::NaiveBayes
+  my $nb = new AI::Categorizer::Categorizer::NNetTC
     (
-     bayes_threshold => 0.2,
+     verbose => 1,
     );
   $nb->train(knowledge => $k);
 
@@ -74,7 +86,8 @@ if (0) {
   $nb->save_state("$name-save3") or die $!;
 }
 
-if (1) {
+# Categorize test set
+if (0) {
   warn "restoring from $name-save3";
   my $nb = AI::Categorizer::Categorizer::NaiveBayes->restore_state("$name-save3");
 
