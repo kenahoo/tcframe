@@ -191,7 +191,7 @@ extended by its subclasses.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{figures/diagram-key.pdf}
+\includegraphics[width=\linewidth]{figures/diagram-key.pdf}
 \caption{Diagrammatic notation for object relationships}
 \label{diagram-key}
 \end{center}
@@ -259,24 +259,26 @@ responsibilities of each class is helpful before looking at the design
 in more detail.  The following classes form the main framework roles
 in \aicat.  For exposition purposes, the UML class specification boxes
 do not list every attribute and method of each class, rather only the
-most important ones for this discussion.  For a complete reference,
-please see the \aicat\ documentation.
+most important ones for this discussion.  In particular, all classes
+define \method{new} constructor methods, not shown in the UML
+specifications, that accept various parameters (usually corresponding
+to the member attributes).  For a complete reference, please see the
+\aicat\ documentation.
 
-XXX - the following descriptions need UML boxes with attributes/operations.
+\subsection{Framework classes}
 
 \begin{description}
 
 \item
-
 \begin{concreteclass}{KnowledgeSet}
  \attributes
-  \class{Document}[] documents \\
-  \class{Category}[] categories \\
-  \class{FeatureSelector} feature\_selector
+  \attr[Document\s]{documents} \\
+  \attr{Category\s}{categories} \\
+  \attr[FeatureSelector]{feature\_selector}
  \methods
-  documents() \\
-  categories() \\
-  scan\_features(\class{Collection})
+  \meth{documents}{} \\
+  \meth{categories}{} \\
+  \meth{scan\_features}{Collection}
 \end{concreteclass}
 
 The \class{KnowledgeSet} class represents a set of processed documents, a set
@@ -295,24 +297,45 @@ feature selection.  It also contains a \class{FeatureVector} object
 representing the features present in all documents.
 
 \item
-
 \begin{abstractclass}{FeatureSelector}
  \attributes
-  \class{number} features\_kept
+  \attr[number]{features\_kept}
  \methods
-  reduce\_features(\class{FeatureVector}) \\
-  rank\_features() \\
-  scan\_features() \\
-  select\_features()
+  \meth[FeatureVector]{reduce\_features}{FeatureVector} \\
+  \meth[FeatureVector]{select\_features}{KnowledgeSet} \\
+  \ameth[FeatureVector]{rank\_features}{KnowledgeSet} \\
+  \ameth[FeatureVector]{scan\_features}{Collection}
 \end{abstractclass}
 
-Feature selection is performed by subclasses of the \class{FeatureSelector}
+Feature selection is performed by subclasses of the abstract \class{FeatureSelector}
 class.  Each \class{KnowledgeSet} object contains a \class{FeatureSelector}
 object---the \class{KnowledgeSet} provides the information necessary to do
 feature selection, and the \class{FeatureSelector} performs the desired
-feature selection algorithm.
+feature selection algorithm.  A \param{features\_kept} parameter
+sets an attribute of the same name in the \class{FeatureSelector}
+class which controls how aggressively the features will be reduced.
 
-\item[Collection]
+The abstract \method{rank\_features} and \method{scan\_features}
+methods must be implemented by concrete subclasses of
+\class{FeatureSelector}.  They provide two ways to create a ranked
+list of the features in a corpus.  \method{rank\_features} will
+examine a \class{KnowledgeSet} object which has already been populated
+with document data, returning a \class{FeatureVector} object
+representing the relevance of each feature in the corpus according to
+the feature selection criterion.  The \method{scan\_features} method
+has the same result, but operates on a \class{Collection} object so
+that the most relevant features can be determined without first having
+to read the entire collection into memory.
+
+\item
+\begin{abstractclass}{Collection}
+ \attributes
+  \attr[hash]{category\_hash}
+ \methods
+  \meth[int]{count\_documents}{} \\
+  \ameth[Document]{next}{} \\
+  \ameth{rewind}{}
+\end{abstractclass}
 
 Because data sets in text categorization may be very large, and
 because their documents may exist in several different underlying
@@ -321,34 +344,135 @@ larger XML file, or fields in a database), a \class{Collection} class provides
 an abstract interface to a set of stored documents, together with a
 way to iterate through the set and return \class{Document} objects.
 
+A concrete subclass of \class{Collection} must implement the
+\method{next} and \method{re\-wind} methods for the specific kind of
+iteration handled.  \method{next} should return the next document in
+the collection, and \method {rewind} should reset the collection's
+iterator.  This might mean re-executing a database query or moving to
+the beginning of a file or directory stream.
+
+The default implementation of \method{count\_documents} simply calls
+\method{next} until all documents in the collection have been
+exhausted, counting how many documents are returned.  This can
+typically be replaced by a more efficient concrete implementation that
+doesn't need to instantiate each document as an object.
+
+The type of iteration to be performed, as well as the location of the
+document resources, will be specified by parameters to concrete
+subclasses.  Because the locations may not have any uniform structure
+across subclasses (for instance, one subclass could use a path on the
+local filesystem, another could use a username, password, and query
+for a database, and another could use a Uniform Resource Locator for
+network collections), the determination of the exact parameters to
+specify is left to the subclass implementations.
+
+A \param{category\_hash} parameter lets the caller supply a hash
+relating document names to categories---if this is not provided,
+category information will be determined while iterating through the
+collection and processing the document data.
+
 A \class{Collection} object may be used in several contexts within the
 framework.  For instance, a \class{KnowledgeSet} instantiates its Document and
 \class{Category} objects through a \class{Collection} object.  A \class{Learner} object may
 also mass-categorize the \class{Documents} in a \class{Collection} object.
 
-\item[Document]
+\item
+\begin{concreteclass}{Document}
+ \attributes
+  \attr[string]{name} \\
+  \attr[Category\s]{categories} \\
+  \attr[FeatureVector]{features}
+ \methods
+  \ameth{parse}{string} \\
+  \meth{parse\_handle}{filehandle} \\
+  \meth{create\_feature\_vector}{} \\
+  \meth[FeatureVector]{features}{}
+\end{concreteclass}
 
 Each text document is represented by a \class{Document} object, or an object
 of one of its subclasses.  Each document class contains methods for
 turning document data into a \class{FeatureVector}.  Each document also has
 a method to report which categories it belongs to.
 
-\item[Category]
+In the standard methodology, the \method{parse} or
+\method{parse\_handle} methods create plain-text data from the
+native format of the document, and the
+\method{create\_feature\_vector} method creates a
+\class{FeatureVector} object (stored as a data member) from the text
+data.  A default implementation of \method{parse} is not supplied in
+the base class.
+
+Note thate the \class{Document} class is not purely an abstract class,
+because a \class{Document} object may be constructed and supplied
+directly with a \class{FeatureVector} object.  Perl does not enforce
+the concept of abstract classes, so an unimplemented \method{parse}
+method is not a problem in this case.  This can make subclassing
+unnecessary for special-purpose types of ``documents'' like images or
+sequences of biological data.
+
+\item
+\begin{concreteclass}{Category}
+ \attributes
+  \attr[string]{name} \\
+  \attr[Document\s]{documents}
+ \methods
+  \meth[Document\s]{documents}{} \\
+  \meth[boolean]{contains\_document}{Document} \\
+  \meth{FeatureVector}{features}{}
+\end{concreteclass}
 
 Each category is represented by a \class{Category} object.  Its main purpose
 is to keep track of which documents belong to it, though it also
 contains methods for examining statistical properties of an entire
 category.
 
-\item[Learner]
+Every category must have a \param{name} string, because
+\class{Collection}s will usually use the string to map between
+documents and categories.  The string name is also shown to users when
+presenting categorization decisions.
+
+The \method{features} method returns a vector representing the sum of
+all vectors of documents that belong to the category.  This may be
+used during a Machine Learning process.  If the learner requires a
+different kind of aggregate representation of a \class{Category} than
+a simple vector sum, then the \method{documents} method should be used
+to construct it manually.
+
+\item
+\begin{abstractclass}{Learner}
+ \attributes
+ \methods
+  \meth{train}{KnowledgeSet} \\
+  \ameth{create\_model}{KnowledgeSet} \\
+  \meth[Hypothesis]{categorize}{Document} \\
+  \ameth[float]{get\_scores}{Document}
+\end{abstractclass}
 
 The abstract \class{Learner} class provides an interface to train on a
-set of pre-categorized documents and subsequently categorize
-previously unseen \class{Document} objects.  Its
+set of pre-categorized documents using the \method{train} method and
+subsequently categorize previously unseen \class{Document} objects
+using the \method{categorize} method.  Its
 concrete subclasses implement specific categorization algorithms like
 \naive\ Bayes, SVM, Decision Tree, and so on.
 
-\item[FeatureVector]
+The \method{create\_model} and \method{get\_scores} abstract methods
+need to be implemented in concrete \class{Learner} subclasses.  They
+are called internally by \method{train} and \method{categorize},
+respectively.  The \method{get\_scores} method returns categorization
+information in terms of per-category scores and a membership
+threshold, and \method{categorize} translates this data into a
+\class{Hypothesis} object representing the categorization.
+
+\item
+\begin{concreteclass}{FeatureVector}
+ \attributes
+  \attr[hash]{features}
+ \methods
+  \meth[int]{euclidean\_length}{} \\
+  \meth{scale}{float} \\
+  \meth[FeatureVector]{intersection}{FeatureVector} \\
+  \meth[float]{dot}{FeatureVector}
+\end{concreteclass}
 
 Most categorization algorithms don't deal directly with documents'
 data, they instead deal with a \emph{vector representation} of a
@@ -356,10 +480,24 @@ document's features.  Most often, documents are represented using the
 ``Bag of Words'' model \cite[p. 10]{sebastiani:02}, i.e. a non-ordered, weighted set of
 features.  The \class{FeatureVector} class provides an interface to the
 operations one may perform on these vector representations, such as
-querying features' presence or absence in a document, adding vectors
-to each other, and so on.
+querying features' presence or absence in a document, finding sums of
+vectors, and so on.
 
-\item[Hypothesis]
+The default implementation of the \class{FeatureVector} class stores
+its data in a Perl hash.  See Section \ref{imp-featurevectors} for
+discussion of an alternate approach.
+
+\item
+\begin{concreteclass}{Hypothesis}
+ \attributes
+  \attr[Category\s]{all\_categories} \\
+  \attr[hash]{scores} \\
+  \attr[float]{threshold}
+ \methods
+  \meth[Category\s]{categories}{} \\
+  \meth[Category]{best\_category}{} \\
+  \meth[boolean]{in\_category}{Category}
+\end{concreteclass}
 
 The result of asking a \class{Learner} to categorize a previously unseen
 document is a \class{Hypothesis} object.  It may be queried for information
@@ -373,13 +511,37 @@ appropriateness score for each category and a threshold for category
 membership.  Any category whose score is above the threshold is
 considered assigned by the system to the given document.
 
-\item[Experiment]
+\item
+\begin{concreteclass}{Experiment}
+ \attributes
+  \attr[Category\s]{categories}
+ \methods
+  \meth{add\_hypothesis}{Hypothesis} \\
+  \meth[float]{micro\_F1}{} \\
+  \meth[string]{stats\_table}{}
+\end{concreteclass}
 
 The \class{Experiment} class can examine the results of many categorization
 decisions (i.e., many \class{Hypothesis} objects) and may be queried for
 aggregate information about the results.  This is often used in order
 to determine the quality (as measured by precision, recall, error,
-etc.) of a \class{Learner} on a collection of test documents.
+etc.---see Section \ref{measures}) of a \class{Learner} on a
+collection of test documents.
+
+The \class{Experiment} class uses the external module
+\class{Statistics::Contingency} from CPAN to store and compute its
+results.  The \class{Statistics::Contingency} module was created for
+the \aicat\ project, but was split from the framework code because it
+is useful for projects not involving the rest of the framework.  The
+framework's \class{Experiment} class is therefore quite small,
+inheriting most of its functionality from the more general-purpose
+module.
+
+\class{Experiment} contains a \method{add_hypothesis} method for
+adding \class{Hypothesis} objects to the set of data to be summarized,
+and 
+
+XXX have to finish this here
 
 \item[AI::Categorizer]
 

@@ -36,14 +36,12 @@
  {\rule{\textwidth}{1pt}\verbatim}%
  {\endverbatim\rule{\textwidth}{1pt}}
 
+% Commands/environments for creating UML class specification boxes
 \newenvironment{classbox}[1]%
  {\begin{tabular}{|l|}
   \hline \multicolumn{1}{|c|}{#1}}%
  {\\ \hline
   \end{tabular}}
-
-\newcommand{\attributes}{\\ \hline}
-\newcommand{\methods}{\\ \hline}
 
 \newenvironment{abstractclass}[1]%
  {\begin{classbox}{\textit{#1}}}%
@@ -52,6 +50,13 @@
 \newenvironment{concreteclass}[1]%
  {\begin{classbox}{\textbf{#1}}}%
  {\end{classbox}}
+
+\newcommand{\attributes}{\\ \hline}
+\newcommand{\methods}{\\ \hline}
+\newcommand{\attr}[2][]{\texttt{#1} #2}
+\newcommand{\meth}[3][void]{\texttt{#1} #2(\texttt{#3})}
+\newcommand{\ameth}[3][void]{\meth[#1]{\textit{#2}}{#3}}
+\newcommand{\s}{[]}
 
 
 \begin{document}
