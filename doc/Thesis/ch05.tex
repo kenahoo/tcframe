@@ -1,5 +1,11 @@
 \chapter{Evaluation}
 
+\newcommand{\cats}{\mathcal{C}}
+\newcommand{\docs}{\mathcal{D}}
+\newcommand{\train}{\mathcal{T}^r}
+\newcommand{\test}{\mathcal{T}^e}
+
+
 In order to evaluate the quality of the \aicat\ framework, several
 aspects of the framework have been tested.  The three main areas
 tested are quality of categorization, efficiency, and ease of use.
@@ -28,9 +34,13 @@ the specifics of the categorization problem in each corpus may be more
 amenable to one categorization technique or another.
 
 The main corpora used for evaluation are listed in this section.  Each
-corpus consists of a set of documents, a set of categories that
+corpus consists of a set of documents $\docs$, a set of categories $\cats$ that
 documents may be assigned to, and a domain-expert-made choice of
-category assignments for each document.
+category assignments for each document.  These category assignments
+are considered to be completely correct, and they form a standard
+against which the TC system's categorization on the test documents can
+be measured.  For each corpus, the set $\docs$ is divided into a
+training set $\train$ and a test set $\test$.
 
 Unless otherwise noted below, a list of common English words from
 \cite{salton:89} was used as a ``stoplist,'' or a set of terms to
@@ -114,10 +124,9 @@ sensitivity'' or not.  Market sensitivity is a subjective label indicating
 whether the given document has potential to affect the issuing
 company's share value, trading volume, or other properties on the
 exchange.  Every document is a member of either the ``sensitive'' or
-``insensitive'' category---we can view this as two categories that
+``insensitive'' category---this can be viewed as two categories that
 partition the corpus, or as a single category that some documents
-belong to and others don't.  For the purposes of this discussion, we
-will treat it as the former.
+belong to and others don't.  This discussion assumes the former.
 
 The documents are divided into a training set of 95,525 documents and a
 test set of 41,105 documents.  The total size of the corpus is about
@@ -160,6 +169,7 @@ already published in the literature---superior results should not be
 expected.
 
 \subsection{Performance Measures}
+\label{measures}
 
 Several statistical measures have become standard in the area of
 evaluating Text Categorization systems.\cite[p. 33]{sebastiani:02}
@@ -212,11 +222,128 @@ C_i}$, respectively.
 \end{table}
 
 
+$\pi$ and $\rho$ give valuable information about the performance of a
+TC system, but neither provides an isolated rating of the system's
+quality.  The reason is that either measure can usually be improved in
+a system to the detriment of the other.\cite[p. 35]{sebastiani:02} For
+instance, the \emph{trivial acceptor} categorizer, which assigns every
+document to every category, will have a perfect $\rho$ score of 1, but
+its precision will be unacceptably low on any nontrivial task.
+
+Therefore, a measure that combines $\pi$ and $\rho$ is desirable as an
+overall measure of the quality of the TC system.  One such measure is
+the $F_\beta$ measure, first introduced to the Information Retrieval
+literature by van Rijsbergen \cite[ch. 7]{rijsbergen:79}.  It is
+defined by the equation $F_\beta = \frac{(\beta^2 + 1)\pi\rho}{\beta^2
+\pi + \rho}$, where $0 \leq \beta \leq \infty$.  The $\beta$ parameter
+provides a continuous way to balance between the importance of $\pi$
+and $\rho$, with values closer to 0 emphasizing $\pi$, values closer
+to $\infty$ emphasizing $\rho$, and a value of 1 balancing the two
+measures equally.  Without specific knowledge of an application's
+requirements (for instance, whether false positives for a certain
+category are more problematic than false negatives), one may presume
+that $\pi$ and $\rho$ are equally important, and therefore the
+literature often uses $F_1$ as a measure of the quality of a TC system
+on a particular category.
+
+${F_1}_i$ may be derived in terms of the entries of the per-category
+contingency table as follows:
+
+\begin{eqnarray*}
+{F_1}_i 
+ & = & \frac{ 2 \pi \rho}{\pi + \rho} \\
+ & = & \frac{ \frac{2 {A_i}^2}{(A_i+B_i)(A_i+C_i)} } { \frac{A_i}{A_i+B_i} + \frac{A_i}{A_i+C_i} } \\
+ & = & \frac{ 2 {A_i}^2 }                            { A_i(A_i+C_i) + A_i(A_i+B_i) } \\
+ & = & \frac{ 2 A_i }                                { 2 A_i + B_i + C_i } \\
+\end{eqnarray*}
+
+Two other measures of categorization quality, \emph{error} and
+\emph{accuracy}, are also sometimes encountered in the TC literature.
+These are simple measures which can also be defined in terms of the
+contingency table in Table \ref{onecat-contingency}: $error =
+\frac{B_i+C_i}{A_i+B_i+C_i+D_i)}$, and $accuracy =
+\frac{A_i+D_i}{A_i+B_i+C_i+D_i)}$.  In other words, error is the
+proportion of the system's decisions that matched the expert's
+choices, and accuracy is the proportion that did not.  As summarized
+in \cite[p. 34]{sebastiani:02}, these are not always useful measures
+of categorization quality, because the \emph{trivial rejector} (a
+system that never assigns any documents to any category) will often
+have a lower error and higher accuracy than most nontrivial
+categorizers.  Nonetheless, error will be measured for the evaluation
+tasks here, because it may give insight into the character of the
+system's performance.
+
+
+\subsection{Averaging Measures Across Categories}
+
+Section \ref{measures} introduced several performance measures that
+may be defined to evaluate a categorizer on a single category.  In
+order to evaluate the categorizer's overall performance on the entire
+set of test documents, it is desirable to combine the per-category
+scores $\pi_i$, $\rho_i$, and ${F_1}_i$ into overall scores $\pi$,
+$\rho$, and $F_1$ for the entire category set.
+
+Two methods for doing this are standard in the literature.  The first
+is called \emph{micro-averaging}, and sums the terms in the
+contingency table for all categories simultaneously rather than in
+per-category tables.  In other words, the micro-averaged $\pi$,
+$\rho$, and $F_1$, notated $\pi^\mu$, $\rho^\mu$, and $F^\mu_1$, are
+defined in terms of the per-category contingency tables by the
+following equations.
+
+\begin{displaymath}
+ \pi^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+B_i}} \qquad
+\rho^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+C_i}} \qquad
+ F^\mu_1 = \frac{\sum_{i=1}^{|C|}{2 A_i}} {\sum_{i=1}^{|C|}{2 A_i+B_i+C_i}} \qquad
+\end{displaymath}
+
+Micro-averaging gives equal weight to each categorization decision
+made by the system, or equivalently, to each document in the corpus,
+regardless of the categories they belong to.
+
+An alternative to micro-averaging is \emph{macro-averaging}, in which
+the per-category scores $\pi_i$, $\rho_i$, and ${F_1}_i$ are simply
+averaged to find the macro-averaged $\pi$, $\rho$, and $F_1$, notated
+$\pi^M$, $\rho^M$, and $F^M_1$.  The following equations describe this
+procedure.
+
+\begin{displaymath}
+ \pi^M = \frac{\sum_{i=1}^{|C|}{\pi_i}}   {|C|} \qquad
+\rho^M = \frac{\sum_{i=1}^{|C|}{\rho_i}}  {|C|} \qquad
+ F^M_1 = \frac{\sum_{i=1}^{|C|}{{F_1}_i}} {|C|} \qquad
+\end{displaymath}
+
+Macro-averaging gives equal weight to each category in the corpus,
+regardless of how many documents they contain.  Thus it provides a
+good counterpart to micro-averaging---macro-averaging will place more
+emphasis on rare categories than micro-averaging, so reporting both
+scores is typically useful to evaluate the system as a whole.
+
+Note that the error and accuracy measures are unaffected by micro-
+vs. macro-averaging, as shown in the following derivation.  This uses
+the observation that $A_i+B_i+C_i+D_i = |\test|$, a consequence of the
+fact that exactly one of the terms on the left side will be
+incremented with each decision about whether a document from the test
+set belongs to $c_i$ or not.
+
+% XXX - really need to spread out this vertical spacing
+% \begin{displaymath}
+\begin{eqnarray*}
+error^M
+ & = & \frac{\sum_{i=1}^{|\cats|}{error_i}}  {|\cats|} \\
+ & = & \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{A_i+B_i+C_i+D_i} }} { \sum_{i=1}^{|\cats|}{1} } \\
+ & = & \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{|\test|} }}         { \sum_{i=1}^{|\cats|}{1} } \\
+ & = & \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{|\test|} } \\
+ & = & \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{A_i+B_i+C_i+D_i} } \\
+ & = & error^\mu
+\end{eqnarray*}
+% \end{displaymath}
+
 \begin{table}
 \begin{center}
 \begin{tabular}{|r c c c c c c c|}
 \hline
-method & M$R$ & M$P$ & M$F_1$ & $\mu R$ & $\mu P$ & $\mu F_1$ & error \\
+method & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ & error \\
 \hline
 NB       & .3659 & .4969 & .3959 & .7238 & .8514 & .7824 & .00555 \\
 SVM      & .0836 & .2932 & .1148 & .4726 & .8657 & .6114 & .00807 \\
@@ -232,7 +359,7 @@ Baseline & .0135 & .0142 & .0137 & .1645 & .1664 & .1654 & .02287 \\
 \begin{center}
 \begin{tabular}{|r c c c c c c c|}
 \hline
-method & M$R$ & M$P$ & M$F_1$ & $\mu R$ & $\mu P$ & $\mu F_1$ & error \\
+method & $\rho^M$ & $\pi^M$ & $F_1^M$ & $\rho^\mu$ & $\pi^\mu$ & $F_1^\mu$ & error \\
 \hline
 NB  & ? & ? & .3886 & .7688 & .8245 & .7956 & .00544 \\
 SVM & ? & ? & .5251 & .8120 & .9137 & .8599 & .00365 \\
