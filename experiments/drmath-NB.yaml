@@ -6,5 +6,5 @@ outfile: "results/drmath-NB.txt"
 learner_class: "::NaiveBayes"
 tfidf_weighting: xfx
 stemming: porter
-features_kept: 2000
+features_kept: 0.2
 verbose: 1
