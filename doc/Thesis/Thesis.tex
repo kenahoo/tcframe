@@ -291,9 +291,12 @@ subclassing.
 
 Some examination of the basic relationships between classes and the
 responsibilities of each class is helpful before looking at the design
-in more detail.
+in more detail.  The major classes in the AI::Categorizer framework
+are:
 
-\subsection{KnowledgeSet}
+\begin{description}
+
+\item[KnowledgeSet]
 
 The KnowledgeSet class represents a set of processed documents, a set
 of categories, and a many-to-many mapping between the two sets.
@@ -307,7 +310,7 @@ and Category objects.  It uses a FeatureSelector object to perform
 feature selection.  It also contains a FeatureVector object
 representing the features present in all documents.
 
-\subsection{FeatureSelector}
+\item[FeatureSelector]
 
 Feature selection is performed by subclasses of the FeatureSelector
 class.  Each KnowledgeSet object contains a FeatureSelector
@@ -315,7 +318,7 @@ object--the KnowledgeSet provides the information necessary to do
 feature selection, and the FeatureSelector performs the desired
 feature selection algorithm.
 
-\subsection{Collection}
+\item[Collection]
 
 Because data sets in text categorization may be very large, and
 because their documents may exist in several different underlying
@@ -329,120 +332,55 @@ framework.  For instance, a KnowledgeSet instantiates its Document and
 Category objects through a Collection object.  A Learner object may
 also mass-categorize the Documents in a Collection object.
 
-\subsection{Document}
+\item[Document]
 
 Each text document is represented by a Document object, or an object
 of one of its subclasses.  Each document class contains methods for
 turning a bunch of data into a Feature Vector.  Each document also has
 a method to report which categories it belongs to.
 
-=head2 Categories
+\item[Category]
 
-Each category is represented by an C<AI::Categorizer::Category>
-object.  Its main purpose is to keep track of which documents belong
-to it, though you can also examine statistical properties of an entire
-category, such as obtaining a Feature Vector representing an
-amalgamation of all the documents that belong to it.
+Each category is represented by a Category object.  Its main purpose
+is to keep track of which documents belong to it, though it also
+contains methods for examining statistical properties of an entire
+category.
 
-=head2 Machine Learning Algorithms
+\item[Learner]
 
-There are lots of different ways to make the inductive leap from the
-training documents to unseen documents.  The Machine Learning
-community has studied many algorithms for this purpose.  To allow
-flexibility in choosing and configuring categorization algorithms,
-each such algorithm is a subclass of C<AI::Categorizer::Learner>.
-There are currently four categorizers included in the distribution:
+The abstract Learner class can train on a set of pre-categorized
+documents and subsequently categorize unseen Document objects.  Its
+concrete subclasses implement specific categorization algorithms like
+Naive Bayes, SVM, Decision Tree, and so on.
 
-=over 4
-
-=item AI::Categorizer::Learner::NaiveBayes
-
-A pure-perl implementation of a Naive Bayes classifier.  No
-dependencies on external modules or other resources.  Naive Bayes is
-usually very fast to train and fast to make categorization decisions,
-but isn't always the most accurate categorizer.
-
-=item AI::Categorizer::Learner::SVM
-
-An interface to Corey Spencer's C<Algorithm::SVM>, which implements a
-Support Vector Machine classifier.  SVMs can take a while to train
-(though in certain conditions there are optimizations to make them
-quite fast), but are pretty quick to categorize.  They often have very
-good accuracy.
-
-=item AI::Categorizer::Learner::DecisionTree
-
-An interface to C<AI::DecisionTree>, which implements a Decision Tree
-classifier.  Decision Trees generally take longer to train than Naive
-Bayes or SVM classifiers, but they are also quite fast when
-categorizing.  Decision Trees have the advantage that you can
-scrutinize the structures of trained decision trees to see how
-decisions are being made.
-
-=item AI::Categorizer::Learner::Weka
-
-An interface to version 2 of the Weka Knowledge Analysis system that
-lets you use any of the machine learners it defines.  This gives you
-access to lots and lots of machine learning algorithms in use by
-machine learning researches.  The main drawback is that Weka tends to
-be quite slow and use a lot of memory, and the current interface
-between Weka and C<AI::Categorizer> is a bit clumsy.
-
-=back
-
-Other machine learning methods that may be implemented soonish include
-Neural Networks, k-Nearest-Neighbor, and/or a mixture-of-experts
-combiner for ensemble learning.  No timetable for their creation has
-yet been set.
-
-Please see the documentation of these individual modules for more
-details on their guts and quirks.  See the C<AI::Categorizer::Learner>
-documentation for a description of the general categorizer interface.
-If you wish to create your own classifier, you should inherit from
-C<AI::Categorizer::Learner> or C<AI::Categorizer::Learner::Boolean>,
-which are abstract classes that manage some of the work for you.
-
-=head2 Feature Vectors
+\item[FeatureVector]
 
 Most categorization algorithms don't deal directly with documents'
-data, they instead deal with a I<vector representation> of a
-document's I<features>.  The features may be any properties of the
-document that seem helpful for determining its category, but they are
-usually
-some version of the ``most important'' words in the document.  A list
-of
-features and their weights in each document is encapsulated by the
-C<AI::Categorizer::FeatureVector> class.  You may think of this class
-as roughly analogous to a Perl hash, where the keys are the names of
-features and the values are their weights.
+data, they instead deal with a \emph{vector representation} of a
+document's features.  Most often, documents are represented using the
+``Bag of Words'' model \cite{XXX}, i.e. a non-ordered, weighted set of
+features.  The FeatureVector class provides an interface to the
+operations one may perform on these vector representations, such as
+querying features' presence or absence in a document, adding vectors
+to each other, and so on.
 
-=head2 Hypotheses
+\item[Hypothesis]
 
-The result of asking a categorizer to categorize a previously unseen
-document is called a hypothesis, because it is some kind of
-``statistical guess'' of what categories this document should be
-assigned to.  Since you may be interested in any of several pieces of
-information about the hypothesis (for instance, which categories were
-assigned, which category was the single most likely category, the
-scores assigned to each category, etc.), the hypothesis is returned as
-an object of the C<AI::Categorizer::Hypothesis> class, and you can use
-its object methods to get information about the hypothesis.  See its
-class documentation for the details.
+The result of asking a Learner to categorize a previously unseen
+document is a Hypothesis object.  It may be queried for information
+about which categories were assigned, which category was the single
+most appropriate category, what scores were assigned to each category,
+and so on.
 
-=head2 Experiments
+\item[Experiment]
 
-The C<AI::Categorizer::Experiment> class helps you organize the
-results of categorization experiments.  As you get lots of
-categorization results (Hypotheses) back from the Learner, you can
-feed these results to the Experiment class, along with the correct
-answers.  When all results have been collected, you can get a report
-on accuracy, precision, recall, F1, and so on, with both
-micro-averaging and macro-averaging over categories.  We use the
-C<Statistics::Contingency> module from CPAN to manage the
-calculations. See the docs for C<AI::Categorizer::Experiment> for more
-details.
+The Experiment class can examine the results of many categorization
+decisions (i.e., many Hypothesis objects) and may be queried for
+aggregate information about the results.  This is often used in order
+to determine the quality (as measured by precision, recall, error,
+etc.) of a Learner on a collection of test documents.
 
-
+\end{description}
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/classes-uml.pdf}
