@@ -135,7 +135,7 @@
 \def\thepage{}
 \onecolumn \raggedbottom
 
-\ps@myheadings \pagenumbering{arabic} \onecolumn \@twosidetrue
+\ps@myheadings \onecolumn \@twosidetrue
 
 
 
