@@ -3,7 +3,8 @@ TCFRame is an application framework for classification (mostly docs)
 
 
 package TCFrame
-# The class should provide methods that describe a complete experiment: collection, method, oarameters used in the training...
+# The class should provide methods that describe a complete
+# experiment: collection, method, parameters used in the training...
 
 Methods:
 	clean;
@@ -13,16 +14,19 @@ Methods:
 
 package TCFrame::Classifier
 # Type of learning classifier
+# All classifiers should be subclasses of AI::Categorize, and conform
+# to its interface.
 
 
 package TCFrame::Classifier::NNet
-# Neural Nets, at this it just a wraper to previous work
+# Neural Nets, at this it just a wraper to previous work.  Needs to be
+# adapted to AI::Categorize model
 
 Attributes:
-	MONEMTUM = 0.5;
+	MOMENTUM = 0.5;
 	EPOCHS =	5;
 	N = 		500;
-	HIDDEN=	50;
+	HIDDEN=	50; (Number of hidden units)
 	SAVE = 	0;
 	COR = 		"signalg";
 	WT= 		"ntc";
@@ -43,10 +47,17 @@ test;
 
 package TCFrame::Classifier::NaiveBayes
 # Naive Bayes
+Attributes:
+	features_kept => 0.2 (what portion of the features should be kept during feature selection)
+	threshold => 0.3 (score threshold for category membership during categorization)
+
+Methods:
+	
 
 
 package TCFrame::Collection
 #The class provides collection wide utilities and data structures.
+# A collection can also be called a "corpus".
 
 Atributes:
 	Description;
