@@ -87,15 +87,50 @@ members of a business team.
 \section{Use Cases}
 
 In order to better understand and document how the framework will be
-used, an analysis of use cases is often helpful. \cite{XXX} Use cases
-provide details of the required functionality of a project.  They can
-also provide a starting point for design of the project's
-architecture.  In this section, several common use cases for a Text
-Categorization application are discussed.  The design of the framework
-should be directed toward satisfying these use cases.
+used, an analysis of use cases is often
+helpful. \cite[XXX-section]{jacobson:92} Use cases provide details of
+the required functionality of a project.  They can also provide a
+starting point for design of the project's architecture.  In this
+section, several common use cases for a Text Categorization
+application are discussed.  The design of the framework should be
+directed toward satisfying these use cases.
 
 \subsection{Scientific investigations}
+
+Much of the academic work on Text Categorization is scientific
+investigation into various techniques for document
+processing.\cite{sebastiani:02} This work may include investigations
+into methods for preprocessing document content, feature selection and
+extraction, or machine learning methods.  Most often, researchers will
+develop or adopt a measurement for the quality of results, then
+compare two or more document processing methods and present the
+measurements for each method.
+
+A typical use case for this type of investigation is as follows.  The
+researcher obtains one or more corpora of documents on which to
+perform his or her experiments.  If the corpus data is not in a format
+compatible with the tools being used, the data must be transformed
+into a different format.  The data is then loaded into one or more
+systems that process the data.  In a research setting, at least one of
+these systems will likely have components developed by the researcher,
+as novel work is usually under investigation.  The outcome of the
+systems' processing is then collected and analyzed using the
+measurement for quality of results, and the work is presented to
+others for review.
+
+Variations on this use case may arise from the specific area under
+investigation.  For instance, if the researcher is investigating
+feature selection, different elements of the TC software will be used
+or customized than if the researcher is investigating machine learning
+techniques.  The process flow may also vary depending on whether the
+researcher is repeating the same process many times on different data
+sets, different processes many times on the same data set, or using a
+different methodology.
+
 \subsection{Embedded applications}
+
+
+
 \subsection{Client/server applications}
 \subsection{Database cooperation}
 
@@ -123,7 +158,7 @@ Figure \ref{diagram-key} explains the notational elements used in the
 diagrams in this section.  Because \cite{gamma:95} is heavily drawn
 upon throughout this chapter, a notation closely following its
 notation is used here, with some elements borrowed from common UML
-\cite{XXX-uml}.
+\cite[XXX-section]{booch:98}.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/inheritance-uml.pdf}
