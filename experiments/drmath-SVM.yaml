@@ -2,6 +2,7 @@
 data_root: corpora/drmath-1.00
 stopword_file: corpora/drmath-1.00/SMART.stoplist
 progress_file: "/tmp/drmath-SVM"
+outfile: "results/drmath-SVM.txt"
 learner_class: "::SVM"
 tfidf_weighting: xxc
 stemming: porter
