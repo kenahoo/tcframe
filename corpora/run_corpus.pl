@@ -16,8 +16,7 @@ my $test_path = 'signalg.test';
 
 use strict;
 
-use lib "$ENV{HOME}/src/tcframe/AI-Categorizer-0.01/lib";
-#use lib "$ENV{HOME}/src/tcframe/src/AI-Categorizer/lib";
+use lib "$ENV{HOME}/src/tcframe/src/AI-Categorizer/lib";
 use AI::Categorizer::KnowledgeSet;
 use AI::Categorizer::Categorizer::NaiveBayes;
 use AI::Categorizer::Experiment;
