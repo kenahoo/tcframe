@@ -7,10 +7,19 @@ use GraphViz;
 my $startpath = shift
   or die "Usage: $0 <path>";
 
-my %ignore_classes = ( Class::Container => 1,
-		       Statistics::Contingency => 1,
-		       Exporter => 1,
-		     );
+my %ignore_classes = map {+$_ => 1} qw(
+				       Class::Container
+				       Statistics::Contingency
+				       Exporter
+				       Storable
+				       ObjectSet
+				      );
+my %abstract_classes = map {+$_ => 1} qw(
+					 Learner
+					 Learner::Boolean
+					 FeatureSelector
+					 Collection
+					);
 
 my %relations;
 find( sub { add_relation(\%relations) }, $startpath );
@@ -19,6 +28,12 @@ print_graffle(\%relations);
 
 sub print_graffle {
   my $h = shift;
+
+  # Give each class a numeric ID
+  my %ids;
+  @ids{ keys %$h } = 1 .. keys %$h;
+  my %rev_ids = reverse %ids;
+
   print <<'EOF';
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
@@ -28,21 +43,47 @@ sub print_graffle {
 	<integer>2</integer>
 	<key>GraphicsList</key>
 	  <array>
+EOF
+
+  # Add the class boxes
+  foreach my $class (keys %$h) {
+    my $style = $abstract_classes{$class} ? '\i' : '\b';
+
+    print <<"EOF";
+	    <dict>
+	      <key>Class</key>
+	      <string>ShapedGraphic</string>
+	      <key>FitText</key>
+	      <string>YES</string>
+	      <key>ID</key>
+	      <integer>$ids{$class}</integer>
+	      <key>Shape</key>
+	      <string>Rectangle</string>
+	      <key>Text</key>
+	      <dict>
+		<key>Text</key>
+		<string>{\\qc\\f0$style $class}</string>
+	      </dict>
+	    </dict>
+EOF
+  }
+  
+  my $i = %$h;
+  # An inheritance arrow:
+  foreach my $class (keys %$h) {
+    foreach my $superclass (@{$h->{$class}}) {
+      $i++;
+      print <<"EOF";
 	    <dict>
 	      <key>Class</key>
 	      <string>LineGraphic</string>
 	      <key>Head</key>
 	      <dict>
 		<key>ID</key>
-		<integer>1</integer>
+		<integer>$ids{$superclass}</integer>
 	      </dict>
 	      <key>ID</key>
-	      <integer>3</integer>
-	      <key>Points</key>
-	      <array>
-		<string>{190.395, 155.925}</string>
-		<string>{223.312, 92.175}</string>
-	      </array>
+	      <integer>$i</integer>
 	      <key>Style</key>
 	      <dict>
 		<key>stroke</key>
@@ -58,20 +99,26 @@ sub print_graffle {
 	      <key>Tail</key>
 	      <dict>
 		<key>ID</key>
-		<integer>2</integer>
+		<integer>$ids{$class}</integer>
 	      </dict>
 	    </dict>
-
 EOF
-  
-  
+    }
+  }
+
+  print <<'EOF';
+	</array>
+</dict>
+</plist>
+EOF
+
 }
 
 
 sub add_relation {
   my $h = shift;
   return unless /\.pm$/;
-  return if /NaiveBayesBoolean|DBI2|Util/;
+  return if /NaiveBayesBoolean|DBI2|Util|NNetTC|ObjectSet|Storable/;
   
   my $fullpath = $File::Find::name;
   open my($fh), $fullpath or die "Can't open $fullpath: $!";
@@ -136,151 +183,3 @@ sub add_to_graphviz {
 }
 
 
-# A .graffle file that works:
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
-<plist version="0.9">
-<dict>
-	<key>CanvasColor</key>
-	<dict>
-		<key>w</key>
-		<real>1.000000e+00</real>
-	</dict>
-	<key>ColumnAlign</key>
-	<integer>0</integer>
-	<key>ColumnSpacing</key>
-	<real>3.600000e+01</real>
-	<key>GraphDocumentVersion</key>
-	<integer>2</integer>
-	<key>GraphicsList</key>
-	<array>
-		<dict>
-			<key>Class</key>
-			<string>LineGraphic</string>
-			<key>Head</key>
-			<dict>
-				<key>ID</key>
-				<integer>1</integer>
-			</dict>
-			<key>ID</key>
-			<integer>3</integer>
-			<key>Points</key>
-			<array>
-				<string>{190.395, 155.925}</string>
-				<string>{223.312, 92.175}</string>
-			</array>
-			<key>Style</key>
-			<dict>
-				<key>stroke</key>
-				<dict>
-					<key>HeadArrow</key>
-					<string>UMLInheritance</string>
-					<key>LineType</key>
-					<integer>1</integer>
-					<key>TailArrow</key>
-					<string>0</string>
-				</dict>
-			</dict>
-			<key>Tail</key>
-			<dict>
-				<key>ID</key>
-				<integer>2</integer>
-			</dict>
-		</dict>
-		<dict>
-			<key>Bounds</key>
-			<string>{{127.575, 155.925}, {90, 78}}</string>
-			<key>Class</key>
-			<string>MultiTextGraphic</string>
-			<key>FitText</key>
-			<string>Vertical</string>
-			<key>ID</key>
-			<integer>2</integer>
-			<key>ListOrientation</key>
-			<string>Vertical</string>
-			<key>Style</key>
-			<dict>
-				<key>fill</key>
-				<dict>
-					<key>GradientAngle</key>
-					<real>3.040000e+02</real>
-					<key>GradientCenter</key>
-					<string>{-0.294118, -0.264706}</string>
-				</dict>
-			</dict>
-			<key>TextList</key>
-			<array>
-				<dict>
-					<key>Align</key>
-					<integer>0</integer>
-					<key>Text</key>
-					<string>{\qc\f0\b SubClass}</string>
-				</dict>
-				<dict>
-					<key>Align</key>
-					<integer>0</integer>
-					<key>Text</key>
-					<string>{Attribute1\
-Attribute2}</string>
-				</dict>
-				<dict>
-					<key>Align</key>
-					<integer>0</integer>
-					<key>Text</key>
-					<string>{Operation1\
-Operation2}</string>
-				</dict>
-			</array>
-			<key>TextPlacement</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>Bounds</key>
-			<string>{{198.45, 14.175}, {90, 78}}</string>
-			<key>Class</key>
-			<string>MultiTextGraphic</string>
-			<key>FitText</key>
-			<string>Vertical</string>
-			<key>ID</key>
-			<integer>1</integer>
-			<key>ListOrientation</key>
-			<string>Vertical</string>
-			<key>Style</key>
-			<dict>
-				<key>fill</key>
-				<dict>
-					<key>GradientAngle</key>
-					<real>3.040000e+02</real>
-					<key>GradientCenter</key>
-					<string>{-0.294118, -0.264706}</string>
-				</dict>
-			</dict>
-			<key>TextList</key>
-			<array>
-				<dict>
-					<key>Align</key>
-					<integer>0</integer>
-					<key>Text</key>
-					<string>{\qc\f0\b ParentClass}</string>
-				</dict>
-				<dict>
-					<key>Align</key>
-					<integer>0</integer>
-					<key>Text</key>
-					<string>{Attribute1\
-Attribute2}</string>
-				</dict>
-				<dict>
-					<key>Align</key>
-					<integer>0</integer>
-					<key>Text</key>
-					<string>{Operation1\
-Operation2}</string>
-				</dict>
-			</array>
-			<key>TextPlacement</key>
-			<integer>0</integer>
-		</dict>
-	</array>
-</dict>
-</plist>
