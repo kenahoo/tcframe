@@ -2,6 +2,7 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
+\usepackage{amsfonts}
 
 \title{Thesis}
 \author{Ken Williams}
@@ -27,17 +28,20 @@ with many potential uses for large businesses as well as individuals.
 The goal of Automatic Text Categorization is to produce specialized
 algorithms that can process natural-language documents, assigning zero
 or more user-defined labels to them based on their content.  More
-formally, given a set of labels $L = \{L_1, \ldots, Lk\}$ and a set of
-previously unseen documents $D = \{D1, D2, \ldots \}$, a categorizer is a
+formally, given a set of labels $L = \{L_1, \ldots, L_k\}$ and a set of
+previously unseen documents $D = \{D_1, D_2, \ldots \}$, a categorizer is a
 function $C$ that maps from $D$ to the set of all subsets of $L$.  In
 practice, many categorizers assign only a single label to each
 document, so a categorizer is often a function that maps directly from
-$D$ to $L$.  In many cases, accurate categorizer functions can be created
-that map documents to useful category sets.
+$D$ to $L$.  Often an intermediate function is useful for "soft" or 
+"rank-based" categorization, mapping from ordered pairs $(D_i, C_j)$ 
+to the set of real numbers $\mathbb{R}$ in order to assign a score 
+to each category $C_j$ for each document $D_i$.
 
-The standard approach to creating new categorizer functions is to
-learn them from a set of training documents.  This is a set of
-user-provided, pre-labeled documents that follows a category
+The standard modern approach to creating new categorizer functions is
+to build them using Machine Learning techniques from a set of training
+documents.  This is a set of user-provided, pre-labeled documents that
+follows a category
 distribution similar to the distribution of $D$, and whose contents
 provide information about what sorts of documents should be mapped to
 what sorts of categories.  Algorithms can then be developed that make
