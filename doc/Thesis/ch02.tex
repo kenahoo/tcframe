@@ -138,7 +138,7 @@ building TC systems.
 The segmenting of text data into chunks representing individual words
 may seem like a straightforward task, but in fact there are many
 variations on how this process, called \emph{tokenizing} in this
-context, can be performed. \cite[p. XXX]{manning:99} It is not
+context, can be performed. \cite[sec. 4.2.2]{manning:99} It is not
 sufficient to split the data by using whitespace (spaces, tabs
 returns, and the like) as delimiters, because this does not deal with
 punctuation characters.  It is also not obvious whether terms with
@@ -169,7 +169,7 @@ write custom code to handle domain-specific cases.
 
 Like many Language Processing fields, much of Text Categorization has
 to do with the problem of \emph{high dimensionality}.
-\cite[p. 13]{sebastiani:02} \cite[p. XXX]{manning:99} \cite{joachims:98} The
+\cite[p. 13]{sebastiani:02} \cite{joachims:98} The
 dimensionality of the space in which the Machine Learning algorithm
 must operate can be as large as the total number of distinct terms in
 $\train$.  This presents two problems.  First, the Machine Learning
@@ -248,7 +248,6 @@ category sets in the subsets of $\docs$ containing $f_k$ or not,
 respectively, and $\Entr(x)$ is the standard entropy function from
 Information Theory. \cite[ch. 2]{manning:99}
 
-% XXX - need to check notation for conditional entropy in Manning
 \begin{equation*}
         IG(f_k) = \Entr(\cats)
                   - P(f_k) \Entr(\cats_{f_k})
