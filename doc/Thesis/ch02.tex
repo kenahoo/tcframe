@@ -1,6 +1,8 @@
 \chapter{Background: Text Categorization}
 \label{background-tc}
 
+XXX - make this introduction clearer.  Rewrite the final sentence in the positive.
+
 This chapter gives an overview of the main Text-Categorization-related
 considerations that an application developer must take into account
 when building a TC application.  These considerations form the basis
@@ -10,6 +12,8 @@ environment and the vocabulary necessary to understand the design
 discussion in Chapter \ref{design}.
 
 \section{Formal Definitions}
+
+XXX - need more references to literature here.
 
 The goal of automatic Text Categorization is to automatically produce specialized
 functions that can process natural-language documents, assigning zero
@@ -61,10 +65,10 @@ correct---typically, they have been manually assigned by a
 material contained in the documents and who knows how to assign a set
 of categories to each document based on the documents' content.
 
-The basic workflow for Text Categorization is relatively simple: the
+The basic outline for creating Text Categorization applications is relatively simple: the
 documents in $\train$ are presented to the TC system, the system
 process the documents' content, and a specific categorization
-algorithm is produced that may be used to categorize future documents
+function $\func$ is produced that may be used to categorize future documents
 from the set $\docs$.  In an application, however, many details of
 this process need to be managed in specific and often varying ways.
 Sections \ref{Document storage} through \ref{Hypothesis behavior}
@@ -146,7 +150,7 @@ punctuated suffixes like \emph{boy's} or \emph{doesn't}, or hyphenated terms
 like \emph{ready-made} ought to be treated as one feature or multiple
 features---this decision will usually need to be made with some
 knowledge of the document set $\docs$.  In addition, many non-European
-written languages do not contain spaces indicating divisions between
+written languages such as Japanese or Korean do not contain spaces indicating divisions between
 words, so a sophisticated tokenizer may be required when dealing with
 languages like these.
 
@@ -167,15 +171,18 @@ write custom code to handle domain-specific cases.
 \subsection{Dimensionality reduction}
 \label{dim-reduction}
 
-Like many Language Processing fields, much of Text Categorization has
-to do with the problem of \emph{high dimensionality}.
+Like many Language Processing research fields, much of Text Categorization has
+to do with the problem of \term{high dimensionality}.
 \cite[p. 13]{sebastiani:02} \cite{joachims:98} The
 dimensionality of the space in which the Machine Learning algorithm
-must operate can be as large as the total number of distinct terms in
-$\train$.  This presents two problems.  First, the Machine Learning
+operates can be as large as the total number of distinct terms in
+$\train$.
+
+High dimensionality may present two problems.  First, the Machine Learning
 algorithm may scale poorly with increased dimensionality, so that
-using the full feature set may be prohibitively costly.  Second, the
-$\train$ data in a high-dimensionality space may be too sparse, with
+the training or categorization phases of the system's operation may
+require more time or memory than is practical. \cite{chakrabarti:98} Second, the
+$\train$ data in a high-dimensional space may be too sparse, with
 not enough nonzero data points to make any useful inductive leap
 during training.  This is particularly true in some highly
 morphological languages like Finnish, in which a single word stem may
@@ -374,8 +381,8 @@ Vector Machines, and k-Nearest-Neighbor categorizers.
 \subsection{\naive\ Bayes}
 
 \naive Bayes categorizers are extremely well-represented in the TC
-literature \cite{lewis:98,yang:99,sebastiani:02}, often giving a
-baseline performers against which other categorizers can be measured.
+literature, with many papers published examining their theory and
+performance \cite{lewis:98,yang:99,sebastiani:02}.
 Their theory rests on Bayes' Theorem of conditional probability, shown
 in Equation \ref{bayes}.  For those unfamiliar with conditional
 probabilities, the notation $P(a|b)$ means ``the probability of $a$
@@ -688,3 +695,6 @@ error^M
 \end{equation*}
 
 
+XXX - comment on inability to compare scores across data sets, on why
+micro-avg is usually higher than macro-avg, and how performance can be
+optimized for a real application (perhaps a different $F_\beta$).

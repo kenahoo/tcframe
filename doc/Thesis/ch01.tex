@@ -13,10 +13,11 @@ provides a good introduction to the field. \cite{sebastiani:02}
 
 The goal of automatic Text Categorization is to create systems that
 can automatically place text-based documents into predefined
-categories.  For example, one system may assign general-interest news
-stories themes such as ``sports,'' ``finance,'' or ``politics.''
-Another system may automatically categorize an email user's email
-messages by routing them into folders.  In these scenarios, the news
+categories.  For example, one system may assign themes such as
+``sports,'' ``finance,'' or ``politics'' to general-interest news
+stories.  Another system may automatically route a user's email
+messages by into folders based on the messages' content.  In these
+scenarios, the news
 story or email message plays the role of a ``document,'' and the news
 theme or email folder plays the role of a ``category.''  The system's
 categorization decisions may be based on any arbitrary properties of
@@ -26,9 +27,9 @@ content of each document.
 The standard modern approach to TC involves using Machine Learning to
 create categorizers automatically, rather than manually specifying the
 criteria that a document must fulfill in order to belong to each
-category. \cite[p. 2]{sebastiani:02} The Machine Learning process that
-creates categories typically examines a set of documents which have
-been pre-assigned with categories, and makes inductive abstractions
+category. \cite[p. 2]{sebastiani:02} The Machine Learning process
+typically examines a set of documents which have
+been pre-assigned to categories, and makes inductive abstractions
 based on this data that will assist it in categorizing future
 documents. \cite[ch. XXX]{mitchell:97}
 
@@ -369,47 +370,6 @@ make up its products.  In this sense, it has a strategy similar to one
 employed in \aicat's design, in which useful pieces of
 functionality created for \aicat\ should be split off into
 their own products whenever possible.
-
-\section{Contributions}
-
-During the course of the candidature on which this thesis is based,
-the following contributions were accomplished:
-
-\begin{itemize}
-\item The \aicat\ framework was designed, implemented, and released
-  under an open-source license \cite{cpan}.  The release includes
-  documentation and a simple example application using the framework.
-\item \naive\ Bayes and Decision Tree categorizers were implemented,
-  as well as a mechanism which allows users to use categorizers
-  implemented in the Weka Machine Learning system\cite{weka:99}.  A
-  simple probabilistic guessing categorizer has also been implemented
-  to provide a baseline for experimentation.
-\item Contributions from other developers have provided the framework
-  with an SVM categorizer.  Collaborative work with other developers
-  have provided Rocchio and k-Nearest-Neighbor categorizers.
-\item The framework currently has a Document Frequency feature
-  selection module implemented.
-\item A paper on the design and applicability of the \aicat\ framework
-  was published in the proceedings of the 7th Australasian Document
-  Computing Symposium. \cite{williams:02}
-\item A short paper on the use of the \aicat\ framework to categorize
-  financial documents was published in the proceedings of the
-  7th Australasian Document Computing Symposium. \cite{calvo:02}
-\item A paper on the use of \aicat\ to automatically categorize
-  mathematics questions will be published in the
-  proceedings of the 11th International Conference on Artificial Intelligence in
-  Education.  \cite{williams:03}
-\item An overview seminar on TC and the design of \aicat\ was given at
-  the University of Sydney.  An invited presentation of the same
-  seminar was given to the Language Technology group at Macquarie
-  University.
-\item Tutorials on Machine Learning were presented at the O'Reilly
-  2002 Open Source Conference and 2003 Bioinformatics Technology
-  Conference (\url{http://conferences.oreilly.com/}).
-\item New testing corpora have been assembled in the educational and
-  financial domains, and the framework has been evaluated using them
-  (see Chapter \ref{Evaluation}).
-\end{itemize}
 
 
 \section{Organization of the Thesis}
