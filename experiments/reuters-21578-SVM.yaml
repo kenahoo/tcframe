@@ -1,0 +1,9 @@
+--- #YAML:1.0
+data_root: corpora/reuters-21578
+stopword_file: corpora/reuters-21578/SMART.stoplist
+progress_file: "/tmp/reuters-SVM"
+learner_class: "::SVM"
+tfidf_weighting: xfx
+stemming: porter
+features_kept: 10000
+verbose: 1
