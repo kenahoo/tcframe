@@ -1,0 +1,8 @@
+--- #YAML:1.0
+data_root: corpora/drmath-1.00
+stopword_file: corpora/drmath-1.00/SMART.stoplist
+progress_file: corpora/drmath-SVM
+learner_class: "::SVM"
+stemming: porter
+tfidf_weighting: xxc
+verbose: 1

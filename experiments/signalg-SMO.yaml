@@ -1,0 +1,13 @@
+--- #YAML:1.0
+collection_class: '::SingleFile'
+delimiter: "\n.I"
+document_class: '::SMART'
+learner_class: '::Weka'
+stemming: porter
+features_kept: 1000
+training_set: 'corpora/signalg/training'
+test_set: 'corpora/signalg/test'
+stopword_file: 'corpora/signalg/SMART.stoplist'
+progress_file: 'corpora/signalg-sensitivity-WekaSMO'
+weka_path: '/Applications/Science/weka-3-2-3/weka.jar'
+verbose: 1
