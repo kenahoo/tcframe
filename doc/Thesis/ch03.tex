@@ -157,8 +157,8 @@ the application developer creates a dedicated categorization server
 which communicates over a data socket with clients.  The main
 application (such as the web server or database described above)
 communicates over a data socket with the categorization server.
-Recent standardizations in protocols such as SOAP or XML/RPC (XXX-need to define SOAP and XML/RPC)
-\cite{XXX-xmlrpc} have provided commonly-available, easy-to-use tools
+Recent standardizations in protocols such as SOAP \cite{soap} and XML/RPC
+\cite{xmlrpc} have provided commonly-available, easy-to-use tools
 for creating these kinds of applications, and since a single
 categorization server can provide services to multiple application
 clients, developers may reduce development time when building TC
@@ -214,7 +214,8 @@ classes in the \aicat\ framework.  Note that this diagram
 illustrates the \emph{capabilities} of the framework more than it
 illustrates its \emph{architecture}.  For instance, the framework
 currently understands several document types, including plain text
-documents and documents in the ``SMART'' format (XXX-need SMART reference).  If the framework is
+documents and documents stored in the format used by the SMART
+Information Retrieval system \cite{buckley:94}.  If the framework is
 extended by writing additional subclasses of existing classes, the
 capabilities increase without changing the basic architecture of the
 framework.
