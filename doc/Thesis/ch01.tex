@@ -77,7 +77,7 @@ in object-oriented software development.\footnote{This thesis assumes
   please see \cite{wirfs:90} for an academic treatment, or
   \cite{conway:99} for an applied treatment.}  The relevant software
 engineering literature contains several different definitions of the
-term:
+term, with two definitions appearing most commonly:
 
 \begin{itemize}
 \item a reusable design of all or part of a system that is represented
@@ -85,22 +85,24 @@ term:
   \cite{johnson:97}
 \item a reusable, ``semi-complete'' application that can be
   specialized to produce custom applications \cite{fayad:97}
-\item XXX - definition from \cite{gamma:95}
 \end{itemize}
 
 These definitions are not in conflict, but rather emphasize different
 aspects of framework development---the first definition emphasizes
-what a framework is made of, the second emphasizes what a framework is
-used for, and the third emphasizes XXX.
-
-Frameworks are (XXX - benefits of frameworks)
-
-\subsection{Guidelines for designing frameworks}
+what a framework is made of, while the second emphasizes what a
+framework is used for.  Notice that the first definition refers to the
+system's \emph{design}, while the second refers to the system's actual
+\emph{code}.  This is because frameworks represent both code reuse and
+design reuse.  The design of a system gets reused because any
+application built using the framework will embody the design decisions
+encoded in the framework structure, and the system code gets reused by
+employing the concrete classes provided with the framework.
+\cite[ch. 1]{gamma:95}
 
 In designing frameworks, developers strive to create a product that is
 useful in a maximum number of situations with a minimum of effort by
 the application developers.  This is evidenced by the consistent
-appearance of the word ``reuse'' in the definitions in the previous
+appearance of the word ``reusable'' in the definitions in the previous
 section.  In order to achieve effective reuse,
 the framework developer must identify those aspects of the target
 applications that vary from one application to the next, typically
@@ -128,10 +130,60 @@ functionality whenever possible.  Since framework requirements may not
 be clear until the framework has been used in several different
 applications, however, many frameworks evolve from being primarily
 whitebox frameworks to primarily blackbox frameworks as they
-mature. \cite[ch. XXX]{gamma:95}
+mature. \cite[ch. 6]{gamma:95}
 
-XXX - needs to be written, distilled from \cite{fayad:99},
-\cite{johnson:97}, and \cite{fayad:97}
+Frameworks are certainly not the only kind of software reuse technique
+in active use.  Other reuse techniques include \term{components},
+\term{libraries}, and \term{application generators}.  A component is
+an element of a software system that can be replaced by other elements
+with similar purpose but different behavior. \cite{johnson:97}  A
+library is a set of routines or objects (possibly components) that
+provide functionality developers may use in application
+code. \cite[ch. 1]{fayad:99}  An application generator is a system
+that creates varying applications based on high-level, domain-specific
+languages that specify the desired behavior of the application in its
+aspects that vary (i.e., in its hot spots). \cite[ch. 1]{fayad:99}
+
+The biggest difference between frameworks and the above reuse
+techniques is that frameworks create an \term{inversion of control}
+between the framework code and the application developer code.
+Framework code assumes control of the main flow in an application, and
+any custom developer code (if the framework is being used in a
+whitebox development style) is invoked by the framework.  In the other
+reuse techniques mentioned above, the developer writes the high-level
+application code (whether in a programming language or in the
+application generator's mini-language) and invokes the reusable
+elements at a lower level.  The inversion of control in frameworks
+lets the framework developer dictate the overall structure of the
+application, while allowing the application developer low-level
+control over application details. \cite[ch. 1]{fayad:99}
+
+According to \cite[ch. 1]{fayad:99}, framework methodology offers the
+following benefits as a reuse technique:
+
+\begin{description}
+\item[Modularity] The hot spots of a framework represent encapsulated
+  solutions to the variations in the application domain.  This helps
+  minimize the impact of design and implementation changes in
+  applications, because they will usually be limited to these
+  encapsulated areas.
+\item[Reusability] Frameworks represent both design reuse and code
+  reuse, leveraging both the expertise of the framework developer
+  encoded in the framework architecture, and well-tested
+  implementations encoded in the framework's concrete classes.  In the
+  case of blackbox usage, reuse may be achieved with no custom
+  application code.
+\item[Extensibility] Whitebox reuse allows frameworks to be used for
+  purposes that the framework developer did not or could not foresee,
+  and allows application developers to create interfaces to
+  proprietary or non-generic entities while using the framework
+  general architecture.
+\item[Inversion of control] Custom application code can play a
+  subordinate role to generic framework code, so that different
+  applications developed using the same framework will behave in
+  similar ways at the highest levels.
+\end{description}
+
 
 \subsection{Design patterns}
 \label{patterns}
