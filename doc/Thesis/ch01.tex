@@ -69,13 +69,15 @@ organizations.
 
 \section{Object-Oriented Application Frameworks}
 
-An Object-Oriented Application Framework (hereafter referred to simply
-as a ``framework'') is a large-scale unit of reusable code in
-object-oriented software development.  Frameworks assist developers in
-creating multiple similar, but non-identical, applications.
-
-The literature on frameworks contains several different definitions of
-the term:
+An \term{Object-Oriented Application Framework} (hereafter referred to
+simply as a \term{framework}) is a large-scale unit of reusable code
+in object-oriented software development.\footnote{This thesis assumes
+  that the reader is familiar with the basic terminology of
+  object-oriented programming.  For an introduction to the subject,
+  please see \cite{wirfs:90} for an academic treatment, or
+  \cite{conway:99} for an applied treatment.}  The relevant software
+engineering literature contains several different definitions of the
+term:
 
 \begin{itemize}
 \item a reusable design of all or part of a system that is represented
@@ -91,36 +93,42 @@ aspects of framework development---the first definition emphasizes
 what a framework is made of, the second emphasizes what a framework is
 used for, and the third emphasizes XXX.
 
-Several terms are commonly encountered in the literature on
-frameworks.  
-
-requiring fine-grained control over the \ldots
-XXX \ldots
+Frameworks are (XXX - benefits of frameworks)
 
 \subsection{Guidelines for designing frameworks}
 
 In designing frameworks, developers strive to create a product that is
 useful in a maximum number of situations with a minimum of effort by
-the application developers.
-
-
-The framework developer must identify those aspects of the target
+the application developers.  This is evidenced by the consistent
+appearance of the word ``reuse'' in the definitions in the previous
+section.  In order to achieve effective reuse,
+the framework developer must identify those aspects of the target
 applications that vary from one application to the next, typically
-called \emph{hot spots}, and allow explicitly for their variations to
-be instantiated in applications.  In some cases, the hot spot
+called \term{hot spots}, and allow explicitly for their variations to
+be instantiated in applications. \cite[ch. 14]{fayad:99}
+\cite{demeyer:97}
+
+In some cases, the hot spot
 variations are known in advance to the framework developer, so
 concrete classes may be provided to the application developer to
 fulfill the variation requirements.  Application development then
 becomes a simple matter of selecting the appropriate concrete classes
-for the application.  This is known as \emph{black box} framework
-usage.  In other cases, the application developer may have a
-particular need that the framework developer did not or could not
-anticipate.  Application development then involves writing custom
-subclasses of the hot spot classes, a process known as \emph{white
-box} framework usage.
+for the application.  This is known as \term{blackbox} framework
+usage.
 
-Because black box framework usage involves much less effort than white
-box usage, ...
+In other cases, the application developer may have a particular need
+that the framework developer did not or could not anticipate.
+Application development then involves writing custom subclasses of the
+hot spot classes, a process known as \term{whitebox} framework
+usage. \cite[ch. 1]{fayad:99}
+
+Because blackbox framework usage involves much less effort than
+whitebox usage, most framework developers aim to provide blackbox
+functionality whenever possible.  Since framework requirements may not
+be clear until the framework has been used in several different
+applications, however, many frameworks evolve from being primarily
+whitebox frameworks to primarily blackbox frameworks as they
+mature. \cite[ch. XXX]{gamma:95}
 
 XXX - needs to be written, distilled from \cite{fayad:99},
 \cite{johnson:97}, and \cite{fayad:97}
@@ -150,8 +158,8 @@ a task, or assembling to form a larger functional unit, while
 inheritance refers to the practice of defining a single object's
 structure and behavior in terms of both general (``parent'') and
 specific (``child'') specifications.  In the language of framework
-design and reuse, composition allows for black-box reuse, while pure
-inheritance forces white-box reuse.\cite[p. 19]{gamma:95}
+design and reuse, composition allows for blackbox reuse, while pure
+inheritance forces whitebox reuse.\cite[p. 19]{gamma:95}
 
 The relevance of several design patterns to \aicat\ will be discussed
 in detail in Chapter \ref{design}.
