@@ -23,7 +23,7 @@ sub run_section {
   if (keys %$do_stage > 1) {
     print " % $0 @ARGV -$stage\n";
     system($0, @ARGV, "-$stage") == 0
-      or die "Couldn't run $0: $!";
+      or die "$0 returned nonzero status, \$?=$?";
     return;
   }
   return $c->$section();
