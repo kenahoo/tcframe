@@ -42,7 +42,7 @@
 					<key>Offset</key>
 					<real>5.454545e+00</real>
 					<key>Position</key>
-					<real>5.000000e-01</real>
+					<real>4.385027e-01</real>
 				</dict>
 				<dict>
 					<key>Label</key>
@@ -108,9 +108,9 @@
 					<key>LabelVisible</key>
 					<string>YES</string>
 					<key>Offset</key>
-					<real>5.454545e+00</real>
+					<real>7.272727e+00</real>
 					<key>Position</key>
-					<real>5.000000e-01</real>
+					<real>4.331551e-01</real>
 				</dict>
 				<dict>
 					<key>Label</key>
@@ -178,7 +178,7 @@
 					<key>Offset</key>
 					<real>5.454545e+00</real>
 					<key>Position</key>
-					<real>5.000000e-01</real>
+					<real>3.582888e-01</real>
 				</dict>
 				<dict>
 					<key>Label</key>
@@ -316,7 +316,7 @@
 					<key>Offset</key>
 					<real>7.272727e+00</real>
 					<key>Position</key>
-					<real>8.395722e-01</real>
+					<real>9.465241e-01</real>
 				</dict>
 				<dict>
 					<key>Label</key>
