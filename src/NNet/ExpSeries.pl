@@ -38,26 +38,26 @@ my $EXP 	=	$COR;
 my $ALPHA 	= 	0.9;
 
 
-#print "\nCleaning up:\n";
-#veryclean();
+print "\nCleaning up:\n";
+veryclean();
 
-#print "\nPreparing a series of experiments:\n";
-#prepare();
+print "\nPreparing a series of experiments:\n";
+prepare();
 
-#print "\nCreating spec file $data/spec\n";
-#create_spec("$bin/smart.11.0/lib", $K);
+print "\nCreating spec file $data/spec\n";
+create_spec("$bin/smart.11.0/lib", $K);
 
-#print "\nCreating vector:\n";
-#create_vec();
+print "\nCreating vector:\n";
+create_vec();
 
-#print "\nSelecting features:\n";
-#select_features();
+print "\nSelecting features:\n";
+select_features();
 
-#print "\nCreating NNet data files:\n";
-#create_trn_nnt();
+print "\nCreating NNet data files:\n";
+create_trn_nnt();
 
-#print "\nTraining NNet:\n";
-#train_nnt();
+print "\nTraining NNet:\n";
+train_nnt();
 
 print "\nQuerying NNet:\n";
 query_nnt();
@@ -230,37 +230,27 @@ EOS
 sub train_nnt {
   chdir $data or die $!;
 
-  mycall qq{ $bin/time.csh "$bin/nntc -r ${EXP}.ttrn.nnt  -t ${EXP}.cv.nnt -e ${EPOCHS} -s ${SAVE} } .
-         qq{ -n ${EXP}.net -h ${HIDDEN} -a 0.9 -m 0.5 " ${EXP}.${EPOCHS}.log };
+  mycall qq{ $bin/nntc -r ${EXP}.ttrn.nnt  -t ${EXP}.cv.nnt -e ${EPOCHS} -s ${SAVE} } .
+         qq{ -n ${EXP}.net -h ${HIDDEN} -a 0.9 -m 0.5 };
 
-  mycall qq{ $bin/time.csh "$bin/nntc -r ${EXP}.ttrn.nnt  -t ${EXP}.cv.nnt -e ${EPOCHS} -s ${SAVE} } .
-         qq{ -n ${EXP}.net -h ${HIDDEN} -a 0.5 -m 0.5 " ${EXP}.${EPOCHS}.log };
+  mycall qq{ $bin/nntc -r ${EXP}.ttrn.nnt  -t ${EXP}.cv.nnt -e ${EPOCHS} -s ${SAVE} } .
+         qq{ -n ${EXP}.net -h ${HIDDEN} -a 0.5 -m 0.5 };
 
-  mycall qq{ $bin/time.csh "$bin/nntc -r ${EXP}.ttrn.nnt  -t ${EXP}.cv.nnt -e ${EPOCHS} -s ${SAVE} } .
-         qq{ -n ${EXP}.net -h ${HIDDEN} -a 0.1 -m 0.5 " ${EXP}.${EPOCHS}.log };
+  mycall qq{ $bin/nntc -r ${EXP}.ttrn.nnt  -t ${EXP}.cv.nnt -e ${EPOCHS} -s ${SAVE} } .
+         qq{ -n ${EXP}.net -h ${HIDDEN} -a 0.1 -m 0.5 };
 
-  # Create $COR.out
-  mycall "$bin/nntc -t ${COR}.tst.nnt -o ${COR}.out -n ${COR}.net";
-
-
+  # Creates "t$THRES.net" file
   mycall qq{ $bin/train_nnt.pl -c ${CV} -d $data -t ${THRES} -e ${COR} } .
          qq{ -n ${EPOCHS} -h ${HIDDEN} -x ${CVEXP} -a ${ALPHA} };
-
 }
 
 sub query_nnt {
   chdir $data or die $!;
 
-  # XXX I don't think this is running on the right data files?
+  # Create $COR.out
+  mycall "$bin/nntc -t $COR.tst.nnt -o $COR.out -n t$THRES.net";
 
-#  mycall "$bin/smart index.query spec";
-#  mycall "$bin/smart convert spec proc convert.obj.weight_query in query.nnn out query.$WT query_weight $WT";
-#  mycall "$bin/smprint vec query.$WT > query.vec";
-
-  mycall "$bin/Smart2NNT.pl -s $data/query.smart -v $data/query.vec -d $data/dict.txt -c $topicfile " .
-         " -f $data/$COR.$MTHD -n $N -o $data/$COR.query.nnt";
-
-  mycall "$bin/nntc -t $data/$COR.query.nnt -o $data/$COR.out -n $data/$COR.net";
-  mycall "$bin/RL_nnet.pl -t $topicfile -r $data/$COR.out -o $data/query_relevance -n 2";
+  # Parse the results
+  mycall "$bin/eval_nnt.pl -t $COR.smart -r $COR.out -o $COR.eval";
 }
 
