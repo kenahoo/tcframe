@@ -22,6 +22,8 @@ if ($do_stage{5}) {
     local *FH;
     open FH, "> $file-results.txt" or die "$file-results.txt: $!";
     # Should also dump parameters here
+    print FH scalar(localtime), "\n";
+    print FH "$0 @ARGV\n\n";
     print FH $result;
     close FH;
   }
