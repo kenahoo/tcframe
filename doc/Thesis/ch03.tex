@@ -1,5 +1,8 @@
 \chapter{\aicat\ Framework Design}
 
+XXX the first paragraph should be talking about how framework is designed,
+not what it is
+
 \aicat\ is a set of Perl modules that implements an
 object-oriented framework for text categorization.  It provides
 classes for managing documents, categories, machine learners,
@@ -576,7 +579,7 @@ In any framework of significant size and customizability, attention
 must be paid to the issue of how specific classes are chosen for the
 various framework roles, how these classes are instantiated, and how
 the instantiated objects are connected to each other.  In the simplest
-possible case, the framework client code must create all objects and
+possible case for the framework developer, the framework client code must create all objects and
 manually connect them to each other---for instance, in \aicat, the
 client code might create a \class{KnowledgeSet} object, a
 \class{Learner} object, an \aicat\ object, a \class{Collection}
@@ -589,7 +592,7 @@ An approach like this is diagrammed in Figure
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/naive-constructors.pdf}
-\caption{A simple approach to object construction}
+\caption{A client-side approach to object construction}
 \label{naive-constructors}
 \end{figure}
 
@@ -613,21 +616,101 @@ This design is moving closer toward a factory-style pattern, in which
 object creation is delegated to another object. \cite{gamma:95}
 defines two specific kinds of factory patterns, ``Factory Methods''
 and ``Abstract Factories.''  Figure \ref{better-constructors} does not
-fit either of these patterns precisely, but it does fall under the
+fit either of these patterns exactly, but it does fall under the
 general category of factory object creation.
-
-A scheme like that in Figure \ref{better-constructors} has both
-advantages and disadvantages compared with that in Figure
-\ref{naive-constructors}.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/better-constructors.pdf}
-\caption{A better approach to object construction}
+\caption{A framework-side approach to object construction}
 \label{better-constructors}
 \end{figure}
 
-XXX need to write \ldots
+A scheme like that in Figure \ref{better-constructors} has both
+advantages and disadvantages compared with that in Figure
+\ref{naive-constructors}.  One obvious advantage is that the client
+code is greatly simplified, because it needn't create any framework
+objects except the top-level object, and because it doesn't have to
+link the objects to each other.  This eliminates redundancy in
+multiple client code bases, and allows the framework designer greater
+flexibility in redesigning the framework hierarchy.  Another advantage
+is that the framework objects are created by the objects that use
+them, so class code can accept responsibility for its subordinate
+objects' entire life cycles.
 
+However, these properties can also be seen as disadvantages.  If each
+framework object assumes all responsibility for creating its
+subordinate objects, then the client may not be able to control the
+creation process effectively.  This is a problem for at least two
+important reasons: first, the client may wish to change some
+properties of the objects it creates.  If it passes all constructor
+parameters to the top-level class constructor, then this constructor
+must have knowledge of all of its subordinate classes' parameters in
+order to affect their construction correctly.  This would couple the
+framework classes too closely.  Second, the client may (and frequently
+will) change which classes are participating in the framework
+hierarchy.  If the \class{KnowledgeSet} class always creates a certain
+class of \class{Collection} object, then in order to substitute a
+different \class{Collection} class, the \class{KnowledgeSet} class
+would need to be subclassed---and the top-level \aicat\ class would
+need to be subclassed too, in order to create the new type of
+\class{KnowledgeSet}, leading to a proliferation of subclasses just to
+manage object creation.  Clearly a better solution is needed.
+
+In order to create a proper solution, some analysis of the problem is
+warranted.  Part of the reason these creational issues are difficult
+is that no standard method exists to translate the framework's design
+relationships into code.  Common programming languages have no
+built-in support for managing the patterns of creation necessary in
+frameworks.  Contrast this with inheritance relationships, which are
+directly supported by object-oriented languages.  For instance, a C++
+or Java \texttt{class} declaration lists its superclasses explicitly,
+and Perl specifies inheritance via each class's \texttt{@INC} array.
+Because inheritance is directly implemented by the language, it is
+easy for framework users to understand inheritance relationships, and
+these relationships are expressed straightforwardly in the framework
+code.  For support of this point, consider object-oriented programming
+in languages like C that don't have inherent OO support, where
+understanding the inheritance structures can be much more
+challenging.\cite[p. 7]{fayad:99}
+
+With this perspective in mind, one solution is to create a way for
+each class to explicitly declare its constructor parameters and its
+relationships to other classes, and then let the framework manage
+object creation in a consistent, centralized manner based on these
+declarations.  In a sense, this approach extends the implementation
+language to be able to express the important framework relationships
+directly, rather than letting them emerge implicitly from patterns of
+usage in the code.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{figures/factory-constructors.pdf}
+\caption{A centralized approach to object construction}
+\label{factory-constructors}
+\end{figure}
+
+Because many users of an application framework will be hesitant to
+depend on a modified, nonstandard version of the implementation
+language, \aicat\ uses inheritance to add these explicit declaration
+capabilities to every class participating in the framework hierarchy.
+Figure \ref{factory-constructors} shows an example of how this
+inheritance functions.  The abstract \aclass{ObjectFactory}
+class\footnote{The \aclass{ObjectFactory} name is used here only for
+discussion purposes.  See Chapter \ref{Implementation} for the actual
+implementation details.} adds the ability for any class derived from
+it to declare the relationships discussed in the previous paragraph.
+It also manages the creation of subordinate objects.  For instance,
+the top-level \aicat\ class declares that it contains both a
+\class{KnowledgeSet} and \class{Learner} object in an aggregation
+relationship.  When an \aicat\ object is created, \class{KnowledgeSet}
+and \class{Learner} objects will automatically be created by the
+\aclass{ObjectFactory} according to the client code's parameters.  The
+\class{KnowledgeSet} also declares that it will need to create
+\class{Collection} objects on demand, and calls creational methods
+provided by its \aclass{ObjectFactory} superclass when it needs to
+create them.
+
+This approach effectively solves the problems with the first two
+approaches considered here. XXX...
 
 \section{Specifying framework relationships}
 \label{class-container}
