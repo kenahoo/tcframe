@@ -1,22 +1,53 @@
 \chapter{Evaluation}
 
-\section{Descriptions of corpora}
-During development and testing, several data sets are used for
-framework testing and application building.  The main data sets are
-listed here.
+In order to evaluate the quality of the \aicat\ framework, several
+aspects of the framework have been tested.  The three main areas of
+testing are quality of classification, efficiency, and ease of use.
 
 
-\subsection{ApteMod (Reuters-21578)}
+\section{Corpora}
+
+During development and testing, several data sets, or ``corpora,''
+were used for framework testing and application building.  Since the
+framework will behave differently on different data sets, it is
+important to understand the characteristics of each corpus.  For
+instance, different feature selection and categorization algorithms
+may scale differently in relation to the size of the training corpus,
+both in terms of efficiency and accuracy.\cite{chakrabarti:98} Also,
+the specifics of the categorization problem in each corpus may be more
+amenable to one categorization technique or another.
+
+The main data sets used for testing are listed in this section.
+Unless otherwise noted below, a list of common English words from
+\cite{salton:89} was used as a ``stoplist,'' or a set of terms to
+completely exclude from processing.  This is a common technique from
+Information Retrieval,\cite{XXX} as it is assumed that these words
+possess little or no information about the target categories, and that
+they will only slow processing and add noise to the data.
+
+
+\subsection{ApteMod}
 
 
 The ``ApteMod'' version of the Reuters-21578 corpus has become a
-standard benchmark corpus in evaluating Text Categorization systems.
-It is a collection of 10,788 documents from the Reuters newswire
-service, partitioned into a training set with 7769 documents and a
-test set with 3019 documents.  The total size of the corpus is about
-17.5 MB.  It is available from
-\url{http://moscow.mt.cs.cmu.edu:8081/reuters_21578/} in SMART format.
+standard benchmark corpus in evaluating Text Categorization
+systems.\cite{yang:99} It is a collection of 10,788 documents from the
+Reuters newswire service, partitioned into a training set with 7769
+documents and a test set with 3019 documents.  The total size of the
+corpus is about 43 MB.  It is available for download from
+\url{http://kdd.ics.uci.edu/databases/reuters21578/reuters21578.html}.
 
+The distribution of categories in the ApteMod corpus is highly skewed,
+with 3,964 documents in the most common category, and only 2 documents
+in each of the five least common categories.  In fact, the original
+data source is even more skewed---in creating the corpus, any
+categories that did not contain at least one document in the training
+set and one document in the test set were removed from the
+corpus.\cite{yang:99}
+
+In the ApteMod corpus, each document belongs to one or more
+categories.  The average number of categories per document is 1.235,
+and the average number of documents per category is 148.089.
 
 \subsection{SignalG}
 This corpus consists of 122,919 financial announcement documents from
