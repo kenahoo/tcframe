@@ -45,11 +45,11 @@ Bldg J03, Sydney NSW 2006\\[1ex]
 {\it 
 This paper describes a new approach to managing a stream of questions about 
 mathematics by integrating a text categorization framework into a relational database 
-management system. The corpora studied is based on un-structured submissions to a 
-questions and answers service in learning mathematics. The classification system has 
+management system. The corpus studied is based on unstructured submissions to a 
+question-and-answer service in learning mathematics. The classification system has 
 been tested using a K-Nearest Neighbour learner built into the framework. The 
 performance results of the classifier are also discussed. The framework was integrated 
-into a postgreSQL database through the use of procedural trigger functions.
+into a PostgreSQL database through the use of procedural trigger functions.
 }
 
 \paragraph{Keywords} 
@@ -101,33 +101,43 @@ the testing process and Section 5 concludes.
 
 \section{Dr. Math Corpus}
 
-For the evaluation of our system we have tested the performance of the categorization 
-system over a set of unstructured, informal documents. These documents are mostly 
-written by students as questions to a Mathematics questions and answers service. 
-The documents vary greatly in length from a single sentence to a couple of paragraphs 
+For the evaluation of our system we have tested the performance of the
+categorization system over a set of unstructured, informal documents
+from the Ask Dr. Math
+service.\footnote{\url{http://www.mathforum.org/dr.math/}} These
+documents are mostly written by students as questions to a Mathematics
+questions and answers service.  The documents vary greatly in length
+from a single sentence to several paragraphs,
 but all of them are relatively short. In addition to this most examples contain symbols 
 and diagrams making linguistic analysis very difficult as well. The Dr. Math service 
 has about 300 volunteers answering hundreds of questions a day. The volunteers have 
 expertise in different areas of math and the site has won a number of awards for its 
 useful service. 
 
-The Dr Math corpus we used contains 6632 documents and was split into a testing 
+The Dr. Math corpus we used contains 6632 documents and was split into a testing 
 set of 1327 documents and a training set of 5305 documents.  There are 95 categories 
-in the corpus. The average number of documents in each category is 107.15 and the 
-standard deviation of the number of documents in each category is 130.45. The title of 
-each category and the corresponding number of documents is shown in Table 1. Note 
-that one document may have more than one category. 
+in the corpus. The average number of documents in each category is
+107.15.  The most popular category, high school-level geometry,
+contains 877 documents, and the least popular category,
+elementary-level golden ratio, contains only 3 documents.  Each
+document may be a member of more than one category, and the average
+number of categories per document is 1.53.  Figure
+\ref{cat-distribution} shows the distribution of categories throughout
+the corpus.
 
 \begin{figure}
+\begin{verbatim}
 Implicit Differentiation
 
-Find the slope of the tangent at the point (3,4) on the circle 
-x\^2 + y\^2 = 25.
+Find the slope of the tangent at the point
+(3,4) on the circle x^2 + y^2 = 25.
 
-My answer: I guess we would need to put it in the y = mx + b form. 
+My answer: I guess we would need to put it
+in the y = mx + b form. 
 
 Thanks for any help,
 Scott
+\end{verbatim}
 \caption{An example document from the Dr. Math corpus}
 \end{figure}
 
@@ -135,7 +145,9 @@ Category names indicate an existing hierarchical ontology that was not used in o
 tests due to the relatively small number of documents available.
 
 \begin{figure}
+\includegraphics[angle=90,width=\linewidth]{cat-distribution}
 \caption{Category distribution for the 95 Dr. Math categories}
+\label{cat-distribution}
 \end{figure}
 
 
@@ -170,12 +182,21 @@ necessary to categorize a document is a basic insert statement with a function c
 place of a value for the category of the document.
 
 \begin{figure}
- INSERT INTO documents (name, content, categories) 
- VALUES ('my name', 'my content', categorize('my name','my content', 'documents');
+\begin{verbatim}
+ INSERT INTO documents
+  (name, content, categories) 
+ VALUES
+  ('my name',
+   'my content',
+   categorize('my name',
+              'my content',
+              'documents'));
+\end{verbatim}
 \caption{Example document insertion statement with categorization}
+\label{sql-insert}
 \end{figure}
 
-The statement in Figure 1 can be further simplified through the creation of a pl/psql 
+The statement in Figure \ref{sql-insert} can be further simplified through the creation of a pl/psql 
 trigger function which fires automatically on insertion and passes the necessary values 
 to the categorize function. 
 
@@ -192,7 +213,6 @@ documents is assigned to the new document.
 
 In the kNN learner module created, the comparison between vectors was made by 
 normalizing each vector and 
-
 finding their dot product. The dimension of each vector was, in this case, 
 representative of the prevalence of a keyword in the document. This in effect gives a 
 cosine of the two vectors being compared. 
@@ -219,7 +239,7 @@ rumbaugh:91}, by integrating it in this way, the classification task
 The training set of the Dr Math corpus (5305 documents) was loaded into a database 
 table named "documents". This table consisted of 3 columns, name, content and 
 categories. The testing set was then inserted into the database, one document at a time 
-using a statement similar to that in Figure 1. After each insert a SELECT query was 
+using a statement similar to that in Figure \ref{sql-insert}. After each insert a SELECT query was 
 run to extract the assigned categories. These categories were then compared to the 
 actual categories of that document. Through this comparison the performance of the 
 categorization in terms of recall  and performance  was measured. The precision and 
@@ -240,6 +260,7 @@ k  & Threshold & Precision & Recall & $F_1$ \\ \hline
 15 & 0.15 & 0.740 & 0.211 & 0.328 \\ \hline
 \end{tabular}
 \caption{Macro averages against k-value and threshold}
+\label{macro-results}
 \end{table}
 
 \begin{table}
@@ -254,10 +275,10 @@ k  & Threshold & Precision & Recall & $F_1$ \\ \hline
 15 & 0.15 & 0.397 & 0.260 & 0.314 \\ \hline
 \end{tabular}
 \caption{Micro averages against k-value and threshold}
+\label{micro-results}
 \end{table}
 
-
-The results in table 3 show that a Macro precision of 0.75 can be achieved for k=15 
+The results in Table \ref{macro-results} show that a Macro precision of 0.75 can be achieved for k=15 
 and a threshold of 0.15, this is a good performance considering that this is noisy data 
 and a small data set. Larger k or thresholds reduce the recall performance The recall 
 was generally poor and this is probably due to the lack of training data and short, 
@@ -284,19 +305,6 @@ due to lack of training data and short, noisy and incoherent documents. The resu
 achieved in this test however demonstrates that a KNN categorizer implemented 
 within a database could have a high enough performance to be useful at classifying 
 unstructured and informal data sets. 
-
-1. Blaha, M., Premerlani W. and Rumbaugh J., Relational Database design using an 
-object oriented methodology. Communications of the ACM 31,4 (April 1988), 414-
-427.
-
-6. Fayad, Mohamed E. and Schmidt, Douglas C. Object-Oriented Application 
-Frameworks, Commun. ACM 40, 10 (Oct. 1997), 32-38.
-
-8. Rumbaugh J., Blaha, M, Premerlani W., Eddy F. and Lorensen W. Object Oriented 
-Modeling and Design. Prentice Hall, 1991.
-
-10. Salton, G. (1991). Developments in automatic text retrieval. Science, 253, 974--
-979.
 
 \section*{Acknowledgements}
 
