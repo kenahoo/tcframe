@@ -3,6 +3,14 @@
 my $name = shift or die "Usage: $0 <corpus-directory>\n";
 $name =~ s,/$,,;
 
+my $categorizer = 'AI::Categorizer::Categorizer::NaiveBayes';
+
+my %format = (
+	      collection_class => 'AI::Categorizer::Collection::SingleFile',
+	      document_class   => 'AI::Categorizer::Document::SMART',
+	      delimiter        => "\n.I",
+	     );
+
 use strict;
 
 use lib "$ENV{HOME}/src/tcframe/src/AI-Categorizer/lib";
@@ -10,11 +18,13 @@ use AI::Categorizer::KnowledgeSet;
 use AI::Categorizer::Categorizer::NaiveBayes;
 use AI::Categorizer::Experiment;
 
+eval "use $categorizer";
+
 # Useful for debugging
 use Carp; $SIG{__DIE__} = \&Carp::confess;
 
 # Scan features
-if (0) {
+if (1) {
   ### Read stopwords
   my @stopwords = `cat $name/SMART.stoplist`;
   chomp @stopwords;
@@ -24,39 +34,24 @@ if (0) {
     (
      name => $name,
      stopwords => { map {($_ => 1)} @stopwords },
-     collection_class => 'AI::Categorizer::Collection::Files',
-     #features_kept => 500,
+     %format,
+     features_kept => 1000,
      verbose => 1,
     );
   
-  $k->scan_features( path => "$name/training", verbose => 1 );
+  $k->scan_features( path => "$name/doc.smart", verbose => 1, document_class => 'AI::Categorizer::Document::SMART' );
 
   warn "saving to $name-save";
   $k->save_state("$name-save") or die $!;
 }
 
 # Read training corpus
-if (0) {
+if (1) {
   ### Use new features
   warn "restoring from $name-save";
   my $k = AI::Categorizer::KnowledgeSet->restore_state("$name-save");
 
-  ### Read categories
-  my $cats = read_cats("$name/cats.txt");
-  
-  ### Read documents
-  opendir TRAIN_DIR, "$name/training" or die $!;
-  while (my $file = readdir TRAIN_DIR) {
-    next if $file =~ /^\./;
-    
-    #print "$file\n";
-    print "$file: @{$cats->{$file} || []}\n";
-    my $body = do {open my $fh, "$name/training/$file" or die $!; local $/; <$fh>};  
-    $k->make_document( name => $file,
-		       categories => $cats->{$file} || [],
-		       content => $body );
-  }
-  closedir TRAIN_DIR;
+  $k->read( path => "$name/doc.smart", document_class => 'AI::Categorizer::Document::SMART' );
 
   #my $v = $k->features->as_hash;
   #printf "Features: %d\nUnique tokens: %d\n", scalar(keys %$v), $k->features->sum;
@@ -73,7 +68,7 @@ if (0) {
   my $k = AI::Categorizer::KnowledgeSet->restore_state("$name-save2");
 
   warn "training categorizer";
-  my $nb = new AI::Categorizer::Categorizer::NaiveBayes;
+  my $nb = $categorizer->new
     (
      verbose => 1,
     );
@@ -86,7 +81,7 @@ if (0) {
 # Categorize test set
 if (0) {
   warn "restoring from $name-save3";
-  my $nb = AI::Categorizer::Categorizer::NaiveBayes->restore_state("$name-save3");
+  my $nb = $categorizer->restore_state("$name-save3");
   my $e = new AI::Categorizer::Experiment;
 
   my $cats = read_cats("$name/cats.txt");
@@ -116,7 +111,7 @@ if (0) {
   print $e->stats_table;
 }
 
-if (1) {
+if (0) {
   my $e = Storable::retrieve('experiment');
   my $cats = $e->category_stats;
   my @metrics = qw(precision recall F1 error);
