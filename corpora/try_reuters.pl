@@ -2,7 +2,7 @@
 
 use strict;
 
-use lib '/Users/ken/src/tcframe/src/AI-Categorizer/lib';
+use lib "$ENV{HOME}/src/tcframe/src/AI-Categorizer/lib";
 use AI::Categorizer::KnowledgeSet;
 use AI::Categorizer::Categorizer::NNetTC;
 
