@@ -2,36 +2,50 @@
 
 \section{Preface}
 
-The field of Automatic Text Categorization is an extremely active area
+This thesis represents research into and implementation of a framework
+for automatic Text Categorization (TC).  In order to produce such a
+framework, research into current TC algorithms has been necessary, as
+well as research into software engineering practices for building
+object-oriented frameworks.
+
+The framework, called \aicat, has been designed with the goal of being
+generically useful for building real-world TC applications, and for
+being extensible using common framework extension techniques.
+
+\section{Automatic Text Categorization}
+
+The field of automatic Text Categorization is an extremely active area
 of current research and application.  It is a multi-disciplinary
 field, attracting attention from the Linguistics, Computer Science,
 Engineering, and Business communities.  Its applicability is broad,
 with many potential uses for large businesses as well as individuals.
+A recent survey article from the Association of Computing Machinery
+provides a good introduction to the field.\cite{sebastiani:02}
 
-The goal of Automatic Text Categorization is to produce specialized
+The goal of automatic Text Categorization is to automatically produce specialized
 algorithms that can process natural-language documents, assigning zero
 or more user-defined labels to them based on their content.  More
-formally, given a set of labels $L = \{L_1, \ldots, L_k\}$ and a set of
-previously unseen documents $D = \{D_1, D_2, \ldots \}$, a categorizer is a
-function $C$ that maps from $D$ to the set of all subsets of $L$.  In
+formally, given a set of labels (i.e., categories) $\cats = \{c_1, \ldots, c_{|\cats|}\}$ and a set of
+previously unseen documents $\docs = \{d_1, d_2, \ldots \}$, a categorizer is a
+function that maps from $\docs$ to the set of all subsets of $\cats$.  In
 practice, many categorizers assign only a single label to each
 document, so a categorizer is often a function that maps directly from
-$D$ to $L$.  Often an intermediate function is useful for ``soft'' or 
-``rank-based'' categorization, mapping from ordered pairs $(D_i, C_j)$ 
+$\docs$ to $\cats$.  Often an intermediate function is useful for ``soft'' or 
+``rank-based'' categorization, mapping from ordered pairs $(d_i, c_j)$ 
 to the set of real numbers $\mathbb{R}$ in order to assign a score 
-to each category $C_j$ for each document $D_i$.
+to each category $c_j$ for each document $d_i$.  The scored categories
+may then be presented to a human expert in decreasing order, and the
+human may then make the final decision on category membership.
 
 The standard modern approach to creating new categorizer functions is
 to build them using Machine Learning techniques from a set of training
-documents.  This is a set of user-provided, pre-labeled documents that
+documents $\train$.  This is a set of user-provided, pre-labeled documents that
 follows a category
-distribution similar to the distribution of $D$, and whose contents
+distribution similar to the distribution of $\docs$, and whose contents
 provide information about what sorts of documents should be mapped to
 what sorts of categories.  Algorithms can then be developed that make
 generalizations about the relationship between document content and
-document category, encoding these generalizations in the algorithm $C$.
-
-\section{Automatic Text Categorization}
+document category, encoding these generalizations in the learned algorithm.
 
 \section{Object Frameworks}
 
@@ -40,11 +54,25 @@ software development.  Frameworks were developed in response to
 situations requiring fine-grained control over the
 
 \subsection{Guidelines for designing frameworks}
+
+XXX - needs to be written, distilled from \cite{fayad:99}
+
 \subsection{Design patterns}
 
+XXX - needs to be written
 
 \section{Contributions}
 
+XXX - list what I feel are the research contributions of this thesis,
+and say what publications have arisen from this work
+
 \section{Organization of the Thesis}
 
-XXX  - can briefly summarize contents of other chapters
+Chapter \ref{background-tc} gives a detailed account of the technical
+issues in Text Categorization that a TC framework must take into
+account.  Chapter \ref{design} discusses design issues in creating the
+\aicat\ framework, motivating the design by consideration of the
+framework's audience and common usage scenarios.  Chapter
+\ref{Implementation} is a short discussion of implementation issues.
+Chapter \ref{Evaluation} evaluates the framework from several
+different perspectives, and Chapter \ref{Conclusion} concludes.
