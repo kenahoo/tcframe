@@ -1,25 +1,60 @@
-\documentclass[a4paper,twocolumn]{article}
+\documentclass[twocolumn]{article}
+\usepackage{sample}
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
+\usepackage[htt]{hyphenat}
+
+\newcommand{\naive}{Na\"\i ve}
+\newcommand{\method}[1]{\texttt{#1()}}
+\newcommand{\class}[1]{\texttt{#1}}
+\newcommand{\param}[1]{\texttt{#1}}
+\newcommand{\aicat}{\texttt{AI::Cat\-e\-gor\-i\-zer}}
 
 
-\author{Rafael A. Calvo \and Ken Williams}
-\title{Automatic Categorization of Announcements on the\\ Australian Stock Exchange}
+\raggedbottom
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\title{Automatic Categorization of Announcements \\ on the Australian Stock Exchange}
+
+\author{
+{\em Rafael A. Calvo}\\[1ex]
+School of Electrical\\
+and Information Engineering\\
+The University of Sydney\\
+Bldg J03, Sydney NSW 2006\\[1ex]
+{\em rafa@ee.usyd.edu.au}
+\and
+{\em Ken Williams}\\[1ex]
+School of Electrical\\
+and Information Engineering\\
+The University of Sydney\\
+Bldg J03, Sydney NSW 2006\\[1ex]
+{\em kenw@ee.usyd.edu.au}
+}
+
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
 
-\begin{center}
-School of Electrical and Information Engineering\\
-The University of Sydney\\
-Bldg J03, Sydney NSW 2006\\
-\{rafa, kenw\}@ee.usyd.edu.au
+        \begin{figure}[b]
+	~\\
+        \noindent
+        {\small\bf\raggedright
+        Proceedings of the 7th Australasian 
+	Document Computing Symposium,\\
+	Sydney, Australia,
+        December 16, 2002.
+        }
+        \end{figure}
 
-\end{center}
 
-\section{Abstract}
-
+\subsection*{\centering Abstract}
+%IEEE allows italicized abstract
+\noindent
+{\it 
 This paper compares the performance of several machine learning
 algorithms for the automatic categorization of corporate announcements
 in the Australian Stock Exchange (ASX) Signal G data stream. The
@@ -40,6 +75,11 @@ different machine learning techniques and the categorization framework
 that we have used to perform these types of categorization
 tasks. Section \ref{results} describes the quantitative results and
 section \ref{conclusion} concludes.
+}
+
+\paragraph{Keywords} 
+XXX
+A list of keywords based on those given in the Call for Papers should be included.
 
 \section{Introduction}
 \label{introduction}
@@ -163,7 +203,7 @@ that might be required to reproduce the results.
 
 Our Na\"\i ve Bayes algorithm is implemented within the
 AI::Cat\-e\-go\-riz\-er framework, an open source categorization
-framework written in Perl by Ken Williams.\footnote{Available at \\
+framework written in Perl by Ken Williams.\footnote{Available at 
 http://www.cpan.org/modules/by-authors/id/KWILLIAMS/} The framework
 has been designed to facilitate the construction of new categorization
 applications following best practices in framework engineering
@@ -235,82 +275,17 @@ SVM & SMART & Porter & DF & tfx & 1000 features, linear kernel \\
 \section{Results}
 \label{results}
 
-
-Table \ref{contingency} describes the possible outcomes of a binary
-classifier.  The ``assigned'' YES/NO results refer to the classifier
-output and the ``correct'' YES/NO refers to the manual ASX-assigned
-categories. A perfect classifier would have a value of 0 for $b_j$ and
-$c_j$.
-
-\begin{table}
-\begin{tabular}{|r|r|r|}
-\hline
-& \multicolumn{2}{|c|}{Correct} \\
-\hline
-Assigned & YES & NO \\
-\hline
-YES & $a_j$ & $b_j$ \\
-\hline
-NO & $c_j$ & $d_j$ \\
-\hline
-\end{tabular}
-\caption{Contingency table for class $j$}
-\label{contingency}
-\end{table}
-
-Using Table \ref{contingency} we define three performance measures
-common in the document categorization literature:
-
-\begin{displaymath}
-recall = r = \left\{ \begin{array}{ll}
-\frac{a}{a+c} & \textrm{if} \, a+c>0 \\
-0                  & \textrm{otherwise}
-\end{array} \right.
-\end{displaymath}
-
-\begin{displaymath}
-precision = p = \left\{ \begin{array}{ll}
-\frac{a}{a+b} & \textrm{if} \, a+b>0 \\
-0                  & \textrm{otherwise}
-\end{array} \right.
-\end{displaymath}
-
-These two measures contain information about whether classification
-errors are dominated by false positives or false negatives.  The
-trade-off between recall and precision can often be controlled by
-setting a classifier's parameters. Both measures should typically be
-used to describe the overall performance, as neither is particularly
-informative by itself. Another common performance measure is the
-$F_\beta$ measure:
-
-\begin{displaymath}
-F_\beta = \frac{(\beta^2 + 1)pr}{\beta^2 p + r}
-\end{displaymath}
-
-The most commonly used $F_\beta$ measure in document categorization is
-$F_1$, which evenly balances precision and recall:
-
-\begin{displaymath}
-F_1 = \frac{2pr}{p + r}
-\end{displaymath}
-
-When dealing with multiple classes there are two possible ways of
-averaging these measures, \emph{macro-averaging} and
-\emph{micro-averaging}. In macro-averaging, one contingency table per
-class is used, then performance measures are computed on each of them
-and averaged. In micro-averaging only one contingency table is used;
-an average of all the classes is computed for each cell and the
-performance measures are obtained therein. The macro-average weights
-equally all the classes, regardless of how many documents they
+In evaluating our classifiers on our data set, we use the common
+statistical measures \emph{precision}, \emph{recall}, and
+$F_1$. \cite{yang:99} \cite{rijsbergen:79} When dealing with multiple
+classes there are two possible ways of averaging these measures,
+\emph{macro-averaging} and \emph{micro-averaging}. The macro-average
+weights equally all the classes, regardless of how many documents they
 contain. The micro-average weights equally all the documents, thus
-biasing toward the performance on common classes.
-
-Since learning algorithms are trained more often on more populated
-categories, there is a risk of overfitting the training process to
-perform well on common categories.  Also, different algorithms will
-perform differently on common and rare categories.  Since these
-differences are often useful to know, both micro-averaged and
-macro-averaged numbers are typically reported to evaluate performance.
+biasing toward the performance on common classes.  Since different
+learning algorithms will perform differently on common and rare
+categories, both micro-averaged and macro-averaged scores are
+typically reported to evaluate performance.
 
 Our experimental process was as follows:
 
@@ -427,13 +402,13 @@ classifiers in commercial applications for both tasks, sensitivity
 detection and report type categorization.
 
 
-\section{Acknowledgements}
+\section*{Acknowledgements}
 
 The authors gratefully acknowledge financial support from the Capital
 Markets Collaborative Research Centre and the University of Sydney.
 
 
-\bibliographystyle{plain}
+\bibliographystyle{sample}
 \bibliography{TC-references}
 
 \end{document}
