@@ -1,6 +1,8 @@
 --- #YAML:1.0
 data_root: corpora/reuters-21578
 stopword_file: corpora/reuters-21578/SMART.stoplist
-progress_file: corpora/reuters
+progress_file: "/tmp/reuters-NB"
+learner_class: "::NaiveBayes"
+tfidf_weighting: xfx
 stemming: porter
 verbose: 1
