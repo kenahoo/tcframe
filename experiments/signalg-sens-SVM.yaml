@@ -6,10 +6,9 @@ stemming: porter
 tfidf_weighting: xfx
 features_kept: 1000
 max_instances: 8000
-training_set:  '/home/rafa/share/corpus/SignalG/training'
-test_set:      '/home/rafa/share/corpus/SignalG/test'
+data_root:     '/home/rafa/share/corpus/SignalG'
 stopword_file: '/home/rafa/share/corpus/SignalG/SMART.stoplist'
 progress_file: '/home/rafa/share/corpus/SignalG/tmp/signalg-sens-SVM'
-outfile: "results/signalg-sens-SVM.txt"
 category_file: '/home/rafa/share/corpus/SignalG/cats-sensitivity.txt'
+outfile: "results/signalg-sens-SVM.txt"
 verbose: 1
