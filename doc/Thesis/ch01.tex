@@ -71,16 +71,59 @@ organizations.
 
 An Object-Oriented Application Framework (hereafter referred to simply
 as a ``framework'') is a large-scale unit of reusable code in
-object-oriented
-software development.  Frameworks were developed in response to
-situations requiring fine-grained control over the \ldots XXX \ldots
+object-oriented software development.  Frameworks assist developers in
+creating multiple similar, but non-identical, applications.
+
+The literature on frameworks contains several different definitions of
+the term:
+
+\begin{itemize}
+\item a reusable design of all or part of a system that is represented
+  by a set of abstract classes and the way their instances interact
+  \cite{johnson:97}
+\item a reusable, ``semi-complete'' application that can be
+  specialized to produce custom applications \cite{fayad:97}
+\item XXX - definition from \cite{gamma:95}
+\end{itemize}
+
+These definitions are not in conflict, but rather emphasize different
+aspects of framework development---the first definition emphasizes
+what a framework is made of, the second emphasizes what a framework is
+used for, and the third emphasizes XXX.
+
+Several terms are commonly encountered in the literature on
+frameworks.  
+
+requiring fine-grained control over the \ldots
+XXX \ldots
 
 \subsection{Guidelines for designing frameworks}
 
+In designing frameworks, developers strive to create a product that is
+useful in a maximum number of situations with a minimum of effort by
+the application developers.
+
+
+The framework developer must identify those aspects of the target
+applications that vary from one application to the next, typically
+called \emph{hot spots}, and allow explicitly for their variations to
+be instantiated in applications.  In some cases, the hot spot
+variations are known in advance to the framework developer, so
+concrete classes may be provided to the application developer to
+fulfill the variation requirements.  Application development then
+becomes a simple matter of selecting the appropriate concrete classes
+for the application.  This is known as \emph{black box} framework
+usage.  In other cases, the application developer may have a
+particular need that the framework developer did not or could not
+anticipate.  Application development then involves writing custom
+subclasses of the hot spot classes, a process known as \emph{white
+box} framework usage.
+
+Because black box framework usage involves much less effort than white
+box usage, ...
+
 XXX - needs to be written, distilled from \cite{fayad:99},
 \cite{johnson:97}, and \cite{fayad:97}
-
- * white-box vs. black-box needs to be defined
 
 \subsection{Design patterns}
 \label{patterns}
