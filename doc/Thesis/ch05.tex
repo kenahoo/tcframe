@@ -339,6 +339,7 @@ error^M
 
 
 \subsection{Results}
+\label{results}
 
 Using the measures defined in Sections \ref{measures} and
 \ref{combining-measures}, categorization experiments were performed on
@@ -601,6 +602,80 @@ Baseline  &   .0452  &  .0286  &  .0286  &  .0356     &  .0354    &  .0355    & 
 
 \section{Efficiency}
 \label{Efficiency}
+
+In order to assess the efficiency of the implementations in \aicat,
+the running times and memory usage of the framework on the tasks in
+Section \ref{results} are reported here.  All tests were performed on
+a Sun Ultra-Enterprise server running Solaris 7, with a processor
+speed of 400 Mhz, and with 2040 Megabytes of RAM.  The software used
+was a pre-release version of \aicat\ version 0.05, running under perl
+version 5.6.1.
+
+The reader is cautioned that the resource usage numbers presented here
+will be highly volatile from one system to another, and that they may
+even change significantly with different versions of the software
+running on the same system.  The results presented here may give a
+rough indication of how the efficiency of different techniques relate
+to each other, however, and how the sizes of the data sets affect
+efficiency.
+
+Each experiment is divided into four stages, each run as a separate
+system process:
+
+\begin{description}
+\item[Scan] The training corpus $\train$ is scanned to determine the
+  most relevant features, using the document frequency feature
+  selection criterion, and the list of relevant features is saved to
+  disk.
+\item[Read] The entire training corpus $\train$ is read into memory as
+  a \class{KnowledgeSet}, using only the features determined in the
+  first step, and saved to disk as a data structure accessible for the
+  next step.
+\item[Learn] A \class{Learner} object is created, and its
+  \method{train} method is invoked using the \class{KnowledgeSet} from
+  the previous step.  The \class{Learner} is saved for use in the next
+  step.
+\item[Test] The \class{Learner} from the previous step is loaded into
+  memory, and each document from the test corpus $\test$ is
+  categorized using the \class{Learner}'s \method{categorize} method.
+\end{description}
+
+\begin{table}
+\begin{tabular}{|c r c c c c|}
+\hline
+           &     &     Scan     &    Read       &    Learn       &   Test       \\ \hline
+           & NB  & 128.6s/10.5M & 122.8s/48.7M  &   22.9s/47.0M  &  244.2s/13.6M \\
+ApteMod    & SVM &   &   &  &  \\
+           & kNN &   &   &   & \\ \hline
+           & NB  &  44.8s/8.7M  &  43.2s/24.1M  &    7.2s/24.1M  &   46.7s/11.0M \\
+Dr. Math   & SVM &  43.7s/9.4M  &  42.8s/26.3M  &  734.5s/304.7M &  118.9s/21.5M \\
+           & kNN &  43.8s/9.0M  &  42.2s/25.1M  &    6.6s/28.1M  &  725.2s/21.9M \\ \hline
+           & NB  &   &   &   & \\
+Signal G   & SVM &   &   &  &  \\
+  (Sens)   & kNN &   &   &   & \\ \hline
+           & NB  &   &   &   & \\
+Signal G   & SVM &   &   &  &  \\
+  (RT)     & kNN &   &   &   & \\ \hline
+\end{tabular}
+\caption{Resource usage for the experiments in Section \ref{results}.
+  Measurements are given as \emph{time}/\emph{memory}.}
+\label{efficiency-drmath}
+\end{table}
+
+Table \ref{efficiency-drmath} shows the resource measures on the
+Dr. Math corpus.  Running time is given in total CPU seconds consumed,
+and memory usage is measured by reporting the total size of the
+process in virtual memory.  Note that the running times include both
+the loading of any data structures from the previous stage and the
+saving of any data structures for the next stage.
+
+Of course, the running times and memory usage during the ``Scan'' and
+``Read'' stages do not vary much when the Machine Learning algorithm
+is changed, because this part of the process does not involve the
+\class{Learner} class.  The numbers are presented so that the reader
+may compare the measurements on the different corpora.
+
+
 
 \section{Applications}
 \label{Applications}
