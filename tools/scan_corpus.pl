@@ -10,8 +10,16 @@ parse_command_line(@ARGV);
 
 my $c = new AI::Categorizer(%opt);
 
-my $stats = $c->scan_stats;
-print "stats: @{[ %$stats ]}\n";
+my $stats = $c->knowledge_set->scan_stats(path => $c->{training_set});
+foreach my $k (sort keys %$stats) {
+  next if $k eq 'categories';
+  print "$k: $stats->{$k}\n";
+}
+
+print "\nCategories:\n";
+foreach my $k (sort keys %{$stats->{categories}}) {
+  print "$k: $stats->{categories}{$k}{document_count}\n";
+}
 
 ##################################################################
 sub parse_command_line {
