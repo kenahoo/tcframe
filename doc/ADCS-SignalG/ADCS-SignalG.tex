@@ -56,9 +56,9 @@ Total    & 46530     & 90100        & 136630\\
 \label{signalg-sensitivity}
 \end{table}
 
-The report type labels are highly skewed across categories.  The most common category, contains 10,064 documents, while ten categories have fewer than five documents each.  In order to quantify this condition more precisely, we use a statistical measure we call the "skew," defined as the standard deviation of the number of documents per category divided by the total number of documents: $skew$ $=$ $\frac{\textrm{stddev}(x_i)}{n}$ $=$ $\textrm{stddev}(\frac{x_i}{n})$, where $x_i$ is the number of documents belonging to category $i$, and $n$ is the total number of documents in the corpus.  Since the skew numbers are typically small, we express them as percentages.
+The report type labels are highly skewed across categories.  The most common category contains 10,064 documents, while ten categories have fewer than five documents each.  In order to quantify this condition more precisely, we use a statistical measure we call the "skew," defined as the standard deviation of the number of documents per category divided by the total number of documents: $skew$ $=$ $\frac{\textrm{stddev}(x_i)}{n}$ $=$ $\textrm{stddev}(\frac{x_i}{n})$, where $x_i$ is the number of documents belonging to category $i$, and $n$ is the total number of documents in the corpus.  Since the skew numbers are typically small, we express them as percentages.
 
-For our report type task, the standard deviation in the number of documents per category is 1998.6 and the number of documents is 136,630, giving a skew of 0.0146 or 1.46\%.  This quantity allows for comparison with other well-known corpora such as the Reuters-21578 Mod Apt\'e benchmark corpus, which contains 10,788 documents with a category membership standard deviation of 491.84, and thus a skew of 4.56\%.  Therefore, our Signal G report type data, while highly skewed, is not as skewed as the Reuters-21578 set.  A more complete picture of the report type category distribution can be seen in Figure \ref{signalg-reptype}.
+For our report type task, the standard deviation in the number of documents per category is 1998.6 and the number of documents is 136,630, giving a skew of 0.0146 or 1.46\%.  This quantity allows for comparison with other well-known corpora such as the Reuters-21578 Mod Apt\'e benchmark corpus, which contains 10,788 documents with a category membership standard deviation of 491.84, and thus a skew of 4.56\%.  Therefore, our Signal G report type data, while highly skewed, is not as skewed by this measure as the Reuters-21578 set.  A more complete picture of the report type category distribution can be seen in Figure \ref{signalg-reptype}.
 
 \begin{figure}
 \includegraphics[angle=90,width=\linewidth]{signalg-reptype}
@@ -76,9 +76,9 @@ Signal G is available to the public, member organizations, and information vendo
 
 We have compared three machine learning methods that have provided some of the best performances in other classification tasks \cite{yang:99}: Support Vector Machines (SVM), Na\"\i ve Bayes (NB), and Neural Networks (NN). It is not possible to describe them thoroughly in this article, so we will only summarize those issues that might be required to reproduce the results.
 
-Our Na\"\i ve Bayes algorithm is implemented within the AI::Cat\-e\-go\-riz\-er framework, an open source categorization framework written in Perl by Ken Williams.\footnote{Available at \\ http://www.cpan.org/modules/by-authors/id/KWILLIAMS/} The framework has been designed to facilitate the construction of new categorization applications following best practices in framework engineering \cite{fayad:99}. Na\"\i ve Bayes categorizers are one of several well-studied probabilistic categorizers \cite{lewis:98}. Most text categorization research using probabilistic methods uses NB, so a number of authors have described them and shown experimental results on a number of data sets \cite{joachims:98} \cite{yang:99}. 
+Our Na\"\i ve Bayes algorithm is implemented within the AI::Cat\-e\-go\-riz\-er framework, an open source categorization framework written in Perl by Ken Williams.\footnote{Available at \\ http://www.cpan.org/modules/by-authors/id/KWILLIAMS/} The framework has been designed to facilitate the construction of new categorization applications following best practices in framework engineering \cite{fayad:99}. Na\"\i ve Bayes categorizers are one of several well-studied probabilistic categorizers \cite{lewis:98}. Most text categorization research using probabilistic methods uses NB, so a number of authors have described them and shown experimental results on a number of data sets \cite{yang:99}. 
 
-Support Vector Machines were developed by Vapnik and colleagues during 1995-1996 \cite{cortes:95} \cite{scholkopf:99}. They were first used in document categorization by \cite{joachims:98} \cite{joachims:99} and used by other authors in experimental comparisons with other methods \cite{yang:99}.  Our SVM implementation uses AI::Categorizer for initial text processing, then passes the data through to Weka's SMO (Sequential Minimal Optimization) categorizer for training and testing.
+Support Vector Machines were developed by Vapnik and colleagues during 1995-1996 \cite{cortes:95} \cite{scholkopf:99}. They were first used in document categorization by \cite{joachims:98} \cite{joachims:99} and used by other authors in experimental comparisons with other methods \cite{yang:99}.  Our SVM implementation uses AI::Categorizer for initial text processing, then passes the data through to the libsvm package for training and testing \cite{libsvm}.  Because of the size of our training set, we had to only train on 8000 documents at a time in order to finish the experiments in a reasonable amount of time.  Future work to libsvm or a replacement may dramatically improve training speed by using recently developed training optimizations, enabling us to train on a larger number of documents and presumably to improve our correctness as a result.
 
 Neural Networks have been widely used and described in the document classification literature. \cite{yang:99} \cite{calvo:00} \cite{calvo:01} The neural network parameters are iteratively adjusted to fit the training data until error stops improving. We have used a backpropagation algorithm that minimizes quadratic error. The input layer has as many units (neurons) as document features retained. The number of hidden units is determined by optimising the performance on a cross-validation set. There is one output unit for each possible category, with activation values between 0 and 1. For each document, the classifier will assign any category whose output unit is greater than 0.5. In our experiment, we used 3-fold cross-validation and averaged the weights of the three resultant neural networks.  Our NN software is the same as in \cite{calvo:00} and \cite{calvo:01}.
 
@@ -87,10 +87,16 @@ Each categorizer was trained on the 95,525 training documents for each task, rep
 Table \ref{algos} summarizes the general steps followed in the preparation of the experiments.  TF/IDF weights are given in the notation followed by \cite{salton:88}.
 
 \begin{table*}
-\begin{tabularx}{\linewidth}{|r|l|l|X|X|X|}
+\begin{tabularx}{\linewidth}{|r|l|l|l|l|X|}
 \hline
 & Stopwords & Stemming & Feature Reduction & TF/IDF & Architecture\\
-\hlineNN & ??? XXX & Yes & $\chi^2$ & LTC? (XXX Need to find out what this really was) & 1000 features, 50 hidden units \\\hlineNB & SMART & Yes & DF & TFX & 1000 features \\\hlineSVM & SMART & Yes & DF & TFX & 1000 features, linear kernel \\
+\hline
+NN & SMART & Porter & $\chi^2$ & tfc & 1000 features, 50 hidden units \\
+\hline
+NB & SMART & Porter & DF & tfx & 1000 features \\
+\hline
+SVM & SMART & Porter & DF & tfx & 1000 features, linear kernel \\
+
 \hline
 \end{tabularx}
 \caption{Comparative description of algorithms used}
@@ -148,9 +154,18 @@ The most commonly used $F_\beta$ measure in document categorization is $F_1$, wh
 F_1 = \frac{2pr}{p + r}
 \end{displaymath}
 
-When dealing with multiple classes there are two possible ways of averaging these measures, \emph{macro-averaging} and \emph{micro-averaging}. In macro-averaging, one contingency table per class is used, then performance measures are computed on each of them and averaged. In micro-averaging only one contingency table is used; an average of all the classes is computed for each cell and the performance measures are obtained therein. The macro-average weights equally all the classes, regardless of how many documents they contain. The micro-average weights equally all the documents, thus biasing toward the performance on common classes.Different classifiers will perform differently on common and rare categories. Learning algorithms are trained more often on more populated classes thus risking local overfitting.\begin{enumerate}
+When dealing with multiple classes there are two possible ways of averaging these measures, \emph{macro-averaging} and \emph{micro-averaging}. In macro-averaging, one contingency table per class is used, then performance measures are computed on each of them and averaged. In micro-averaging only one contingency table is used; an average of all the classes is computed for each cell and the performance measures are obtained therein. The macro-average weights equally all the classes, regardless of how many documents they contain. The micro-average weights equally all the documents, thus biasing toward the performance on common classes.
 
-\item Linguistic dimensionality reduction: A list of stopwords \cite{salton:89} was removed from the document collection and the Porter stemming algorithm was applied \cite{manning:99}.\item Statistical dimensionality reduction: Chi squared, document frequency, and other statistics are often used to reduce the feature vector dimensionality \cite{manning:99} \cite{sebastiani:02}.\item Vectorization and weighting: The resulting documents were represented as vectors, using TF/IDF weighting \cite{salton:88} \cite{yang:97}. \item Architecture: The selected terms were used as input features to the classifier. Some of the algorithms allow several architectures, and the best algorithm was chosen by optimising the results on a cross-validation set. \item Training: We generated a cross-validation set randomly. These documents were set aside and the Neural Network was trained on the remaining ones. 
+Different classifiers will perform differently on common and rare categories. Learning algorithms are trained more often on more populated classes thus risking local overfitting.
+
+\begin{enumerate}
+
+\item Linguistic dimensionality reduction: A list of stopwords \cite{salton:89} was removed from the document collection and the Porter stemming algorithm was applied \cite{manning:99}.
+\item Statistical dimensionality reduction: Chi squared, document frequency, and other statistics are often used to reduce the feature vector dimensionality \cite{manning:99} \cite{sebastiani:02}.
+\item Vectorization and weighting: The resulting documents were represented as vectors, using TF/IDF weighting \cite{salton:88} \cite{yang:97}. 
+\item Architecture: The selected terms were used as input features to the classifier. Some of the algorithms allow several architectures, and the best algorithm was chosen by optimising the results on a cross-validation set. 
+\item Training: We generated a cross-validation set randomly. These documents were set aside and the Neural Network was trained on the remaining ones. 
+
 
 \end{enumerate}
 
@@ -159,8 +174,11 @@ When dealing with multiple classes there are two possible ways of averaging thes
 \hline
    & \multicolumn{3}{|c|}{Micro} & \multicolumn{3}{|c|}{Macro} \\
 \hline
-   & $p$  & $r$  &$F_1$ & $p$  & $r$  & $F_1$ \\\hline
- NN & 0.89 & 0.89 & 0.89 & 0.88 & 0.88 & 0.88 \\ NB & 0.83 & 0.84 & 0.83 & 0.90 & 0.90 & 0.90 \\SVM & 0.82 & 0.82 & 0.82 & 0.80 & 0.79 & 0.80 \\
+   & $p$  & $r$  &$F_1$ & $p$  & $r$  & $F_1$ \\
+\hline
+ NN & 0.89 & 0.89 & 0.89 & 0.88 & 0.88 & 0.88 \\
+ NB & 0.83 & 0.84 & 0.83 & 0.90 & 0.90 & 0.90 \\
+SVM & 0.82 & 0.82 & 0.82 & 0.80 & 0.79 & 0.80 \\
 \hline
 \end{tabular}
 \caption{Performance for the market sensitivity task}
@@ -173,15 +191,22 @@ When dealing with multiple classes there are two possible ways of averaging thes
 \hline
    & \multicolumn{3}{|c|}{Micro} & \multicolumn{3}{|c|}{Macro} \\
 \hline
-   & $p$  & $r$  &$F_1$ & $p$  & $r$  & $F_1$ \\\hline
-NN & 0.87 & 0.71 & 0.78 & 0.45 & 0.34 & 0.37  \\NB & 0.62 & 0.67 & 0.64 & 0.46 & 0.61 & 0.46  \\SVM &  &  &  &  &  & \\
+   & $p$  & $r$  &$F_1$ & $p$  & $r$  & $F_1$ \\
+\hline
+NN & 0.87 & 0.71 & 0.78 & 0.45 & 0.34 & 0.37  \\
+NB & 0.62 & 0.67 & 0.64 & 0.46 & 0.61 & 0.46  \\
+SVM &  &  &  &  &  & \\
+
 \hline
 \end{tabular}
 \caption{Performance for the report type task}
 \label{res:rept}
 \end{table}
 
-It is important to note that the performance results are based on comparing the automatic categorization of each document with the tagging of human experts at the ASX. The manual classification is a subjective decision process affected by the ASXÕs legal liabilities and the normal human classification disagreements. It has been shown in various studies that there could be considerable variation in the inter-indexer agreement \cite{bruce:98} \cite{brants:00}. For example, in a Reuters news collection correction rates averaged 5.16\% \cite{rose:02} with some editors being corrected up to 77\% of the time. Similar disagreements can be expected in the ASXÕs assignments on the Signal G corpus.  In the light of these disagreements we can imagine that there might be a limit to the performance that can be obtained by automatic categorization. Figure \ref{histogram} shows a histogram of classes and documents for different performance ranges using the Na\"\i ve Bayes classifier. It shows how most categories that do well have large number of documents, except for some that have very few documents (fewer than 5). This shows the well-known result that the machine learning algorithms such as Na\"\i ve Bayes perform better on well-populated categories. Similar results can be obtained for the other classifiers.
+It is important to note that the performance results are based on comparing the automatic categorization of each document with the tagging of human experts at the ASX. The manual classification is a subjective decision process affected by the ASXÕs legal liabilities and the normal human classification disagreements. It has been shown in various studies that there could be considerable variation in the inter-indexer agreement \cite{bruce:98} \cite{brants:00}. For example, in a Reuters news collection correction rates averaged 5.16\% \cite{rose:02} with some editors being corrected up to 77\% of the time. Similar disagreements can be expected in the ASXÕs assignments on the Signal G corpus.  In the light of these disagreements we can imagine that there might be a limit to the performance that can be obtained by automatic categorization. 
+
+Figure \ref{histogram} shows a histogram of classes and documents for different performance ranges using the Na\"\i ve Bayes classifier. It shows how most categories that do well have large number of documents, except for some that have very few documents (fewer than 5). This shows the well-known result that the machine learning algorithms such as Na\"\i ve Bayes perform better on well-populated categories. Similar results can be obtained for the other classifiers.
+
 
 \begin{figure}
 \includegraphics[angle=90,width=\linewidth]{results}
@@ -193,7 +218,12 @@ It is important to note that the performance results are based on comparing the 
 \label{conclusion}
 
 
-In this paper we have applied several machine learning techniques (Neural Networks, Na\"\i ve Bayes, and Support Vector Machines) to the categorization of announcements of companies publicly traded by the ASX.  Two tasks were evaluated: the categorization of documents as sensitive or not, and the categorization in one of the 144 report types defined by ASX. The results show that is possible to obtain classifiers with more than 88\% precision and recall on the sensitivity task and 86\% precision, 74\% recall on the report type task.The results are somewhat better than the ones obtained by several researchers working on the Reuters news cable database \cite{calvo:00} \cite{calvo:01}. This database has fewer categories (90) than the report type task but also fewer documents (10,000). Although it is risky to try to extrapolate the results, we believe that due to the similarity in the documents, other financial databases with documents in English should also have similar performance. Future work includes testing adding statistical feature selection to the classification framework, and improving the efficiency of the algorithms so they can be used for even larger data sets. The excellent performance shows the possibility to use these classifiers in commercial applications for both tasks, sensitivity detection and report type categorization.
+In this paper we have applied several machine learning techniques (Neural Networks, Na\"\i ve Bayes, and Support Vector Machines) to the categorization of announcements of companies publicly traded by the ASX.  Two tasks were evaluated: the categorization of documents as sensitive or not, and the categorization in one of the 144 report types defined by ASX. The results show that is possible to obtain classifiers with more than 88\% precision and recall on the sensitivity task and 86\% precision, 74\% recall on the report type task.
+
+The results are somewhat better than the ones obtained by several researchers working on the Reuters news cable database \cite{calvo:00} \cite{calvo:01}. This database has fewer categories (90) than the report type task but also fewer documents (10,000). Although it is risky to try to extrapolate the results, we believe that due to the similarity in the documents, other financial databases with documents in English should also have similar performance. Future work includes testing adding statistical feature selection to the classification framework, and improving the efficiency of the algorithms so they can be used for even larger data sets. 
+
+The excellent performance shows the possibility to use these classifiers in commercial applications for both tasks, sensitivity detection and report type categorization.
+
 
 \section{Acknowledgements}
 
