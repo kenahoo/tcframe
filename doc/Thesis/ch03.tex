@@ -374,7 +374,7 @@ the field of text categorization.
 \label{Adapter-learner}
 \end{figure}
 
-Figure \ref{Adapter-learner} shows an instance of how the Adapter
+Figure \ref{Adapter-learner} shows how the Adapter
 pattern is present in \aicat's \class{Learner} class.  The abstract
 \class{Learner} class specifies a common interface that all subclasses
 must conform to.  Several of its concrete subclasses implement their
@@ -410,8 +410,27 @@ the \class{Learner::Weka} module for reasons of efficiency or platform
 compatibility.  Because this interface is hidden using an Adapter
 pattern, the implementation may be changed freely.
 
-A major benefit of using Adapters comes in the area of reusability.
-XXX \ldots
+The differences in interfaces between the Adapter and the Adaptee may
+be merely historical, or they may reflect different needs in different
+domains.  The Adapter must conform to the interface of its abstract
+superclass, which is typically designed to be independent of subclass
+abilities and implementations.  The Adaptee may be designed for use in
+a different arena, with extra functionality, or an interface that
+takes full advantage of its capabilities.
+
+Using Adapters may bring major benefits in the area of reusability.
+Obviously, classes won't have to be re-implemented if the
+functionality can be adapted from an existing implementation.  Second,
+and perhaps more importantly, classes initially implemented for a
+framework may be converted into Adaptee classes, usable in isolation.
+This can bring them better exposure in other projects and thus more
+feedback, maturing them quickly.  This can be a major win, because
+iteration is considered a limiting factor in framework development
+\cite[p. 75]{fayad:99}, and any process that speeds up maturity in
+framework components can have a large impact.  Adapters can also force
+a more robust encapsulation of design in the Adaptee, bringing
+benefits in the conceptual and technical segmentation of the
+framework.
 
 \subsection{Strategy}
 \label{Strategy}
