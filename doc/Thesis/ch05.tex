@@ -58,6 +58,34 @@ Research Centre and is not available for use by outside groups.
 
 
 \section{Quality of Classification}
+
+\begin{table}
+\begin{tabular}{|r c c c c c c c|}
+\hline
+method & M$R$ & M$P$ & M$F_1$ & $\mu R$ & $\mu P$ & $\mu F_1$ & error \\
+\hline
+NB  & .3659 & .4969 & .3959 & .7238 & .8514 & .7824 & .00555 \\
+SVM & .0836 & .2932 & .1148 & .4726 & .8657 & .6114 & .00807 \\
+kNN & \\
+\hline
+\end{tabular}
+\caption{Results of \aicat\ on Reuters corpus}
+\end{table}
+
+\begin{table}
+\begin{tabular}{|r c c c c c c c|}
+\hline
+method & M$R$ & M$P$ & M$F_1$ & $\mu R$ & $\mu P$ & $\mu F_1$ & error \\
+\hline
+NB  & ? & ? & .3886 & .7688 & .8245 & .7056 & .00544 \\
+SVM & ? & ? & .5251 & .8120 & .9137 & .8599 & .00365 \\
+kNN & ? & ? & .5242 & .8339 & .8807 & .8567 & .00385 \\
+\hline
+\end{tabular}
+\caption{Results from \cite{yang:99} on Reuters corpus}
+\end{table}
+
+
 \section{Efficiency}
 
 \section{Applications}
