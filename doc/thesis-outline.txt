@@ -12,12 +12,21 @@ Outline of Ken Williams' thesis work
 
 ** The framework should be useful in a broad range of situations
 
+
 * Assessment criteria
 
-** The successful use of the framework by other people not involved in this project will demonstrate its usefulness
-
-** The successful use of the application by anyone will demonstrate its usefulness
+** Duplication of literature-published performance metrics will demonstrate successful implementation of standard techniques
 
 ** Publication of previously unknown results, or previously unseen performance metrics, will demonstrate improvement on published classification methods
 
-** Duplication of literature-published performance metrics will demonstrate successful implementation of standard techniques
+** The successful use of the application by anyone will demonstrate its completion
+
+** The framework should be uploaded to CPAN and pass the CPAN-Testers testing procudures
+
+** The successful use of the framework by other people not involved in this project will demonstrate its completion and usefulness
+
+
+* Planning
+
+** See 'docs/framework_design.txt' in the CVS repository
+
