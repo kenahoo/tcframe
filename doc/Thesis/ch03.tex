@@ -345,19 +345,19 @@ the general categorization task.  \cite{tumer:98}
 
 To implement ensemble learners within \aicat, the Composite
 pattern may be applied to the \class{Learner} class to create a
-\ensemble\ subclass.  Figure \ref{Composite-ensemble}
+\class{Learner::Ensemble} subclass.  Figure \ref{Composite-ensemble}
 shows the classes participating in this pattern.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Composite.pdf}
-\caption{The Composite pattern in the \ensemble\ class}
+\caption{The Composite pattern in the \class{Learner::Ensemble} class}
 \label{Composite-ensemble}
 \end{figure}
 
-Since \ensemble\ is a subclass of the abstract
+Since \class{Learner::Ensemble} is a subclass of the abstract
 \class{Learner} class, it conforms to the \class{Learner} interface.
 This is crucial to implementation of the Composite pattern---it means
-that clients may use the \ensemble\ class without
+that clients may use the \class{Learner::Ensemble} class without
 knowing that it implements an ensemble learner behind the scenes.  In
 this way, transparent ensemble learning is achieved through
 polymorphism.
@@ -365,11 +365,11 @@ polymorphism.
 According to \cite[p. 30]{sebastiani:02}, ensemble learning techniques
 can be specified by (1) a set of individual learners (the ``members''
 in Figure \ref{Composite-ensemble}), and (2) a mechanism for combining
-the output of the individual learners.  The \ensemble\
+the output of the individual learners.  The \class{Learner::Ensemble}
 class can provide generic support for creating the member learners of
 the ensemble, but the combination mechanism may take many different
 forms.  Such algorithms are an active area of Machine Learning
-research.  As such, \ensemble\ may be subclassed in
+research.  As such, \class{Learner::Ensemble} may be subclassed in
 order to implement different combination mechanisms.  Since these
 subclasses implement the combination algorithm in different ways, they
 may themselves be seen as carrying out a Strategy pattern (see section
