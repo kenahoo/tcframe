@@ -22,11 +22,12 @@ if (0) {
     (
      name => $name,
      stopwords => { map {($_ => 1)} @stopwords },
+     collection_class => 'AI::Categorizer::Collection::Files',
      features_kept => 500,
      verbose => 1,
     );
   
-  $k->scan_features( directory => "$name/training" );
+  $k->scan_features( path => "$name/training", verbose => 1 );
 
   warn "saving to $name-save";
   $k->save_state("$name-save") or die $!;
@@ -37,12 +38,6 @@ if (0) {
   ### Use new features
   warn "restoring from $name-save";
   my $k = AI::Categorizer::KnowledgeSet->restore_state("$name-save");
-
-  my $k = new AI::Categorizer::KnowledgeSet
-    (
-     name => $name,
-     verbose => 1,
-    );
 
   ### Read categories
   my $cats = read_cats("$name/cats.txt");
