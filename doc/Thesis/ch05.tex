@@ -299,7 +299,7 @@ following equations.
 
 Micro-averaging gives equal weight to each categorization decision
 made by the system, or equivalently, to each document in the corpus,
-regardless of the categories they belong to.
+regardless of how many categories it belongs to.
 
 An alternative to micro-averaging is \emph{macro-averaging}, in which
 the per-category scores $\pi_i$, $\rho_i$, and ${F_1}_i$ are simply
@@ -314,8 +314,8 @@ procedure.
 \end{displaymath}
 
 Macro-averaging gives equal weight to each category in the corpus,
-regardless of how many documents they contain.  Thus it provides a
-good counterpart to micro-averaging---macro-averaging will place more
+regardless of how many documents it contains.  Thus it provides a
+good counterpart to micro-averaging; macro-averaging will place more
 emphasis on rare categories than micro-averaging, so reporting both
 scores is typically useful to evaluate the system as a whole.
 
