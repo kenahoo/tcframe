@@ -4,7 +4,7 @@ document_class: '::Text'
 learner_class: '::KNN'
 stemming: porter
 tfidf_weighting: xfx
-features_kept: 5000
+features_kept: 1000
 max_instances: 8000
 training_set:  '/home/rafa/share/corpus/SignalG/training'
 test_set:      '/home/rafa/share/corpus/SignalG/test'
