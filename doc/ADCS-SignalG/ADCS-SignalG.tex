@@ -3,20 +3,6 @@
 \usepackage[dvips]{graphicx}
 \usepackage{tabularx}
 
-% \newcommand{\intro}[1]{\emph{#1}}
-
-
-\begin{comment}
-\textwidth = 6.5 in
-\textheight = 9 in
-\oddsidemargin = 0.0 in
-\evensidemargin = 0.0 in
-\topmargin = 0.0 in
-\headheight = 0.0 in
-\headsep = 0.0 in
-\parskip = 0.2in
-\parindent = 0.0in
-\end{comment}
 
 \author{Rafael A. Calvo \and Ken Williams}
 \title{Automatic Categorization of Announcements on the\\ Australian Stock Exchange}
@@ -34,7 +20,7 @@ Bldg J03, Sydney NSW 2006\\
 
 \section{Abstract}
 
-This paper compares the performance of several machine learning algorithms for the automatic categorization of corporate announcements in the Australian Stock Exchange (ASX) Signal G data stream. The article also describes some of the applications that the categorization of corporate announcements may enable. We have performed tests on two categorization tasks: market sensitivity, which indicates whether an announcement will have an impact on the market, and report type, which classifies each announcement into one of the report categories defined by the ASX. We have tried Neural Networks, a Na\"ive Bayes classifier, and Support Vector Machines and achieved good results.
+This paper compares the performance of several machine learning algorithms for the automatic categorization of corporate announcements in the Australian Stock Exchange (ASX) Signal G data stream. The article also describes some of the applications that the categorization of corporate announcements may enable. We have performed tests on two categorization tasks: market sensitivity, which indicates whether an announcement will have an impact on the market, and report type, which classifies each announcement into one of the report categories defined by the ASX. We have tried Neural Networks, a Na\"\i ve Bayes classifier, and Support Vector Machines and achieved good results.
 
 Section \ref{introduction} of this paper discusses the problem and application domain area, emphasizing the importance of language technologies in the financial information arena. Section \ref{data} describes the Signal G data set.  Section \ref{methods} describes the different machine learning techniques and the categorization framework that we have used to perform these types of categorization tasks. Section \ref{results} describes the quantitative results and section \ref{conclusion} concludes.
 
@@ -86,9 +72,9 @@ XXX need figure here
 \label{methods}
 
 
-We have compared three machine learning methods that have provided some of the best performances in other classification tasks \cite{yang:99}: Support Vector Machines (SVM), Na\"ive Bayes (NB), and Neural Networks (NN). It is not possible to describe them thoroughly in this article, so we will only summarize those issues that might be required to reproduce the results.
+We have compared three machine learning methods that have provided some of the best performances in other classification tasks \cite{yang:99}: Support Vector Machines (SVM), Na\"\i ve Bayes (NB), and Neural Networks (NN). It is not possible to describe them thoroughly in this article, so we will only summarize those issues that might be required to reproduce the results.
 
-Our Na\"ive Bayes algorithm is implemented within the AI::Cat\-e\-go\-riz\-er framework, an open source categorization framework written in Perl by Ken Williams.\footnote{Available at \\ http://www.cpan.org/XXX/K/KW/KWILLIAMS/} The framework has been designed to facilitate the construction of new categorization applications following best practices in framework engineering \cite{fayad:99}. Na\"ive Bayes categorizers are one of several well-studied probabilistic categorizers \cite{lewis:98}. Most text categorization research using probabilistic methods uses NB, so a number of authors have described them and shown experimental results on a number of data sets \cite{joachim:98} \cite{yang:99}. 
+Our Na\"\i ve Bayes algorithm is implemented within the AI::Cat\-e\-go\-riz\-er framework, an open source categorization framework written in Perl by Ken Williams.\footnote{Available at \\ http://www.cpan.org/XXX/K/KW/KWILLIAMS/} The framework has been designed to facilitate the construction of new categorization applications following best practices in framework engineering \cite{fayad:99}. Na\"\i ve Bayes categorizers are one of several well-studied probabilistic categorizers \cite{lewis:98}. Most text categorization research using probabilistic methods uses NB, so a number of authors have described them and shown experimental results on a number of data sets \cite{joachims:98} \cite{yang:99}. 
 
 Support Vector Machines were developed by Vapnik and colleagues during 1995-1996 \cite{cortes:95} \cite{scholkopf:99}. They were first used in document categorization by \cite{joachims:98} \cite{joachims:99} and used by other authors in experimental comparisons with other methods \cite{yang:99}.  Our SVM implementation uses AI::Categorizer for initial text processing, then passes the data through to Weka's SMO (Sequential Minimal Optimization) categorizer for training and testing.
 
@@ -98,7 +84,7 @@ Each categorizer was trained on the 95,525 training documents for each task, rep
 
 Table \ref{algos} summarizes the general steps followed in the preparation of the experiments.
 
-\begin{table*}[!b]
+\begin{table*}
 \begin{tabularx}{\linewidth}{|r|l|l|X|X|X|}
 \hline
 & Stopwords & Stemming & Feature Reduction & TF/IDF & Architecture\\
@@ -193,7 +179,7 @@ NN & 0.87 & 0.71 & 0.78 & 0.45 & 0.34 & 0.37  \\NB & 0.62 & 0.67 & 0.64 & 0.46 
 \label{res:rept}
 \end{table}
 
-It is important to note that the performance results are based on comparing the automatic categorization of each document with the tagging of human experts at the ASX. The manual classification is a subjective decision process affected by the ASXÕs legal liabilities and the normal human classification disagreements. It has been shown in various studies that there could be considerable variation in the inter-indexer agreement \cite{bruce:98} \cite{brants:00}. For example, in a Reuters news collection correction rates averaged 5.16\% \cite{rose:02} with some editors being corrected up to 77\% of the time. Similar disagreements can be expected in the ASXÕs assignments on the Signal G corpus.  In the light of these disagreements we can imagine that there might be a limit to the performance that can be obtained by automatic categorization. Figure \ref{histogram} shows a histogram of classes and documents for different performance ranges using the Na\"ive Bayes classifier. It shows how most categories that do well have large number of documents, except for some that have very few documents (fewer than 5). This shows the well-known result that the machine learning algorithms such as Na\"ive Bayes perform better on well-populated categories. Similar results can be obtained for the other classifiers.
+It is important to note that the performance results are based on comparing the automatic categorization of each document with the tagging of human experts at the ASX. The manual classification is a subjective decision process affected by the ASXÕs legal liabilities and the normal human classification disagreements. It has been shown in various studies that there could be considerable variation in the inter-indexer agreement \cite{bruce:98} \cite{brants:00}. For example, in a Reuters news collection correction rates averaged 5.16\% \cite{rose:02} with some editors being corrected up to 77\% of the time. Similar disagreements can be expected in the ASXÕs assignments on the Signal G corpus.  In the light of these disagreements we can imagine that there might be a limit to the performance that can be obtained by automatic categorization. Figure \ref{histogram} shows a histogram of classes and documents for different performance ranges using the Na\"\i ve Bayes classifier. It shows how most categories that do well have large number of documents, except for some that have very few documents (fewer than 5). This shows the well-known result that the machine learning algorithms such as Na\"\i ve Bayes perform better on well-populated categories. Similar results can be obtained for the other classifiers.
 
 \begin{figure}
 % \includegraphics[width=\textwidth]{results.epsf}
@@ -205,7 +191,7 @@ It is important to note that the performance results are based on comparing the 
 \label{conclusion}
 
 
-In this paper we have applied several machine learning techniques (Neural Networks, Na\"ive Bayes, and Support Vector Machines) to the categorization of announcements of companies publicly traded by the ASX.  Two tasks were evaluated: the categorization of documents as sensitive or not, and the categorization in one of the 144 report types defined by ASX. The results show that is possible to obtain classifiers with more than 88\% precision and recall on the sensitivity task and 86\% precision, 74\% recall on the report type task.The results are somewhat better than the ones obtained by several researchers working on the Reuters news cable database \cite{calvo:00} \cite{calvo:01}. This database has fewer categories (90) than the report type task but also fewer documents (10,000). Although it is risky to try to extrapolate the results, we believe that due to the similarity in the documents, other financial databases with documents in English should also have similar performance. Future work includes testing adding statistical feature selection to the classification framework, and improving the efficiency of the algorithms so they can be used for even larger data sets. The excellent performance shows the possibility to use these classifiers in commercial applications for both tasks, sensitivity detection and report type categorization.
+In this paper we have applied several machine learning techniques (Neural Networks, Na\"\i ve Bayes, and Support Vector Machines) to the categorization of announcements of companies publicly traded by the ASX.  Two tasks were evaluated: the categorization of documents as sensitive or not, and the categorization in one of the 144 report types defined by ASX. The results show that is possible to obtain classifiers with more than 88\% precision and recall on the sensitivity task and 86\% precision, 74\% recall on the report type task.The results are somewhat better than the ones obtained by several researchers working on the Reuters news cable database \cite{calvo:00} \cite{calvo:01}. This database has fewer categories (90) than the report type task but also fewer documents (10,000). Although it is risky to try to extrapolate the results, we believe that due to the similarity in the documents, other financial databases with documents in English should also have similar performance. Future work includes testing adding statistical feature selection to the classification framework, and improving the efficiency of the algorithms so they can be used for even larger data sets. The excellent performance shows the possibility to use these classifiers in commercial applications for both tasks, sensitivity detection and report type categorization.
 
 \section{Acknowledgements}
 
