@@ -125,7 +125,7 @@ if ($opt{4}) {
   while (my $d = $c->next) {
     my $h = $l->categorize($d);
     printf "%s: assigned=(%s) correct=(%s)\n", $d->name, join(', ', $h->categories), join(', ', map $_->name, $d->categories);
-    $e->add_hypothesis($h, [map $_->name, $d->categories]);
+    $e->add_hypothesis($h, [$d->categories]);
   }
 
   Storable::store($e, 'experiment');
