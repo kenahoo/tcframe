@@ -34,17 +34,103 @@ being extensible using common framework extension techniques.
 
 \section*{Availability}
 
-XXX - say where this thesis is available, and where \aicat\ is
-available, and where data sets are available
+The latest released version of the \aicat\ framework (currently 0.04)
+is always available at
+\url{http://search.cpan.org/author/KWILLIAMS/}.  Perl source code,
+documentation, and a simple example application are included in the
+distribution.
+
+For developers who wish to stay more actively involved with tracking
+changes in the framework, the entire distribution is also available
+using the Concurrent Versions System (CVS).  This allows developers to
+access the latest bug fixes, to create their own patches against the
+main framework code, and to track changes between releases.  Details
+of how to access the CVS version are at
+\url{http://sourceforge.net/cvs/?group_id=62831}, or via the project's
+development home page at
+\url{http://sourceforge.net/projects/ai-categorizer/}.
+
+The ApteMod data set discussed in Chapter \ref{Evaluation} is
+available for download from
+\url{http://kdd.ics.uci.edu/databases/reuters21578/reuters21578.html}.
+
+The Dr. Math data set is not available for direct download, but
+interested parties may contact Ken Williams at \url{ken@mathforum.org}
+for details.
+
+XXX - Signal G data set needs to be discussed if it remains in the
+thesis
+
+After submission to the University of Sydney, this thesis document
+will be available in electronic format at
+\url{http://www.ee.usyd.edu.au/~kenw/Thesis.pdf}, and in hardcopy
+format from the University of Sydney Engineering Library.
 
 \section*{Licensing}
 
-XXX - explain open source license, what license \aicat\ is released
-under, what license this thesis is released under
+The \aicat\ framework is implemented as a set of Perl modules (see
+Section \ref{imp-language}).  As is customary with many Perl modules,
+the framework is distributed under the same licensing terms as the
+standard version of the Perl interpreter.  This means that the user
+may choose either the GNU General Public License or the Artistic
+License as the terms of using the software, whichever fits better with
+their needs.  In practical terms, this means that the code is
+encouraged to be used in research, commercial, educational, or other
+environments, without the need to pay royalties to the software's
+original author.  It also means that the software's inner workings are
+available to be inspected or modified by other developers for their
+own projects.
+
+Licenses of the above type are called ``open source'' licenses.  Their
+goal is to foster the development and evolution of software by
+leveraging the user community and developer community as a resource
+that can feed back into the development cycle.  According to
+\url{http://www.opensource.org/}, ``open source promotes software
+reliability and quality by supporting independent peer review and
+rapid evolution of source code.''  This aligns very well with the
+traditional goals of academic research.  By making the source code
+discussed in academic project available as open source resources, the
+results can far more easily be verified by other researchers.
+
+For more information on open source concepts, please visit
+\url{http://www.opensource.org/}.
+
+This thesis is copyright \copyright 2003 by Ken Williams. This
+material may be distributed only subject to the terms and conditions
+set forth in the Open Publication License, v1.0 or later (the latest
+version is presently available at
+\url{http://www.opencontent.org/openpub/}).
 
 \section*{Motivations}
 
-XXX - write about why I did this project, from personal perspective
+My own personal motivations for embarking on this project were to
+further educate myself on Text Categorization research, to learn more
+about framework methodology, and to provide a software resource to
+others who wish to use TC methods in their software projects.  I have
+long been interested in Machine Learning methods for various purposes,
+and I enjoy working with natural languages.  Doing corpus-based work
+in Natural Language Processing is a fun combination of Machine
+Learning and Linguistics, and reading the literature on the topic
+always makes me excited to work on my next project.
+
+Unfortunately, when I was just beginning to do work on my own Text
+Categorization projects, I found that there were very few TC tools
+freely available for my use, and those that were available were often
+difficult to customize.  Very few tools were available in Perl, my
+usual language of choice, and this seemed like an odd situation given
+the well-known agility of Perl at handling text data.  I cannot hope
+to solve everyone's software needs in TC, but the \aicat\ framework
+represents my best effort in providing the kind of thing I was looking
+for when I began working in this area.
+
+My interest in framework development has recently increased by working
+on the \class{HTML::Mason} project \cite{rolsky:02}.  For this, I
+and others helped shepherd the code from a fairly monolithic
+function-based tool to a customizable OO framework suitable for many
+more purposes than it was originally developed to serve.  I became
+convinced of the power of framework development with that project, and
+I sought to bring the same benefits to an open-source framework for TC.
+
 
 \chapter*{Statement of Originality}
 XXX, don't know what goes here
