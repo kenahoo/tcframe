@@ -109,6 +109,14 @@ written languages do not contain spaces indicating divisions between
 words, so a sophisticated tokenizer may be required when dealing with
 languages like these.
 
+In addition, the tokenization process (or equivalently, a stage
+directly after tokenization) may remove from the data any term in a
+pre-defined list of ``stop words,'' which are words that occur very
+commonly in the domain (such as ``the'' or ``and'' in most English
+texts) and are assumed to contain little or no relevance to the
+categorization problem at hand. \ref[p. 15]{sebastiani:02}
+\ref{mladenic:98}
+
 In order to address these issues, a TC system needs to allow
 variations in the tokenizing process.  This may involve providing a
 set of parameters that the user can adjust in order to affect
