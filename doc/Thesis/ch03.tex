@@ -227,11 +227,13 @@ patterns.  The ``Iterator,'' ``Composite,'' ``Adapter,'' ``Strategy,''
 and ``Factory Method'' patterns are discussed, and specific examples
 from \aicat\ show how they are applied within the framework.  These
 are not by any means the only instances of common design patterns in
-the framework, nor do they give complete coverage of all
-design-related issues involved in \aicat.  But the patterns provide a
-starting point for design discussion, and their use has been found
-beneficial in many arenas \cite{granlund:99}, so they are used here in
-the hope that they clarify the issues involved.
+the framework, nor do the specific patterns in \cite{gamma:95} provide
+a complete catalog of all possible patterns in software.  This
+discussion also does not give complete coverage to all design-related
+issues involved in \aicat.  But patterns often provide a starting
+point for design discussion, and their use has been found beneficial
+in many diverse arenas \cite{granlund:99}, so they are used here in
+the hope that they clarify the important design issues.
 
 \subsection{Iterator}
 
@@ -419,7 +421,7 @@ functionality using a framework-external resource.  For example,
 is a wrapper around the ``Weka'' Machine Learning system.
 \class{Learner::SVM} is a wrapper around a framework-external
 \class{Algorithm::SVM} module, which is itself a wrapper around the
-\texttt{libsvm} C library.\cite{libsvm}\footnote{Note that
+\texttt{libsvm}\cite{libsvm} C library.\footnote{Note that
 \class{Learner::SVM}, Weka, and \texttt{libsvm} are not part of the
 contributed work of this thesis, as they are written by other authors.}
 
@@ -438,6 +440,7 @@ adaptation (in this case, Java to Perl) with functionality
 transformation (mapping Weka's methods to the required \class{Learner}
 interface).
 
+Adapters can create design flexibility.
 The current implementation of \class{Learner::Weka} interfaces with
 Weka through its command-line interface, but this is not a design
 constraint.  Future implementations may embed the Weka system inside
@@ -469,11 +472,68 @@ framework.
 
 \subsection{Strategy}
 \label{Strategy}
+
+The Strategy pattern defines ``a family of algorithms, encapsulates
+each one, amd makes them interchangeable.'' \cite[p. 315]{gamma:95}
+It is used when a domain task needs to be carried out, but there may
+be several ways to carry out that task, and it is important to let the
+user or client choose from among these alternatives.
+
+An important concept in the Strategy pattern is that of ``behavior.''
+In \cite{gamma:95}, the Strategy pattern is recommended when ``many
+related classes differ only in their behavior.''  In this context, a
+distinction is made between an algorithm's purpose and its behavior.
+For example, a set of algorithms for finding line-break points in text
+paragraphs have a common purpose (to accomplish the line-breaking
+task), but they may carry out their task in different ways.  The
+algorithms may make different trade-offs in terms of speed and memory,
+or they may try to optimize different aspects of the task.  Since it
+is impossible to satisfy all clients in all situations with a single
+choice of algorithm, it is desirable to encapsulate each algorithm in
+a class that can be chosen or extended by the client.
+
+The field of text categorization has several natural applications for
+the Strategy pattern.  One of the primary concerns of most TC
+researchers is the development of novel algorithms for various aspects
+of the categorization task, so it is essential for these algorithms to
+be easy to vary in a categorization framework.  In the language of
+\cite{fayad:99}, these algorithms are framework ``hot spots.''
+
+The most obvious Strategy application in \aicat\ is the
+\class{Learner} class and its subclasses.  These classes all have a
+common task to perform, that of training a categorizer and
+categorizing unseen documents.  The various subclasses represent very
+different ways to accomplish that task.  Importantly, the results of
+the task, and not just the internal mechanism that performs it, may be
+different depending on which \class{Learner} subclass is used.
+
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Strategy.pdf}
 \caption{The Strategy pattern in the Learner class}
 \label{Strategy-learner}
 \end{figure}
+
+Figure \ref{Strategy-learner} shows how the Strategy pattern appears
+in the \class{Learner} class and its subclasses.  Three concrete
+subclasses are shown that implement specific Machine Learning
+algorithms (see Figure \ref{inheritance-uml} for other \class{Learner}
+subclasses currently implemented).  From the point of view of the
+client \aicat\ object, all \class{Learner}s have the same interface,
+and may therefore be treated uniformly.  The framework user or
+application designer, however, may choose judiciously among subclasses
+depending on the particular needs of the application.  Customizability
+of the Machine Learning algorithm is of paramount importance to the
+framework, since it would be useless to researchers if this were not
+the case.
+
+Each \class{Learner} subclass must implement the abstract
+\method{train} and \method{categorize} methods in order to perform the
+two essential tasks of any \class{Learner}.  The \method{train} method
+examines a \class{KnowledgeSet} object and builds an internal (and
+opaque) model that will be used to categorize future documents.  The
+\method{categorize} method takes a \class{Document} object as an
+argument and returns a \class{Hypothesis} object representing the
+outcome of categorization based on the model.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{figures/Strategy-feasel.pdf}
@@ -481,7 +541,34 @@ framework.
 \label{Strategy-feasel}
 \end{figure}
 
+Another application of the Strategy pattern is shown in Figure
+\ref{Strategy-feasel}.  Here, the varying algorithm performs
+feature selection, another framework hot spot.  There has been much
+activity in current research on improving feature selection for
+different scenarios \cite{yang:01,yang:97}, so customization in this
+area is also essential.
+
+To perform feature selection, a \class{KnowledgeSet} object invokes
+either the \method{select\_features} or \method{scan\_features} method
+of the \class{FeatureSelector} object, depending on whether a complete
+\class{KnowledgeSet} or a \class{Collection} object should be
+examined.  Examining a \class{Collection} iteratively requires less
+memory because the documents don't have to be loaded into memory all
+at once, but it requires a separate pass through the data.  The choice
+of which method to run is made in response to user specification.
+
+Because \method{select\_features} and \method{scan\_features} are
+virtual methods in the parent class, any concrete subclass must
+implement these methods according to the particular algorithm the
+subclass represents.  As of this writing, only the
+\class{FeatureSelector::DocFrequency} subclass is implemented, but
+the other subclasses in the diagram are planned.
+
+
 \subsection{Factory Method}
+
+XXX need to write \ldots
+
 
 \section{Specifying framework relationships}
 
@@ -513,14 +600,17 @@ will function in similar ways.\cite[p. 13]{fayad:99}
 
 Since Perl lacks first-class support for specifying patterns of
 collaboration (as is the case with most common OO languages), a
-language extension has been employed in the \aicat\ framework that
-unifies these issues.  Using this extension, each class explicitly
+language extension called \class{Class::Container} has been employed
+in the \aicat\ framework to unify these issues.  Using this extension,
+each class explicitly
 declares any other objects it cooperates with in certain types of
 relationships.  Because these declarations are made explicitly and
 don't just emerge from usage patterns in the implementation code,
 certain types of functionality may be handled centrally and
 consistently, greatly easing the burden of implementing these
 relationships and aiding framework flexibility.
+
+For example, XXX \ldots
 
 \section{Limitations}
 
