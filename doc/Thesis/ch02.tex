@@ -174,18 +174,73 @@ scaled in several different ways.  The TF/IDF vector weighting
 techniques are used commonly in TC systems, and their availability is
 desirable for the \aicat\ framework.
 
-\subsection{Machine learning algorithm choice}
+\subsection{Machine Learning algorithm}
 
+Many different Machine Learning algorithms are actively studied in the
+TC research literature, and new algorithms or variations on existing
+algorithms are continually being developed.  In addition, the choice
+of algorithm may depend on the specific application---algorithms
+differ not only in their ability to perform accurately on differing
+data sets, but also in the resources they may require during training
+and when categorizing documents.  Therefore, it is not possible to
+choose a single Machine Learning algorithm for incorporation into the
+\aicat\ framework.  As a TC system, it needs to allow for selection
+among several standard algorithms and for incorporation of novel
+algorithms developed by researchers.
 
+Section \ref{machine-learning} gives an overview of three well-studied
+Machine Learning algorithms and compares some of their relevant
+characteristics.  Section \ref{Strategy} in Chapter \ref{design} shows
+how the architecture of \aicat\ allows for flexibility in this aspect
+of categorization.
 
-\subsection{Machine learning configuration}
+\subsection{Machine Learning configuration}
+\label{ml-config}
 
-\subsection{Incremental or on-line learning}
+Even within a single Machine Learning algorithm, there may be several
+parameters that a supervisor may vary to influence the training and
+categorization processes.  For instance, the k-Nearest-Neighbor
+algorithm has an adjustable parameter $k$, the SVM algorithm allows
+for several variations in the type of kernel used, and most
+categorization algorithms admit some type of control to trade off
+precision and recall against each other (see Section \ref{measures}
+for an explanation of these terms).  In order to achieve the
+appropriate performance for a given task, application developers need
+simple ways to vary these parameters.
+
+In fact, this issue is not unique to the Machine Learning component of
+the TC process.  Several of the previously discussed aspects of the TC
+task, including feature selection, dimensionality reduction, and
+vector space transformation, may be controlled by parameters that the
+supervisor may wish to vary.  Consistency in the system's handling of
+parameters may therefore be an important part of its design.  This
+issue will be discussed again in Section \ref{factory-method}.
+
+\subsection{Incremental learning}
+
+In some TC applications, it may be desirable to incorporate feedback
+from the user about whether the system's categorization decisions have
+been correct or incorrect.\cite[p. 28]{sebastiani:02} This may allow
+for a relatively small initial training set $\train$, or for
+categorization on concepts which may change over time.  This process
+is called \emph{incremental} or \emph{on-line} learning.
+
+Unfortunately, incremental learning is not possible with all Machine
+Learning methods, since some algorithms (e.g. Neural Network
+categorizers) may not be able to incorporate new evidence into their
+model without going through the entire training process again.  For
+those algorithms which can support it, however, the use of incremental
+learning may be considered important in building a TC application, and
+is therefore considered a goal of the \aicat\ project.
 
 \subsection{Hypothesis behavior}
 \label{Hypothesis behavior}
 
+
+
 \section{Machine learning techniques}
+\label{machine-learning}
+
 \subsection{Naive Bayes}
 \subsection{Support Vector Machines}
 \subsection{k-Nearest-Neighbor}
