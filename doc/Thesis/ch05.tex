@@ -245,13 +245,15 @@ on a particular category.
 ${F_1}_i$ may be derived in terms of the entries of the per-category
 contingency table as follows:
 
-\begin{eqnarray*}
+\begin{equation*}
+\begin{split}
 {F_1}_i 
- & = & \frac{ 2 \pi_i \rho_i}{\pi_i + \rho_i} \\
- & = & \frac{ \frac{2 {A_i}^2}{(A_i+B_i)(A_i+C_i)} } { \frac{A_i}{A_i+B_i} + \frac{A_i}{A_i+C_i} } \\
- & = & \frac{ 2 {A_i}^2 }                            { A_i(A_i+C_i) + A_i(A_i+B_i) } \\
- & = & \frac{ 2 A_i }                                { 2 A_i + B_i + C_i } \\
-\end{eqnarray*}
+ & = \frac{ 2 \pi_i \rho_i}{\pi_i + \rho_i} \\[6pt]
+ & = \frac{ \frac{2 {A_i}^2}{(A_i+B_i)(A_i+C_i)} } { \frac{A_i}{A_i+B_i} + \frac{A_i}{A_i+C_i} } \\[6pt]
+ & = \frac{ 2 {A_i}^2 }                            { A_i(A_i+C_i) + A_i(A_i+B_i) } \\[6pt]
+ & = \frac{ 2 A_i }                                { 2 A_i + B_i + C_i } \\[6pt]
+\end{split}
+\end{equation*}
 
 Two other measures of categorization quality, \emph{error} and
 \emph{accuracy}, are also sometimes encountered in the TC literature.
@@ -288,11 +290,11 @@ $\rho$, and $F_1$, notated $\pi^\mu$, $\rho^\mu$, and $F^\mu_1$, are
 defined in terms of the per-category contingency tables by the
 following equations.
 
-\begin{displaymath}
+\begin{equation*}
  \pi^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+B_i}} \qquad
 \rho^\mu = \frac{\sum_{i=1}^{|C|}{A_i}} {\sum_{i=1}^{|C|}{A_i+C_i}} \qquad
  F^\mu_1 = \frac{\sum_{i=1}^{|C|}{2 A_i}} {\sum_{i=1}^{|C|}{2 A_i+B_i+C_i}} \qquad
-\end{displaymath}
+\end{equation*}
 
 Micro-averaging gives equal weight to each categorization decision
 made by the system, or equivalently, to each document in the corpus,
@@ -304,11 +306,11 @@ averaged to find the macro-averaged $\pi$, $\rho$, and $F_1$, notated
 $\pi^M$, $\rho^M$, and $F^M_1$.  The following equations describe this
 procedure.
 
-\begin{displaymath}
+\begin{equation*}
  \pi^M = \frac{\sum_{i=1}^{|C|}{\pi_i}}   {|C|} \qquad
 \rho^M = \frac{\sum_{i=1}^{|C|}{\rho_i}}  {|C|} \qquad
  F^M_1 = \frac{\sum_{i=1}^{|C|}{{F_1}_i}} {|C|} \qquad
-\end{displaymath}
+\end{equation*}
 
 Macro-averaging gives equal weight to each category in the corpus,
 regardless of how many documents it contains.  Thus it provides a
@@ -323,18 +325,17 @@ fact that exactly one of the terms on the left side will be
 incremented with each decision about whether a document from the test
 set belongs to $c_i$ or not.
 
-% XXX - really need to spread out this vertical spacing
-% \begin{displaymath}
-\begin{eqnarray*}
+\begin{equation*}
+\begin{split}
 error^M
- & = & \frac{\sum_{i=1}^{|\cats|}{error_i}}  {|\cats|} \\
- & = & \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{A_i+B_i+C_i+D_i} }} { \sum_{i=1}^{|\cats|}{1} } \\
- & = & \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{|\test|} }}         { \sum_{i=1}^{|\cats|}{1} } \\
- & = & \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{|\test|} } \\
- & = & \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{A_i+B_i+C_i+D_i} } \\
- & = & error^\mu
-\end{eqnarray*}
-% \end{displaymath}
+ & = \frac{\sum_{i=1}^{|\cats|}{error_i}}  {|\cats|} \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{A_i+B_i+C_i+D_i} }} { \sum_{i=1}^{|\cats|}{1} } \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{ \frac{B_i+C_i}{|\test|} }}         { \sum_{i=1}^{|\cats|}{1} } \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{|\test|} } \\[6pt]
+ & = \frac{\sum_{i=1}^{|\cats|}{B_i+C_i}}                           { \sum_{i=1}^{|\cats|}{A_i+B_i+C_i+D_i} } \\[6pt]
+ & = error^\mu
+\end{split}
+\end{equation*}
 
 
 \subsection{Results}
