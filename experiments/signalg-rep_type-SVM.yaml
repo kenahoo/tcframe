@@ -1,0 +1,10 @@
+--- #YAML:1.0
+collection_class: '::Files'
+document_class: '::Text'
+stemming: porter
+features_kept: 1000
+data_root: '/home/rafa/share/corpus/SignalG'
+stopword_file: 'corpora/signalg-small/SMART.stoplist'
+progress_file: 'corpora/signalg-rep_type-SVM'
+verbose: 1
+learner_class: '::SVM'
