@@ -30,7 +30,7 @@
 				<string>{-1, 0}</string>
 			</array>
 			<key>Shape</key>
-			<string>Cube</string>
+			<string>Cylinder</string>
 			<key>Text</key>
 			<dict>
 				<key>Align</key>
@@ -303,7 +303,7 @@ categorize(
 				<string>{-1, 0}</string>
 			</array>
 			<key>Shape</key>
-			<string>Cube</string>
+			<string>Cylinder</string>
 			<key>Text</key>
 			<dict>
 				<key>Align</key>
