@@ -33,7 +33,7 @@ membership.
 
 The standard modern approach to creating new categorizer functions is
 to build them using Machine Learning techniques from a set of training
-documents $\train$.\cite[p. 2]{sebastiani:02} This is a set of
+documents $\train$. \cite[p. 2]{sebastiani:02} This is a set of
 user-provided, pre-labeled documents that follows a category
 distribution similar to the distribution of $\docs$, and whose contents
 provide information about what sorts of documents should be mapped to
@@ -131,7 +131,7 @@ building TC systems.
 The segmenting of text data into chunks representing individual words
 may seem like a straightforward task, but in fact there are many
 variations on how this process, called \emph{tokenizing} in this
-context, can be performed.\cite[p. XXX]{manning:99} It is not
+context, can be performed. \cite[p. XXX]{manning:99} It is not
 sufficient to split the data by using whitespace (spaces, tabs
 returns, and the like) as delimiters, because this does not deal with
 punctuation characters.  It is also not obvious whether terms with
@@ -184,7 +184,7 @@ collapse to their linguistic stem \emph{run}.  Although the use of
 such processing has occasionally been reported to harm overall system
 performance \cite{baker:98}, availability of such an algorithm is
 usually seen as a necessary component of a TC
-system.\cite[p. 12]{sebastiani:02}
+system. \cite[p. 12]{sebastiani:02}
 
 Another way to reduce dimensionality in a TC system is to apply
 \emph{feature selection} and/or \emph{feature extraction}.  Both are
@@ -198,7 +198,7 @@ order to create a new, lower-dimensional space of features.
 
 Three of the most commonly used feature selection criteria are the
 \emph{information gain} (IG), \emph{document frequency} (DF), and
-\emph{$\chi^2$} metrics.\cite{yang:97} $\text{DF}(f_k)$ is simply the
+\emph{$\chi^2$} metrics. \cite{yang:97} $\text{DF}(f_k)$ is simply the
 number of documents of $\train$ in which the feature $f_k$ occurs.
 $\chi^2$ is defined as follows---here, $A$, $B$, $C$, and $D$ are
 defined as the terms in the contingency table shown in Table
@@ -232,7 +232,7 @@ $f_k$           & Yes & $A$ & $B$ \\
 In order to find the overall $\chi^2(f_k)$ metric, the terms
 $\chi^2(f_k,c_j)$ may either be averaged (typically weighted by the
 frequency of each category), or the maximum value for any category may
-be adopted.\cite{yang:97}
+be adopted. \cite{yang:97}
 
 $IG$ is defined as follows, where $P(f_k)$ and $P(\overline{f_k})$ are
 the probabilities that a document does or does not contain $f_k$,
@@ -319,7 +319,7 @@ issue will be discussed again in Section \ref{factory-method}.
 
 In some TC applications, it may be desirable to incorporate feedback
 from the user about whether the system's categorization decisions have
-been correct or incorrect.\cite[p. 28]{sebastiani:02} This may allow
+been correct or incorrect. \cite[p. 28]{sebastiani:02} This may allow
 for a relatively small initial training set $\train$, or for
 categorization on concepts which may change over time.  This process
 is called \emph{incremental} or \emph{on-line} learning.
@@ -338,7 +338,7 @@ is therefore considered a goal of the \aicat\ project.
 Most of the standard Text Categorization literature assumes that the
 goal of TC is to assign each document to one of two mutually exclusive
 categories, otherwise known as \emph{binary
-categorization}.\cite[p. 3]{sebastiani:02} Of course, real-world
+categorization}. \cite[p. 3]{sebastiani:02} Of course, real-world
 problems often involve ontologies that consist of more than two
 categories, and membership may not be mutually exclusive.  For
 instance, some applications may require assigning only the most
@@ -463,7 +463,7 @@ each category, possibly learned by optimizing performance on a
 validation set.  In addition, if more than one document is being
 categorized in a batch operation, several differing strategies for
 thresholding may be employed that take advantage of the overall
-proportions of documents that belong to each category.\cite{yang:01}
+proportions of documents that belong to each category. \cite{yang:01}
 
 Although the k-Nearest-Neighbor algorithm is conceptually simple, it
 is computationally intensive.  Unless thresholds are learned from a
@@ -489,7 +489,7 @@ SVM techniques are similar to kNN in that they view the training
 documents as vectors in a vector space, and that they require a
 similarity function (called the ``kernel'' function) that plays a role
 similar to the function $m$ in Section
-\ref{knn}.\cite[ch. 1]{scholkopf:02} However, instead of considering
+\ref{knn}. \cite[ch. 1]{scholkopf:02} However, instead of considering
 the documents most similar to the document to be categorized, SVM
 algorithms learn a \emph{decision surface} during training which
 divides the vector space into regions that indicate category
@@ -512,15 +512,15 @@ documents prohibitive unless the standard algorithms are modified.
 \label{measures}
 
 Several statistical measures have become standard in the area of
-evaluating Text Categorization systems.\cite[p. 33]{sebastiani:02}
+evaluating Text Categorization systems. \cite[p. 33]{sebastiani:02}
 Some of the most prevalant are based on the notions of
 \emph{precision} and \emph{recall} from the field of Information
-Retrieval.\cite{rijsbergen:79} Precision, often denoted by the symbol
+Retrieval. \cite{rijsbergen:79} Precision, often denoted by the symbol
 $\pi$, measures the probability that a document assigned by the TC
 system to a given category actually belongs to that category.
 Conversely, recall, denoted by $\rho$, measures the probability that a
 document actually belonging to a certain category will be assigned
-during testing to that category.\cite[p. 33]{sebastiani:02}
+during testing to that category. \cite[p. 33]{sebastiani:02}
 
 The probabilities mentioned above can be estimated during testing by
 comparing how often the TC system's category choices match the correct
@@ -565,7 +565,7 @@ C_i}$, respectively.
 $\pi$ and $\rho$ give valuable information about the performance of a
 TC system, but neither provides an isolated rating of the system's
 quality.  The reason is that either measure can usually be improved in
-a system to the detriment of the other.\cite[p. 35]{sebastiani:02} For
+a system to the detriment of the other. \cite[p. 35]{sebastiani:02} For
 instance, the \emph{trivial acceptor} categorizer, which assigns every
 document to every category, will have a perfect $\rho$ score of 1, but
 its precision will be unacceptably low on any nontrivial task.
