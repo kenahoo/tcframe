@@ -10,7 +10,7 @@ parse_command_line(@ARGV);
 
 my $c = new AI::Categorizer(%opt);
 
-my $stats = $c->knowledge_set->scan_stats(path => $c->{training_set});
+my $stats = $c->knowledge_set->scan_stats(path => [$c->{training_set}, $c->{test_set}]);
 foreach my $k (sort keys %$stats) {
   next if $k eq 'categories';
   print "$k: $stats->{$k}\n";
