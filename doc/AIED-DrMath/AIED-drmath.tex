@@ -1,4 +1,4 @@
-\documentclass[twocolumn]{article}
+\documentclass{article}
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{tabularx}
@@ -15,22 +15,11 @@
 \title{Streamlined Automatic Categorization of Mathematics Questions}
 
 \author{
-{\em Ken Williams}\\[1ex]
+{\em Ken Williams, Rafael A. Calvo, David Bell}\\[1ex]
 Web Engineering Group\\
 The University of Sydney\\
 Bldg J03, Sydney NSW 2006\\[1ex]
-{\em kenw@ee.usyd.edu.au}
-\and
-{\em Rafael A. Calvo}\\[1ex]
-Web Engineering Group\\
-The University of Sydney\\
-Bldg J03, Sydney NSW 2006\\[1ex]
-{\em rafa@ee.usyd.edu.au}
-\and
-{\em David Bell}\\[1ex]
-Web Engineering Group\\
-The University of Sydney\\
-Bldg J03, Sydney NSW 2006\\[1ex]
+{\em {\{kenw,rafa\}}@ee.usyd.edu.au} and
 {\em dave@student.usyd.edu.au}
 }
 
@@ -38,7 +27,6 @@ Bldg J03, Sydney NSW 2006\\[1ex]
 
 \maketitle
 \thispagestyle{empty}
-
 
 \subsection*{\centering Abstract}
 \noindent
@@ -76,7 +64,7 @@ service for students and teachers.\cite{drmath} The issues
 discussed also apply to other similar systems such as customer relationship 
 management (CRM) and e-learning systems in general. These systems can use an 
 automatic text categorization framework to categorize the questions into the experts' 
-area of interest, or into the appropriate customer support mailbox. 
+areas of interest, or into the appropriate customer support mailbox. 
 
 The downside of an automatic categorization approach is that integrating such 
 functionality into existing systems can be very complex, and often involves an in 
@@ -87,7 +75,7 @@ database, the categorization framework\cite{williams:02} can be made invisible t
 users and is thus more attractive to the average system administrator or application 
 developer. Also, application developers, do not have to re-implement the 
 classification software. They only need a machine learning professional to assist in 
-training the classifier, and once trained it can then be reused in different applications. 
+training the classifier, and once trained it can then be reused for different applications. 
 
 The applications of information retrieval have been well studied since the 1980s, as 
 discussed by Salton \cite{salton:89,salton:91}, and many of these methodologies have been 
@@ -115,30 +103,8 @@ analysis very difficult. The Ask Dr. Math service has about 300
 volunteers (about 30-40 of which may be active in any given month),
 dealing with hundreds of questions a day. The volunteers have
 expertise in different areas of math, and the site has won a number of
-awards for its useful service.
-
-The filtering of questions is a major element of the Ask Dr. Math
-question answering process.  The service may receive about 7000
-questions a month, about half of which are eventually answered.  The
-unanswered questions may be duplicate submissions, messages of thanks,
-inappropriate questions, or other messages that don't require a
-response.  There also may be some legitimate mathematics questions
-that go unanswered, simply because the service is not fee-based for
-either the students or the experts, and thus can make no guarantee
-that any particular question will be answered.  The experts are
-currently responsible for choosing their own questions to answer.
-
-The Dr. Math corpus we used contains 6632 documents and was split into a training
-set of 5305 documents and a testing set of 1327 documents.  There are 95 categories 
-in the corpus. The average number of documents in each category is
-107.15.  The most popular category, high school-level geometry,
-contains 877 documents, and the least popular category,
-elementary-level golden ratio, contains only 3 documents.  Each
-document may be a member of more than one category, and the average
-number of categories per document is 1.53.  Figure
-\ref{cat-distribution} shows the distribution of categories throughout
-the corpus.  Category names indicate both level and topic, such as
-``geometry.elem'' or ``calculus.college.''
+awards for its useful service.  Figure \ref{example-question} shows an
+example submission to the service.
 
 \begin{figure}
 \begin{verbatim}
@@ -154,7 +120,34 @@ Thanks for any help,
 Scott
 \end{verbatim}
 \caption{An example document from the Dr. Math corpus}
+\label{example-question}
 \end{figure}
+
+The filtering of questions is a major element of the Ask Dr. Math
+question answering process.  The service may receive about 7000
+questions a month, about half of which are eventually answered.  The
+unanswered questions may be duplicate submissions, messages of thanks,
+inappropriate questions, or other messages that don't require a
+response.  There also may be some legitimate mathematics questions
+that go unanswered, simply because the service is not fee-based for
+either the students or the experts, and thus can make no guarantee
+that any particular question will be answered.  The experts are
+currently responsible for choosing their own questions to answer.
+
+The Dr. Math corpus we used contains 6632 documents and was split into a training
+set of 5305 documents and a testing set of 1327 documents.  There are 95 categories 
+in the corpus, and the average number of documents in each category is
+107.15.  The categories are structured in a 2-level hierarchy
+(``level'' and ``topic''), with a total of four levels (elementary
+school, middle school, high school, and college) and 62 topics (for
+example, ``geometry'' or ``statistics'').
+The most popular category, high school-level geometry,
+contains 877 documents, and the least popular category,
+elementary-level golden ratio, contains only 3 documents.  Each
+document may be a member of more than one category, and the average
+number of categories per document is 1.53.  Figure
+\ref{cat-distribution} shows the distribution of categories throughout
+the corpus.
 
 It may be important to note that our corpus was drawn from the public
 archive of answered questions, not directly from the stream of
@@ -185,17 +178,22 @@ The framework used in this project was designed to provide a
 consistent way to build document categorization
 systems.\cite{williams:02} It allows the developer to focus on the
 quality of the more critical and complex modules by allowing reuse of
-common, simple base modules.  The framework already has
-implementations of Support Vector Machine (SVM), \naive\ Bayes, and
-Decision Tree classifiers \cite{yang:99, sebastiani:02}. Other methods
-such as Neural Networks \cite{calvo:00, calvo:01} and
-K-Nearest-Neighbor classifiers are under development.
+common, simple base modules.  The framework has
+implementations of 
+k-Nearest-Neighbor (kNN), \naive\ Bayes (NB), Support Vector Machine (SVM), and
+Decision Tree (DT) classifiers \cite{yang:99, sebastiani:02}. Other methods
+such as Neural Network \cite{calvo:00, calvo:01} classifiers are under development.
 
+The framework architecture allows extensions to be built by subclassing
+its main classes \cite{williams:02}. Class inheritance contributes to code reuse and 
+quality.
 In this project we extended the framework by adding an alternative
-Collection class to allow for the data to be read directly from a
-database instead of from a file system.  Framework extensions are built by subclassing
-the main classes in the framework. Class inheritance contributes to code reuse and 
-quality. The framework also provides statistical analysis of experimental results, and 
+Collection class to allow for the data to be read directly from a database instead of from a file system.  
+Having a classifier that uses the data directly from the database
+streamlines the management of questions and answers in this type of
+system. In fact, it allows many content or learning management systems
+to natively use automatic classification features.
+The framework also provides statistical analysis of experimental results, and 
 produced the performance measures discussed in Section \ref{results}.
 
 The framework's architecture and language choice enabled us to easily build the 
@@ -249,10 +247,7 @@ between any two vectors), and the most prevalent category or
 categories amongst these is assigned to the new document.
 
 In our testing, we have found that NB is a more accurate categorizer
-than kNN.  This seems contrary to the findings of \cite{yang:99}, and
-may reflect the fact that our implementation of NB is more mature than
-our kNN implementation.  The rest of this paper will focus on the NB
-experiment and results.
+than kNN.  The rest of this paper will focus on the NB experiment and results.
 
 Since the categorization performance is determined only by the classification 
 framework, all these methods should behave the same inside the
@@ -266,6 +261,9 @@ rumbaugh:91}, by integrating it in this way, the classification task
 \section{Method and Results}
 \label{results}
 
+% Ken: here you use a select but in the example you use an insert. This  options are 
+% very different because it puts the classification effort at different stages (when storing or when viewing). I think it needs to be explained better and the examples be of the same type as the explanation here
+ 
 The 5305 training documents in the Dr. Math corpus were loaded into a database 
 table named ``documents.'' This table consisted of 3 columns: name, content and 
 categories. The testing set was then inserted into the database, one document at a time 
@@ -290,7 +288,6 @@ Baseline & 0.019   & 0.018   & 0.018   & 0.042   & 0.031 \\ \hline
 \label{results-main}
 \end{table}
 
-
 The results in Table \ref{results-main} show the performance of the
 categorization algorithms.  The precision, recall, and $F_1$ scores
 can be computed using macro-averaging, which gives equal weight to
@@ -309,28 +306,35 @@ that separate categorizers could be trained to recognize the two
 components separately, perhaps with more success than a single
 categorizer may have on the two components together.
 
-Table \ref{results-NB} shows the success of a \naive\ Bayes
-categorizer, and Table \ref{results-baseline} shows a baseline
-categorizer for comparison.  We give results for the level task, the
-topic task, and a task that uses the separate topic and level
-categorizers to assign a combined category.
+To test this hypothesis, we created three new categorization tasks:
+one that categorizes by level alone, one that categorizes by topic
+alone, and one that uses the separate topic and level categorizers to
+assign a combined category.  In this combined process, each assigned
+level was combined with each assigned topic, any nonexistent
+categories (such as ``calculus.elem'' or ``addition.college'') were
+filtered out, and all remaining categories were assigned to the given
+document.  This process was performed using the \naive\ Bayes and
+baseline categorizers described above.  Table \ref{results-NB} shows
+the performance for the \naive\ Bayes categorizer and Table
+\ref{results-baseline} shows the baseline categorizer for comparison.
 
 Comparing the combined task to the NB results in Table
 \ref{results-main}, we see that separating the categorization task
-into two subtasks hurt overall performance on the combined task.  The
-level task looks promising, but comparing it with the baseline
+into two subtasks adversely affected the overall performance on the combined task.
+The performance for the level task seems good, but comparing it with the baseline
 categorizer shows that it may not be significantly better than random
-guessing.  However, the performance on the topic task is noteworthy,
+guessing.  This is probably due to the small number of categories.
+However, the performance on the topic task is noteworthy,
 because it is so far above both the baseline categorizer and the
 original NB categorizer.  In addition, the topic assignment may be
-more valuable than the level assignment, because while most students
+more valuable in this application than the level assignment, because while most students
 will be able to indicate their own age or grade level when asking a
 question, they may not be able to place their own question in an
 appropriate category.
 
 Because the math topics used in this experiment were generated from
 the category names, we ended up with some duplication that may have
-hurt performance.  For example, there are categories called
+decreased performance.  For example, there are categories called
 ``probability.high,'' ``statistics.high,'' and ``prob.stats.middle.''
 This means that the combined list of extracted math topics includes
 ``probability,'' ``statistics,'' and ``prob.stats.''  The exact effect
@@ -375,10 +379,15 @@ systems.
 
 Two categorization algorithms were applied to the task of classifying
 messages sent to an educational ask-an-expert service.  A \naive\
-Bayes classifier was fairly successful at categorizing the messages.
-The highest success rate was found in classifying messages by math
-topic, a task that coule be useful on the unstructured data sent to
-services such as the one we discussed.
+Bayes classifier outperformed the k\-Nearest Neighbour classifier and
+was reasonably successful at categorizing the messages. Future work
+includes testing classifiers that use other machine learning models
+such as Support Vector Machines and Neural Networks.  The
+classification performance of \naive\ Bayes was also measured using the
+2-level hierarchy of the corpus. In this case, the highest success
+rate was found in classifying messages by math topic, instead of
+school level. This task could be useful on the unstructured data sent
+to ask-an-expert services such as the one we discussed.
 
 \section*{Acknowledgements}
 
@@ -387,6 +396,6 @@ Collaborative Research Centre and the University of Sydney. The authors also
 acknowledge The Math Forum for giving permission to use and discuss their data. 
 
 \bibliographystyle{plain}
-\bibliography{TC-references}
+\bibliography{TC-References}
 
 \end{document}
