@@ -11,20 +11,25 @@ my %format = (
 	      delimiter        => "\n.I",
 	     );
 
+my $train_file = 'signalg.train';
+my $test_path = 'signalg.test';
+
 use strict;
 
-use lib "$ENV{HOME}/src/tcframe/src/AI-Categorizer/lib";
+use lib "$ENV{HOME}/src/tcframe/AI-Categorizer-0.01/lib";
+#use lib "$ENV{HOME}/src/tcframe/src/AI-Categorizer/lib";
 use AI::Categorizer::KnowledgeSet;
 use AI::Categorizer::Categorizer::NaiveBayes;
 use AI::Categorizer::Experiment;
 
 eval "use $categorizer";
+eval "use $format{document_class}";
 
 # Useful for debugging
 use Carp; $SIG{__DIE__} = \&Carp::confess;
 
 # Scan features
-if (1) {
+if (0) {
   ### Read stopwords
   my @stopwords = `cat $name/SMART.stoplist`;
   chomp @stopwords;
@@ -39,19 +44,19 @@ if (1) {
      verbose => 1,
     );
   
-  $k->scan_features( path => "$name/doc.smart", verbose => 1, document_class => 'AI::Categorizer::Document::SMART' );
+  $k->scan_features( path => "$name/$train_file", verbose => 1, document_class => 'AI::Categorizer::Document::SMART', max_docs => 40_000 );
 
   warn "saving to $name-save";
   $k->save_state("$name-save") or die $!;
 }
 
 # Read training corpus
-if (1) {
+if (0) {
   ### Use new features
   warn "restoring from $name-save";
   my $k = AI::Categorizer::KnowledgeSet->restore_state("$name-save");
 
-  $k->read( path => "$name/doc.smart", document_class => 'AI::Categorizer::Document::SMART' );
+  $k->read( path => "$name/$train_file", document_class => 'AI::Categorizer::Document::SMART', max_docs => 40_000 );
 
   #my $v = $k->features->as_hash;
   #printf "Features: %d\nUnique tokens: %d\n", scalar(keys %$v), $k->features->sum;
@@ -79,32 +84,23 @@ if (0) {
 }
 
 # Categorize test set
-if (0) {
+if (1) {
   warn "restoring from $name-save3";
   my $nb = $categorizer->restore_state("$name-save3");
   my $e = new AI::Categorizer::Experiment;
+  
+  eval "use $format{collection_class}";
+  my $c = $format{collection_class}->new
+      (
+       delimiter => "\n.I",
+       path => "$name/$test_path",
+       verbose => 1,
+      );
 
-  my $cats = read_cats("$name/cats.txt");
-  my %totals;
-  my @metrics = qw(precision recall F1);
-
-  local $|=1;
-  opendir my($dir), "$name/test" or die $!;
-  while (my $file = readdir $dir) {
-    next if $file =~ /^\./;
-    
-    my $body = do {open my $fh, "$name/test/$file" or die $!; local $/; <$fh>};  
-    my $d = new AI::Categorizer::Document(
-					  name => $file,
-					  content => $body,
-					 );
+  while (my $d = $c->next) {
     my $h = $nb->categorize($d);
-    $e->add_hypothesis($h, $cats->{$file});
-    print '.';
-    #print "$file: @{$cats->{$file}} => @{[ $h->categories ]}\n";
+    $e->add_hypothesis($h, [$d->categories]);
   }
-  print "\n";
-  closedir $dir;
 
   Storable::store($e, 'experiment');
 
@@ -126,7 +122,7 @@ sub read_cats {
   my $file = shift;
 
   my %cats;
-  open my $fh, $file or die $!;
+  open my $fh, $file or die "$file: $!";
   while (<$fh>) {
     my ($doc, @cats) = split;
     $cats{$doc} = [@cats];
