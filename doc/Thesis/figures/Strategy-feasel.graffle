@@ -23,7 +23,7 @@
 			<key>FitText</key>
 			<string>Clip</string>
 			<key>ID</key>
-			<integer>57</integer>
+			<integer>19</integer>
 			<key>Magnets</key>
 			<array>
 				<string>{0, 1}</string>
@@ -52,7 +52,7 @@
 			<key>FitText</key>
 			<string>Clip</string>
 			<key>ID</key>
-			<integer>56</integer>
+			<integer>18</integer>
 			<key>Magnets</key>
 			<array>
 				<string>{0, 1}</string>
@@ -79,14 +79,14 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>40</integer>
+				<integer>2</integer>
 			</dict>
 			<key>ID</key>
-			<integer>55</integer>
+			<integer>17</integer>
 			<key>Points</key>
 			<array>
-				<string>{361.076, 130.675}</string>
-				<string>{295.011, 102.325}</string>
+				<string>{361.14, 130.675}</string>
+				<string>{295.039, 102.325}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -101,7 +101,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>53</integer>
+				<integer>15</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -110,14 +110,14 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>40</integer>
+				<integer>2</integer>
 			</dict>
 			<key>ID</key>
-			<integer>54</integer>
+			<integer>16</integer>
 			<key>Points</key>
 			<array>
-				<string>{244.824, 130.675}</string>
-				<string>{245.189, 102.325}</string>
+				<string>{244.822, 130.675}</string>
+				<string>{245.188, 102.325}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -132,7 +132,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>50</integer>
+				<integer>12</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -146,7 +146,7 @@
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>52</integer>
+					<integer>14</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -159,7 +159,8 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\f0\fs24 \cf0 select_features()}</string>
+\f0\fs24 \cf0 select_features()\
+scan_features()}</string>
 					</dict>
 					<key>TextPlacement</key>
 					<integer>0</integer>
@@ -170,7 +171,7 @@
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>53</integer>
+					<integer>15</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -189,7 +190,7 @@ MutualInformation}</string>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>51</integer>
+			<integer>13</integer>
 		</dict>
 		<dict>
 			<key>Class</key>
@@ -202,7 +203,7 @@ MutualInformation}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>49</integer>
+					<integer>11</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -215,7 +216,8 @@ MutualInformation}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\f0\fs24 \cf0 select_features()}</string>
+\f0\fs24 \cf0 select_features()\
+scan_features()}</string>
 					</dict>
 					<key>TextPlacement</key>
 					<integer>0</integer>
@@ -226,7 +228,7 @@ MutualInformation}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>50</integer>
+					<integer>12</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -245,7 +247,7 @@ ChiSquared}</string>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>48</integer>
+			<integer>10</integer>
 		</dict>
 		<dict>
 			<key>Class</key>
@@ -253,10 +255,10 @@ ChiSquared}</string>
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>40</integer>
+				<integer>2</integer>
 			</dict>
 			<key>ID</key>
-			<integer>47</integer>
+			<integer>9</integer>
 			<key>Points</key>
 			<array>
 				<string>{126, 66.2488}</string>
@@ -275,7 +277,7 @@ ChiSquared}</string>
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>57</integer>
+				<integer>19</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -284,10 +286,10 @@ ChiSquared}</string>
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>56</integer>
+				<integer>18</integer>
 			</dict>
 			<key>ID</key>
-			<integer>46</integer>
+			<integer>8</integer>
 			<key>Points</key>
 			<array>
 				<string>{313, 72.9652}</string>
@@ -308,7 +310,7 @@ ChiSquared}</string>
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>40</integer>
+				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -317,14 +319,14 @@ ChiSquared}</string>
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>40</integer>
+				<integer>2</integer>
 			</dict>
 			<key>ID</key>
-			<integer>45</integer>
+			<integer>7</integer>
 			<key>Points</key>
 			<array>
-				<string>{131.467, 130.675}</string>
-				<string>{196.607, 102.325}</string>
+				<string>{131.377, 130.675}</string>
+				<string>{196.569, 102.325}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -339,7 +341,7 @@ ChiSquared}</string>
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>44</integer>
+				<integer>6</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -353,7 +355,7 @@ ChiSquared}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>43</integer>
+					<integer>5</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -366,7 +368,8 @@ ChiSquared}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\f0\fs24 \cf0 select_features()}</string>
+\f0\fs24 \cf0 select_features()\
+scan_features()}</string>
 					</dict>
 					<key>TextPlacement</key>
 					<integer>0</integer>
@@ -377,7 +380,7 @@ ChiSquared}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>44</integer>
+					<integer>6</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -396,7 +399,7 @@ DocFrequency}</string>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>42</integer>
+			<integer>4</integer>
 		</dict>
 		<dict>
 			<key>Class</key>
@@ -409,7 +412,7 @@ DocFrequency}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>40</integer>
+					<integer>2</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -422,7 +425,8 @@ DocFrequency}</string>
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural
 
-\f0\i\fs24 \cf0 select_features()}</string>
+\f0\i\fs24 \cf0 select_features()\
+scan_features()}</string>
 					</dict>
 					<key>TextPlacement</key>
 					<integer>0</integer>
@@ -433,7 +437,7 @@ DocFrequency}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
-					<integer>41</integer>
+					<integer>3</integer>
 					<key>Shape</key>
 					<string>Rectangle</string>
 					<key>Text</key>
@@ -451,7 +455,7 @@ DocFrequency}</string>
 				</dict>
 			</array>
 			<key>ID</key>
-			<integer>39</integer>
+			<integer>1</integer>
 		</dict>
 	</array>
 	<key>GridInfo</key>
@@ -528,7 +532,7 @@ DocFrequency}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>Frame</key>
-		<string>{{31, 0}, {538, 746}}</string>
+		<string>{{21, 0}, {538, 746}}</string>
 		<key>VisibleRegion</key>
 		<string>{{0, 0}, {523, 669}}</string>
 		<key>Zoom</key>
