@@ -14,9 +14,11 @@ DrMath
 FeatureSelector
 FeatureVector
 http
+kNN
 KnowledgeSet
 libsvm
 mathforum
+NB
 ObjectFactory
 OO
 org
@@ -25,6 +27,7 @@ pollination
 polymorphism
 pre
 reusability
+stoplist
 stopword
 subclassed
 subclassing
